@@ -1,0 +1,313 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tool="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/margin_min">
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_small">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin_small"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/distance"
+                            android:textColor="@color/colorTextPrimaryLight"
+                            android:textSize="@dimen/font_large" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/colorTextPrimaryDark"
+                            android:textSize="@dimen/font_medium"
+                            tool:text="10 Km" />
+
+                    </LinearLayout>
+
+                    <SeekBar
+                        android:id="@+id/seekBar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp" />
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_small">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin_small"
+                    android:orientation="vertical">
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/show_distance_in"
+                            android:textColor="@color/colorTextPrimaryLight"
+                            android:textSize="@dimen/font_large" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/colorTextPrimaryDark"
+                            android:textSize="@dimen/font_medium"
+                            tool:text="Km" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/margin_min"
+                            android:layout_weight="1"
+                            android:background="@drawable/rounded_rect_bg"
+                            android:padding="@dimen/margin_5dp"
+                            android:text="KM"
+                            android:textColor="@color/colorPrimary" />
+
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/margin_min"
+                            android:layout_weight="1"
+                            android:background="@drawable/rounded_rect_bg_accent"
+                            android:clickable="true"
+                            android:padding="@dimen/margin_5dp"
+                            android:text="Miles"
+                            android:textColor="@color/colorTextWhite" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_small">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin_small"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/age_range"
+                            android:textColor="@color/colorTextPrimaryLight"
+                            android:textSize="@dimen/font_large" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/colorTextPrimaryDark"
+                            android:textSize="@dimen/font_medium"
+                            tool:text="18-45" />
+
+                    </LinearLayout>
+
+                    <SeekBar
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp" />
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_small">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin_small"
+                    android:orientation="vertical">
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/show_me"
+                        android:textColor="@color/colorTextPrimaryLight"
+                        android:textSize="@dimen/font_large" />
+
+                    <Switch
+                        android:id="@+id/switch1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/margin_5dp"
+                        android:layout_weight="1"
+                        android:padding="@dimen/margin_min"
+                        android:text="Men"
+                        android:textColor="@color/colorTextPrimary"
+                        android:textSize="@dimen/font_medium" />
+
+                    <Switch
+                        android:id="@+id/switch2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/margin_5dp"
+                        android:layout_weight="1"
+                        android:padding="@dimen/margin_min"
+                        android:text="Women"
+                        android:textColor="@color/colorTextPrimary"
+                        android:textSize="@dimen/font_medium" />
+
+                    <Switch
+                        android:id="@+id/switch3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/margin_5dp"
+                        android:layout_weight="1"
+                        android:padding="@dimen/margin_min"
+                        android:text="Others"
+                        android:textColor="@color/colorTextPrimary"
+                        android:textSize="@dimen/font_medium" />
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_small">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin_small"
+                    android:orientation="vertical">
+
+                    <Switch
+                        android:id="@+id/switch_discoverable"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:padding="@dimen/margin_min"
+                        android:text="Discoverable"
+                        android:textColor="@color/colorTextPrimaryLight"
+                        android:textSize="@dimen/font_large" />
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/card_feature_in"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_small">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin_small"
+                    android:orientation="vertical">
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/feature_in"
+                        android:textColor="@color/colorTextPrimaryLight"
+                        android:textSize="@dimen/font_large" />
+
+                    <Switch
+                        android:id="@+id/switch11"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/margin_5dp"
+                        android:layout_weight="1"
+                        android:padding="@dimen/margin_min"
+                        android:text="Men"
+                        android:textColor="@color/colorTextPrimary"
+                        android:textSize="@dimen/font_medium" />
+
+                    <Switch
+                        android:id="@+id/switch22"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/margin_5dp"
+                        android:layout_weight="1"
+                        android:padding="@dimen/margin_min"
+                        android:text="Women"
+                        android:textColor="@color/colorTextPrimary"
+                        android:textSize="@dimen/font_medium" />
+
+                    <Switch
+                        android:id="@+id/switch33"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/margin_5dp"
+                        android:layout_weight="1"
+                        android:padding="@dimen/margin_min"
+                        android:text="Others"
+                        android:textColor="@color/colorTextPrimary"
+                        android:textSize="@dimen/font_medium" />
+
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</FrameLayout>

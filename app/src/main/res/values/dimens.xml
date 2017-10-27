@@ -1,0 +1,45 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="nav_header_vertical_spacing">16dp</dimen>
+    <dimen name="nav_header_height">160dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+
+    <dimen name="margin_min">4dp</dimen>
+    <dimen name="margin_small">8dp</dimen>
+    <dimen name="margin_avg">16dp</dimen>
+    <dimen name="margin_big">32dp</dimen>
+    <dimen name="margin_huge">64dp</dimen>
+
+    <dimen name="user_icon_width">36dp</dimen>
+    <dimen name="user_icon_height">36dp</dimen>
+
+    <dimen name="card_corner_radius">4dp</dimen>
+    <dimen name="card_elevation">4dp</dimen>
+
+    <dimen name="margin_1dp">1dp</dimen>
+    <dimen name="margin_2dp">2dp</dimen>
+    <dimen name="margin_3dp">3dp</dimen>
+    <dimen name="margin_5dp">5dp</dimen>
+    <dimen name="margin_7dp">7dp</dimen>
+    <dimen name="margin_8dp">8dp</dimen>
+    <dimen name="margin_10dp">10dp</dimen>
+    <dimen name="margin_12dp">12dp</dimen>
+    <dimen name="margin_15dp">15dp</dimen>
+    <dimen name="margin_16dp">16dp</dimen>
+    <dimen name="margin_18dp">18dp</dimen>
+    <dimen name="margin_20dp">20dp</dimen>
+    <dimen name="margin_25dp">25dp</dimen>
+    <dimen name="margin_30dp">30dp</dimen>
+    <dimen name="margin_35dp">35dp</dimen>
+
+
+    <dimen name="font_micro">8sp</dimen>
+    <dimen name="font_small">12sp</dimen>
+    <dimen name="font_medium">16sp</dimen>
+    <dimen name="font_large">18sp</dimen>
+    <dimen name="font_huge">22sp</dimen>
+    <dimen name="font_description">18sp</dimen>
+
+</resources>

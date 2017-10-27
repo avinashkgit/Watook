@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "563156802665",
+    "firebase_url": "https://watook-225d9.firebaseio.com",
+    "project_id": "watook-225d9",
+    "storage_bucket": "watook-225d9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:563156802665:android:30a38bc488296c53",
+        "android_client_info": {
+          "package_name": "com.watook"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "563156802665-hgu7s3pb12qs1s9afgdpjrjo2hi18qnj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBSBIjjh5n6U9nx59Z9PbPySGhSW4S2uRw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

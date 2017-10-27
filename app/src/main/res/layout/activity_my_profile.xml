@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tool="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBar"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:fitsSystemWindows="true"
+        android:overScrollMode="ifContentScrolls"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_scrollFlags="scroll|snap">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/pager"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentTop="true" />
+
+                <com.viewpagerindicator.CirclePageIndicator
+                    android:id="@+id/indicator"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:gravity="bottom"
+                    android:padding="10dp"
+                    app:centered="true"
+                    app:fillColor="@color/colorAccent"
+                    app:pageColor="@color/colorPrimary"
+                    app:snap="false" />
+
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+                <ImageView
+                    android:id="@+id/iv_profile"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_margin="@dimen/margin_avg"
+                    android:src="@drawable/shape_profile_not_selected"
+                    android:stepSize="1"
+                    android:numStars="1" />
+
+
+            </RelativeLayout>
+        </android.support.design.widget.CollapsingToolbarLayout>
+    </android.support.design.widget.AppBarLayout>
+
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorBackground"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_name_age"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:padding="@dimen/margin_avg"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/font_large"
+                tool:text="Avinash kumar, 26" />
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_avg"
+                android:layout_marginStart="@dimen/margin_avg"
+                android:paddingBottom="@dimen/margin_min"
+                android:paddingTop="@dimen/margin_min"
+                android:text="About You"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/font_description" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/et_status"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:hint="Bio..."
+                    android:inputType="none"
+                    android:padding="@dimen/margin_avg"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/font_medium" />
+
+                <ImageView
+                    android:id="@+id/iv_edit_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="@dimen/margin_10dp"
+                    android:padding="@dimen/margin_5dp"
+                    android:src="@drawable/ic_mode_edit_primary_18dp" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_avg"
+                android:layout_marginStart="@dimen/margin_avg"
+                android:paddingBottom="@dimen/margin_min"
+                android:paddingTop="@dimen/margin_min"
+                android:text="Work Info"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/font_description" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white">
+
+                <TextView
+                    android:id="@+id/tv_work"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/margin_avg"
+                    android:text="Android Developer"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/font_medium" />
+            </LinearLayout>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_avg"
+                android:layout_marginStart="@dimen/margin_avg"
+                android:paddingBottom="@dimen/margin_min"
+                android:paddingTop="@dimen/margin_min"
+                android:text="Gender"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/font_description" />
+
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white">
+
+                <RadioButton
+                    android:id="@+id/rb_male"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin_avg"
+                    android:layout_marginStart="@dimen/margin_avg"
+                    android:text="Male" />
+
+                <RadioButton
+                    android:id="@+id/rb_female"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin_avg"
+                    android:layout_marginStart="@dimen/margin_avg"
+                    android:text="Female" />
+            </RadioGroup>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_avg"
+                android:layout_marginStart="@dimen/margin_avg"
+                android:paddingBottom="@dimen/margin_min"
+                android:paddingTop="@dimen/margin_min"
+                android:text="Status"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/font_description" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white">
+
+                <TextView
+                    android:id="@+id/tv_relation_status"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:hint="Relationship Status"
+                    android:padding="@dimen/margin_avg"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/font_medium" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+    </android.support.v4.widget.NestedScrollView>
+
+</android.support.design.widget.CoordinatorLayout>
