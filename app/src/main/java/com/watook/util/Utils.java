@@ -123,6 +123,8 @@ public class Utils {
                 setDist = formatter.format(distance) + " Miles";
             }
         }
+
+
         return setDist;
     }
 
