@@ -36,7 +36,8 @@ import com.watook.application.MyApplication;
 import com.watook.application.MySharedPreferences;
 import com.watook.manager.ApiManager;
 import com.watook.manager.DatabaseManager;
-import com.watook.model.ApplicationIdResponse;
+import com.watook.model.Preferences;
+import com.watook.model.response.ApplicationIdResponse;
 import com.watook.model.MyProfile;
 import com.watook.model.response.CodeValueResponse;
 import com.watook.model.response.ProfileSaveResponse;
@@ -224,7 +225,7 @@ public class LoginActivity extends BaseActivity {
                     for (int i = 0; i < permissions.length; i++)
                         perms.put(permissions[i], grantResults[i]);
                     // Check for both permissions
-                     if (/*perms.get(Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED
+                    if (/*perms.get(Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED
                             &&*/ perms.get(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                         Log.d(TAG, "sms & location services permission granted");
                         // process the normal flow
@@ -319,13 +320,13 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void getApplicationId(final MyProfile myProfile, final String accessToken) {
-        Call<ApplicationIdResponse> registrationResponseCall = ApiManager.getApiInstance().getApplicationId("https://graph.facebook.com/app",accessToken);
+        Call<ApplicationIdResponse> registrationResponseCall = ApiManager.getApiInstance().getApplicationId("https://graph.facebook.com/app", accessToken);
         registrationResponseCall.enqueue(new Callback<ApplicationIdResponse>() {
             @Override
             public void onResponse(@NonNull Call<ApplicationIdResponse> call, @NonNull Response<ApplicationIdResponse> response) {
                 int statusCode = response.code();
                 ApplicationIdResponse registrationResponse = response.body();
-                if (statusCode == 200 && registrationResponse != null && registrationResponse.getId() != null ) {
+                if (statusCode == 200 && registrationResponse != null && registrationResponse.getId() != null) {
                     if (!Utils.isEmpty(registrationResponse.getId())) {
                         registerUser(registrationResponse.getId(), accessToken, myProfile);
                     }
@@ -359,8 +360,7 @@ public class LoginActivity extends BaseActivity {
                         e.printStackTrace();
                     }
                     apiCallGetCodeValue(myProfile, registrationResponse);
-                }
-                else {
+                } else {
                     dismissProgressDialog();
                     showAToast(getResources().getString(R.string.oops_something_went_wrong));
                 }
@@ -492,6 +492,7 @@ public class LoginActivity extends BaseActivity {
                 int statusCode = response.code();
                 SaveLocationResponse saveResponse = response.body();
                 if (statusCode == 200 && saveResponse != null && saveResponse.getStatus() != null && saveResponse.getStatus().equalsIgnoreCase("success")) {
+                    setPreferences();
                     navigateView();
                 } else {
                     dismissProgressDialog();
@@ -506,6 +507,51 @@ public class LoginActivity extends BaseActivity {
             }
         });
 
+    }
+
+
+//    private void apiCallSavePreferences() {
+//        HashMap<String, String> map = new HashMap<>();
+//        map.put("userId", DatabaseManager.getInstance(this).getMyProfile().getUserId());
+//        map.put("latitude", latitude + "");
+//        map.put("longitude", longitude + "");
+//
+//
+//        Call<PreferencesSaveResponse> saveProfile = ApiManager.getApiInstance().setPreferences(Constant.CONTENT_TYPE,
+//                DatabaseManager.getInstance(this).getRegistrationData().getData(), map);
+//        saveProfile.enqueue(new Callback<PreferencesSaveResponse>() {
+//            @Override
+//            public void onResponse(@NonNull Call<PreferencesSaveResponse> call, @NonNull Response<PreferencesSaveResponse> response) {
+//                int statusCode = response.code();
+//                PreferencesSaveResponse saveResponse = response.body();
+//                if (statusCode == 200 && saveResponse != null && saveResponse.getStatus() != null && saveResponse.getStatus().equalsIgnoreCase("success")) {
+//                    navigateView();
+//                } else {
+//                    dismissProgressDialog();
+//                    showAToast(getResources().getString(R.string.oops_something_went_wrong));
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(@NonNull Call<PreferencesSaveResponse> call, @NonNull Throwable t) {
+//                showAToast(getResources().getString(R.string.oops_something_went_wrong));
+//                dismissProgressDialog();
+//            }
+//        });
+//
+//    }
+
+    private void setPreferences() {
+        Preferences pref = new Preferences();
+        pref.setDistanceUnitKm(false);
+        pref.setAgeMin(18);
+        pref.setAgeMax(40);
+        pref.setDistanceRange(10);
+        pref.setFemaleInterest(true);
+        pref.setMaleInterest(true);
+        pref.setDiscoverable(true);
+
+        DatabaseManager.getInstance(LoginActivity.this).insertPreferences(pref);
     }
 
 

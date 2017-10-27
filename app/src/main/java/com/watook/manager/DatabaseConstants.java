@@ -18,6 +18,9 @@ public class DatabaseConstants {
     static final String TABLE_USERS = "users";
     static final String USERS_RESPONSE = "users_response";
 
+    static final String TABLE_PREFERENCES = "preferences";
+    static final String PREFERENCES_RESPONSE = "users_response";
+
 
     /////////////////////////////////////////////////////////////////
 
@@ -28,11 +31,17 @@ public class DatabaseConstants {
     static final String CREATE_TABLE_REGISTRATION = "CREATE TABLE IF NOT EXISTS " + TABLE_REGISTRATION
             + " (" + REGISTRATION_RESPONSE + " BLOB" + " )";
 
+
     static final String CREATE_TABLE_CODE_VALUE = "CREATE TABLE IF NOT EXISTS " + TABLE_CODE_VALUE
             + " (" + CODE_VALUE_RESPONSE + " BLOB" + " )";
 
+
     static final String CREATE_TABLE_USERS = "CREATE TABLE IF NOT EXISTS " + TABLE_USERS
             + " (" + USERS_RESPONSE + " BLOB" + " )";
+
+
+    static final String CREATE_TABLE_PREFERENCES = "CREATE TABLE IF NOT EXISTS " + TABLE_PREFERENCES
+            + " (" + PREFERENCES_RESPONSE + " BLOB" + " )";
 
 
 }

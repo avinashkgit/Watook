@@ -1,10 +1,8 @@
 package com.watook.callback;
 
-import android.app.Application;
-
-import com.watook.model.ApplicationIdResponse;
-import com.watook.model.MyProfile;
+import com.watook.model.response.ApplicationIdResponse;
 import com.watook.model.response.CodeValueResponse;
+import com.watook.model.response.PreferencesSaveResponse;
 import com.watook.model.response.ProfileSaveResponse;
 import com.watook.model.response.RegistrationResponse;
 import com.watook.model.response.SaveLocationResponse;
@@ -17,7 +15,6 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
-import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.Url;
 
@@ -46,4 +43,7 @@ public interface WatookApi {
 
     @GET
     Call<ApplicationIdResponse> getApplicationId(@Url String url, @Query("access_token") String token);
+
+    @POST("setting/save")
+    Call<PreferencesSaveResponse> setPreferences(@Header("Content-Type") String content_type, @Header("token") String token, @Body HashMap map);
 }

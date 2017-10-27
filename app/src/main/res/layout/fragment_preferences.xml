@@ -1,4 +1,5 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tool="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -38,6 +39,7 @@
                             android:textSize="@dimen/font_large" />
 
                         <TextView
+                            android:id="@+id/txt_dist"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/colorTextPrimaryDark"
@@ -46,8 +48,8 @@
 
                     </LinearLayout>
 
-                    <SeekBar
-                        android:id="@+id/seekBar"
+                    <com.crystal.crystalrangeseekbar.widgets.CrystalSeekbar
+                        android:id="@+id/distance_bar"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp" />
@@ -93,26 +95,43 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-                        <Button
+                        <LinearLayout
+                            android:id="@+id/lay_km"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="@dimen/margin_min"
                             android:layout_weight="1"
-                            android:background="@drawable/rounded_rect_bg"
-                            android:padding="@dimen/margin_5dp"
-                            android:text="KM"
-                            android:textColor="@color/colorPrimary" />
+                            android:background="@drawable/rounded_rect_bg_accent_empty">
 
-                        <Button
+                            <Button
+                                android:id="@+id/btn_km"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="?attr/selectableItemBackground"
+                                android:padding="@dimen/margin_5dp"
+                                android:text="KM"
+                                android:textColor="@color/colorTextPrimary" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/lay_miles"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="@dimen/margin_min"
                             android:layout_weight="1"
-                            android:background="@drawable/rounded_rect_bg_accent"
-                            android:clickable="true"
-                            android:padding="@dimen/margin_5dp"
-                            android:text="Miles"
-                            android:textColor="@color/colorTextWhite" />
+                            android:background="@drawable/rounded_rect_bg_accent">
+
+                            <Button
+                                android:id="@+id/btn_miles"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="?attr/selectableItemBackground"
+                                android:clickable="true"
+                                android:padding="@dimen/margin_5dp"
+                                android:text="Miles"
+                                android:textColor="@color/colorTextWhite" />
+                        </LinearLayout>
 
                     </LinearLayout>
 
@@ -145,6 +164,7 @@
                             android:textSize="@dimen/font_large" />
 
                         <TextView
+                            android:id="@+id/txt_age_range"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/colorTextPrimaryDark"
@@ -153,10 +173,15 @@
 
                     </LinearLayout>
 
-                    <SeekBar
+                    <com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar
+                        android:id="@+id/age_bar"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="10dp" />
+                        android:layout_margin="10dp"
+                        app:max_start_value="40"
+                        app:max_value="55"
+                        app:min_start_value="20"
+                        app:min_value="18" />
 
                 </LinearLayout>
 
@@ -183,7 +208,7 @@
                         android:textSize="@dimen/font_large" />
 
                     <Switch
-                        android:id="@+id/switch1"
+                        android:id="@+id/switch_men"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/margin_5dp"
@@ -194,24 +219,13 @@
                         android:textSize="@dimen/font_medium" />
 
                     <Switch
-                        android:id="@+id/switch2"
+                        android:id="@+id/switch_women"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/margin_5dp"
                         android:layout_weight="1"
                         android:padding="@dimen/margin_min"
                         android:text="Women"
-                        android:textColor="@color/colorTextPrimary"
-                        android:textSize="@dimen/font_medium" />
-
-                    <Switch
-                        android:id="@+id/switch3"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/margin_5dp"
-                        android:layout_weight="1"
-                        android:padding="@dimen/margin_min"
-                        android:text="Others"
                         android:textColor="@color/colorTextPrimary"
                         android:textSize="@dimen/font_medium" />
 
@@ -246,64 +260,7 @@
             </android.support.v7.widget.CardView>
 
 
-            <android.support.v7.widget.CardView
-                android:id="@+id/card_feature_in"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_small">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/margin_small"
-                    android:orientation="vertical">
-
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/feature_in"
-                        android:textColor="@color/colorTextPrimaryLight"
-                        android:textSize="@dimen/font_large" />
-
-                    <Switch
-                        android:id="@+id/switch11"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/margin_5dp"
-                        android:layout_weight="1"
-                        android:padding="@dimen/margin_min"
-                        android:text="Men"
-                        android:textColor="@color/colorTextPrimary"
-                        android:textSize="@dimen/font_medium" />
-
-                    <Switch
-                        android:id="@+id/switch22"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/margin_5dp"
-                        android:layout_weight="1"
-                        android:padding="@dimen/margin_min"
-                        android:text="Women"
-                        android:textColor="@color/colorTextPrimary"
-                        android:textSize="@dimen/font_medium" />
-
-                    <Switch
-                        android:id="@+id/switch33"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/margin_5dp"
-                        android:layout_weight="1"
-                        android:padding="@dimen/margin_min"
-                        android:text="Others"
-                        android:textColor="@color/colorTextPrimary"
-                        android:textSize="@dimen/font_medium" />
-
-
-                </LinearLayout>
-
-            </android.support.v7.widget.CardView>
 
 
         </LinearLayout>

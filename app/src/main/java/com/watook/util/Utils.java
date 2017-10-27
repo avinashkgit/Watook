@@ -111,7 +111,7 @@ public class Utils {
             setDist = formatter.format(distance) + " mts";
         }
         if (distance >= 1000) {
-            if (false) {
+            if (true) {
                 distance = distance / 1000;
                 NumberFormat formatter = NumberFormat.getNumberInstance();
                 formatter.setMaximumFractionDigits(1);
@@ -123,9 +123,17 @@ public class Utils {
                 setDist = formatter.format(distance) + " Miles";
             }
         }
-
-
         return setDist;
+
+    }
+
+
+    public static int milesToKm(int n){
+         Double s = ((n)/0.621371);
+        NumberFormat formatter = NumberFormat.getNumberInstance();
+        formatter.setMaximumFractionDigits(0);
+        s = Double.valueOf(formatter.format(s));
+        return s.intValue();
     }
 
 }

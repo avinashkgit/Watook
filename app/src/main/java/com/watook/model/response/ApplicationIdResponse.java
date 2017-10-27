@@ -1,4 +1,4 @@
-package com.watook.model;
+package com.watook.model.response;
 
 import java.io.Serializable;
 

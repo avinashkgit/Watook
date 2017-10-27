@@ -21,6 +21,8 @@
     <color name="colorProfileSelected">#f06560</color>
     <color name="colorProfileNotSelected">#19f06560</color>
 
+    <color name="colorTransparent">#00bdbdbd</color>
+
     <color name="red_50">#FFEBEE</color>
     <color name="red_100">#FFCDD2</color>
     <color name="red_200">#EF9A9A</color>

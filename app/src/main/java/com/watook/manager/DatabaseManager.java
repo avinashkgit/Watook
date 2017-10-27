@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.watook.model.MyProfile;
+import com.watook.model.Preferences;
 import com.watook.model.response.CodeValueResponse;
 import com.watook.model.response.RegistrationResponse;
 import com.watook.model.response.UserListResponse;
@@ -58,6 +59,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
         db.execSQL(DatabaseConstants.CREATE_TABLE_REGISTRATION);
         db.execSQL(DatabaseConstants.CREATE_TABLE_CODE_VALUE);
         db.execSQL(DatabaseConstants.CREATE_TABLE_USERS);
+        db.execSQL(DatabaseConstants.CREATE_TABLE_PREFERENCES);
 
     }
 
@@ -67,6 +69,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
         database.execSQL("delete from " + DatabaseConstants.TABLE_REGISTRATION);
         database.execSQL("delete from " + DatabaseConstants.TABLE_CODE_VALUE);
         database.execSQL("delete from " + DatabaseConstants.TABLE_USERS);
+        database.execSQL("delete from " + DatabaseConstants.TABLE_PREFERENCES);
     }
 
     @Override
@@ -328,6 +331,44 @@ public class DatabaseManager extends SQLiteOpenHelper {
                 blob = cursor.getBlob(cursor.getColumnIndex(DatabaseConstants.USERS_RESPONSE));
                 if (blob != null)
                     obj = (List<UserListResponse.UserList>) byteToObj(blob);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return obj;
+    }
+
+
+
+    public void insertPreferences(Preferences myObject) {
+        try {
+            database = this.getWritableDatabase();
+            database.execSQL("delete from " + DatabaseConstants.TABLE_PREFERENCES);
+            final ContentValues values = new ContentValues();
+            values.put(DatabaseConstants.PREFERENCES_RESPONSE, objToByte(myObject));
+            database.insert(DatabaseConstants.TABLE_PREFERENCES, null, values);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    public Preferences getPreferences() {
+        Cursor cursor = null;
+        byte[] blob;
+        Preferences obj = null;
+        try {
+            cursor = database.query(DatabaseConstants.TABLE_PREFERENCES, new String[]{"*"}, null, null, null, null, null);
+            if (cursor != null && cursor.getCount() > 0) {
+                cursor.moveToLast();
+                blob = cursor.getBlob(cursor.getColumnIndex(DatabaseConstants.PREFERENCES_RESPONSE));
+                if (blob != null)
+                    obj = (Preferences) byteToObj(blob);
             }
         } catch (Exception e) {
             e.printStackTrace();
