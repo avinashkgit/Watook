@@ -128,8 +128,8 @@ public class Utils {
     }
 
 
-    public static int milesToKm(int n){
-         Double s = ((n)/0.621371);
+    public static int milesToKm(int n) {
+        Double s = ((n) / 0.621371);
         NumberFormat formatter = NumberFormat.getNumberInstance();
         formatter.setMaximumFractionDigits(0);
         s = Double.valueOf(formatter.format(s));
