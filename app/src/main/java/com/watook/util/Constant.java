@@ -21,6 +21,10 @@ public class Constant {
     public static final String STATUS_RECENTLY_ONLINE = "Recently Online";
     public static final String STATUS_OFFLINE = "Offline";
 
+    public static final String IS_LOGGED_IN = "is_logged_in";
+
+    public static final String DISTANCE_UNIT_KM = "distance_unit_km";
+
 
 
 }

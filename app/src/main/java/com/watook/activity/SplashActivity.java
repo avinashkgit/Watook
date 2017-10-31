@@ -6,25 +6,28 @@ import android.os.Bundle;
 import android.widget.ImageView;
 
 import com.watook.R;
+import com.watook.application.MySharedPreferences;
 import com.watook.manager.DatabaseManager;
 import com.watook.model.MyProfile;
+import com.watook.util.Constant;
 
 public class SplashActivity extends BaseActivity {
     final Handler handler = new Handler();
-    MyProfile myProfile;
+    boolean isLoggedIn = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         try {
-            myProfile = DatabaseManager.getInstance(SplashActivity.this).getMyProfile();
+            isLoggedIn = (boolean) MySharedPreferences.getObject(Constant.IS_LOGGED_IN);
         } catch (Exception e) {
+            e.printStackTrace();
         }
+
         final ImageView logoView = (ImageView) findViewById(R.id.img_logo);
-//        Glide.with(this).load(R.drawable.logo).asBitmap().into(logoView);
         expand(logoView);
-        if (myProfile == null) {
+        if (!isLoggedIn) {
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {

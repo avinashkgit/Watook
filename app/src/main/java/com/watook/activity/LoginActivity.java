@@ -446,7 +446,7 @@ public class LoginActivity extends BaseActivity {
                 if (statusCode == 200 && saveResponse != null && saveResponse.getStatus() != null && saveResponse.getStatus().equalsIgnoreCase("success")) {
                     myProfile.setUserId(saveResponse.getData().getUserId());
                     try {
-                        MyApplication.getInstance().setUserId(Long.parseLong(saveResponse.getData().getUserId()));
+                        MyApplication.getInstance().setUserId(saveResponse.getData().getUserId());
                         MySharedPreferences.putObject(Constant.USER_ID, saveResponse.getData().getUserId());
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -493,6 +493,11 @@ public class LoginActivity extends BaseActivity {
                 SaveLocationResponse saveResponse = response.body();
                 if (statusCode == 200 && saveResponse != null && saveResponse.getStatus() != null && saveResponse.getStatus().equalsIgnoreCase("success")) {
                     setPreferences();
+                    try {
+                        MySharedPreferences.putObject(Constant.IS_LOGGED_IN, true);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     navigateView();
                 } else {
                     dismissProgressDialog();
@@ -552,6 +557,11 @@ public class LoginActivity extends BaseActivity {
         pref.setDiscoverable(true);
 
         DatabaseManager.getInstance(LoginActivity.this).insertPreferences(pref);
+        try {
+            MySharedPreferences.putObject(Constant.DISTANCE_UNIT_KM, false );
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 

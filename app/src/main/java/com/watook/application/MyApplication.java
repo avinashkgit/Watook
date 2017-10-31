@@ -25,7 +25,7 @@ public class MyApplication extends MultiDexApplication {
     public boolean isAppBackground = true;
     public static int density;
     DisplayMetrics metrics;
-    private long userId;
+    private String userId;
     private String token;
     private int height,width;
 
@@ -122,7 +122,7 @@ public class MyApplication extends MultiDexApplication {
         } else {
         }
         try {
-            userId = (Integer) MySharedPreferences.getObject(Constant.USER_ID);
+            userId = (String) MySharedPreferences.getObject(Constant.USER_ID);
             token = (String) MySharedPreferences.getObject(Constant.TOKEN);
             MyApplication.getInstance().setUserId(userId);
             MyApplication.getInstance().setToken(token);
@@ -185,11 +185,11 @@ public class MyApplication extends MultiDexApplication {
         super.onTerminate();
     }
 
-    public long getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(long userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 

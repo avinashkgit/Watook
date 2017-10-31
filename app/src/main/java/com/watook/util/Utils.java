@@ -11,6 +11,8 @@ import android.view.inputmethod.InputMethodManager;
 
 import com.watook.application.GPSTracker;
 import com.watook.application.MyApplication;
+import com.watook.application.MySharedPreferences;
+import com.watook.manager.DatabaseManager;
 
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -111,7 +113,14 @@ public class Utils {
             setDist = formatter.format(distance) + " mts";
         }
         if (distance >= 1000) {
-            if (true) {
+            boolean isDistUnitKm = false;
+            try {
+                isDistUnitKm = (boolean) MySharedPreferences.getObject(Constant.DISTANCE_UNIT_KM);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            if (isDistUnitKm) {
                 distance = distance / 1000;
                 NumberFormat formatter = NumberFormat.getNumberInstance();
                 formatter.setMaximumFractionDigits(1);
@@ -134,6 +143,22 @@ public class Utils {
         formatter.setMaximumFractionDigits(0);
         s = Double.valueOf(formatter.format(s));
         return s.intValue();
+    }
+
+    public static String getDistanceBasedOnUnit(int n) {
+        String s;
+        boolean isDistUnitKm = false;
+        try {
+            isDistUnitKm = (boolean) MySharedPreferences.getObject(Constant.DISTANCE_UNIT_KM);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (isDistUnitKm) {
+            s = milesToKm(n) + " Km";
+        } else {
+            s = n + " Miles";
+        }
+        return s;
     }
 
 }

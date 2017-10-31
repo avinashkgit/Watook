@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -15,7 +16,9 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarChangeListener;
+import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarFinalValueListener;
 import com.crystal.crystalrangeseekbar.interfaces.OnSeekbarChangeListener;
+import com.crystal.crystalrangeseekbar.interfaces.OnSeekbarFinalValueListener;
 import com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar;
 import com.crystal.crystalrangeseekbar.widgets.CrystalSeekbar;
 import com.watook.R;
@@ -66,15 +69,17 @@ public class PreferencesFragment extends Fragment implements View.OnClickListene
     private void bindViews() {
         Preferences pref = DatabaseManager.getInstance(activity).getPreferences();
         if (pref.isDistanceUnitKm()) {
+            setKmBackground();
             if (!clicked)
                 setKm();
-            txtDistance.setText(Utils.milesToKm(pref.getDistanceRange()) + " Km");
-            distanceBar.setPosition(Utils.milesToKm(pref.getDistanceRange()));
+            txtDistance.setText(Utils.getDistanceBasedOnUnit(pref.getDistanceRange()));
+            distanceBar.setMinStartValue(pref.getDistanceRange()).apply();
         } else {
+            setMilesBackground();
             if (!clicked)
                 setMiles();
-            txtDistance.setText(pref.getDistanceRange() + " Miles");
-            distanceBar.setPosition(pref.getDistanceRange());
+            txtDistance.setText(Utils.getDistanceBasedOnUnit(pref.getDistanceRange()));
+            distanceBar.setMinStartValue(pref.getDistanceRange()).apply();
         }
         if (pref.isFemaleInterest()) {
             switchWomen.setChecked(true);
@@ -85,12 +90,41 @@ public class PreferencesFragment extends Fragment implements View.OnClickListene
         if (pref.isDiscoverable()) {
             switchDiscoverable.setChecked(true);
         }
+        ageSeekBar.setMinStartValue(pref.getAgeMin()).setMaxStartValue(pref.getAgeMax()).apply();
 
     }
 
     private void inItViews(final View view) {
         switchMen = (Switch) view.findViewById(R.id.switch_men);
+        switchMen.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (switchMen.isChecked()) {
+                    switchMen.setChecked(true);
+                    setGenderInterestMale(true);
+                } else {
+                    switchWomen.setChecked(true);
+                    setGenderInterestFemale(true);
+                    setGenderInterestMale(false);
+
+
+                }
+            }
+        });
         switchWomen = (Switch) view.findViewById(R.id.switch_women);
+        switchWomen.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (switchWomen.isChecked()) {
+                    switchWomen.setChecked(true);
+                    setGenderInterestFemale(true);
+                } else {
+                    switchMen.setChecked(true);
+                    setGenderInterestMale(true);
+                    setGenderInterestFemale(false);
+                }
+            }
+        });
 
         activity = (PreferencesActivity) getActivity();
         txtAgeRange = (TextView) view.findViewById(R.id.txt_age_range);
@@ -109,7 +143,13 @@ public class PreferencesFragment extends Fragment implements View.OnClickListene
         distanceBar.setOnSeekbarChangeListener(new OnSeekbarChangeListener() {
             @Override
             public void valueChanged(Number value) {
-                txtDistance.setText(Utils.milesToKm(value.intValue()) + " Km");
+                txtDistance.setText(Utils.getDistanceBasedOnUnit(value.intValue()));
+            }
+        });
+        distanceBar.setOnSeekbarFinalValueListener(new OnSeekbarFinalValueListener() {
+            @Override
+            public void finalValue(Number value) {
+                setDistance(value.intValue());
             }
         });
 
@@ -121,10 +161,42 @@ public class PreferencesFragment extends Fragment implements View.OnClickListene
                 txtAgeRange.setText(minValue + "-" + maxValue);
             }
         });
+        ageSeekBar.setOnRangeSeekbarFinalValueListener(new OnRangeSeekbarFinalValueListener() {
+            @Override
+            public void finalValue(Number minValue, Number maxValue) {
+                setAge(minValue.intValue(), maxValue.intValue());
+            }
+        });
 
         switchDiscoverable = (Switch) view.findViewById(R.id.switch_discoverable);
         switchDiscoverable.setChecked(true);
 
+    }
+
+    private void setGenderInterestMale(boolean male) {
+        Preferences pref = DatabaseManager.getInstance(activity).getPreferences();
+        pref.setMaleInterest(male);
+        DatabaseManager.getInstance(activity).insertPreferences(pref);
+    }
+
+    private void setGenderInterestFemale(boolean female) {
+        Preferences pref = DatabaseManager.getInstance(activity).getPreferences();
+        pref.setFemaleInterest(female);
+        DatabaseManager.getInstance(activity).insertPreferences(pref);
+    }
+
+
+    private void setDistance(int dist) {
+        Preferences pref = DatabaseManager.getInstance(activity).getPreferences();
+        pref.setDistanceRange(dist);
+        DatabaseManager.getInstance(activity).insertPreferences(pref);
+    }
+
+    private void setAge(int min, int max) {
+        Preferences pref = DatabaseManager.getInstance(activity).getPreferences();
+        pref.setAgeMin(min);
+        pref.setAgeMax(max);
+        DatabaseManager.getInstance(activity).insertPreferences(pref);
     }
 
 
@@ -133,39 +205,54 @@ public class PreferencesFragment extends Fragment implements View.OnClickListene
         switch (v.getId()) {
             case R.id.btn_km:
                 setKm();
+                setKmBackground();
                 break;
             case R.id.btn_miles:
                 setMiles();
+                setMilesBackground();
                 break;
         }
     }
 
     private void setMiles() {
+        Preferences pref = DatabaseManager.getInstance(activity).getPreferences();
+        pref.setDistanceUnitKm(false);
+        DatabaseManager.getInstance(activity).insertPreferences(pref);
+        try {
+            MySharedPreferences.putObject(Constant.DISTANCE_UNIT_KM, false);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        clicked = true;
+        bindViews();
+    }
+
+    private void setMilesBackground() {
         layMiles.setBackground(getResources().getDrawable(R.drawable.rounded_rect_bg_accent));
         layKm.setBackground(getResources().getDrawable(R.drawable.rounded_rect_bg_accent_empty));
         btnKm.setTextColor(getResources().getColor(R.color.colorTextPrimaryDark));
         btnMiles.setTextColor(getResources().getColor(R.color.colorTextWhite));
-
-        Preferences pref = DatabaseManager.getInstance(activity).getPreferences();
-        pref.setDistanceUnitKm(false);
-        DatabaseManager.getInstance(activity).insertPreferences(pref);
-
-        clicked = true;
-        bindViews();
-
     }
 
     private void setKm() {
+        Preferences pref = DatabaseManager.getInstance(activity).getPreferences();
+        pref.setDistanceUnitKm(true);
+        DatabaseManager.getInstance(activity).insertPreferences(pref);
+        try {
+            MySharedPreferences.putObject(Constant.DISTANCE_UNIT_KM, true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        clicked = true;
+        bindViews();
+    }
+
+    private void setKmBackground() {
         layKm.setBackground(getResources().getDrawable(R.drawable.rounded_rect_bg_accent));
         layMiles.setBackground(getResources().getDrawable(R.drawable.rounded_rect_bg_accent_empty));
         btnMiles.setTextColor(getResources().getColor(R.color.colorTextPrimaryDark));
         btnKm.setTextColor(getResources().getColor(R.color.colorTextWhite));
-
-        Preferences pref = DatabaseManager.getInstance(activity).getPreferences();
-        pref.setDistanceUnitKm(true);
-        DatabaseManager.getInstance(activity).insertPreferences(pref);
-
-        clicked = true;
-        bindViews();
     }
 }

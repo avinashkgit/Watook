@@ -3,17 +3,16 @@ package com.watook.core.chat;
 import android.content.Context;
 import android.util.Log;
 
-
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.watook.application.MySharedPreferences;
 import com.watook.fcm.FcmNotificationBuilder;
 import com.watook.model.Chat;
 import com.watook.util.Constant;
-import com.watook.util.SharedPrefUtil;
 
 /**
  * Author: Kartik Sharma
@@ -63,11 +62,15 @@ public class ChatInteractor implements ChatContract.Interactor {
                     getMessageFromFirebaseUser(chat.senderUid, chat.receiverUid);
                 }
                 // send push notification to the receiver
-                sendPushNotificationToReceiver(chat.sender,
-                        chat.message,
-                        chat.senderUid,
-                        new SharedPrefUtil(context).getString(Constant.ARG_FIREBASE_TOKEN),
-                        receiverFirebaseToken);
+                try {
+                    sendPushNotificationToReceiver(chat.sender,
+                            chat.message,
+                            chat.senderUid,
+                            (String) MySharedPreferences.getObject(Constant.ARG_FIREBASE_TOKEN),
+                            receiverFirebaseToken);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 mOnSendMessageListener.onSendMessageSuccess();
             }
 

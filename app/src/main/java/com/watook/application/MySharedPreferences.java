@@ -1,5 +1,6 @@
 package com.watook.application;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Base64InputStream;
 import android.util.Base64OutputStream;
@@ -159,6 +160,5 @@ public class MySharedPreferences {
             return null;
         return new ObjectInputStream(new Base64InputStream(new ByteArrayInputStream(serialized.getBytes()), 0)).readObject();
     }
-
 
 }

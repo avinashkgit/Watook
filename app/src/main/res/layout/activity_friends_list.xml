@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:fitsSystemWindows="true">
 
     <android.support.design.widget.AppBarLayout
@@ -15,10 +16,25 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <FrameLayout
-        android:id="@+id/frame_layout_content_chat"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+    <!--<FrameLayout-->
+        <!--android:id="@+id/frame_layout_content_chat"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--app:layout_behavior="@string/appbar_scrolling_view_behavior" />-->
 
-</android.support.design.widget.CoordinatorLayout>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_near_by"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </android.support.v7.widget.RecyclerView>
+
+    <TextView
+        android:id="@+id/txt_no_data_found"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="@string/hello_blank_fragment"
+        android:visibility="gone"/>
+
+</LinearLayout>

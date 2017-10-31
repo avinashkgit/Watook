@@ -178,9 +178,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
-                        app:max_start_value="40"
                         app:max_value="55"
-                        app:min_start_value="20"
                         app:min_value="18" />
 
                 </LinearLayout>

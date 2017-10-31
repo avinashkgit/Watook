@@ -2,14 +2,12 @@ package com.watook.fcm;
 
 import android.util.Log;
 
-
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
+import com.watook.application.MySharedPreferences;
 import com.watook.util.Constant;
-import com.watook.util.SharedPrefUtil;
 
 public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
     private static final String TAG = "MyFirebaseIIDService";
@@ -42,7 +40,11 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
      * @param token The new token.
      */
     private void sendRegistrationToServer(final String token) {
-        new SharedPrefUtil(getApplicationContext()).saveString(Constant.ARG_FIREBASE_TOKEN, token);
+        try {
+            MySharedPreferences.putObject(Constant.ARG_FIREBASE_TOKEN, token);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             FirebaseDatabase.getInstance()

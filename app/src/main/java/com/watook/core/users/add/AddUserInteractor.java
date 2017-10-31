@@ -9,9 +9,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.watook.R;
+import com.watook.application.MySharedPreferences;
 import com.watook.model.User;
 import com.watook.util.Constant;
-import com.watook.util.SharedPrefUtil;
 
 
 public class AddUserInteractor implements AddUserContract.Interactor {
@@ -24,9 +24,14 @@ public class AddUserInteractor implements AddUserContract.Interactor {
     @Override
     public void addUserToDatabase(final Context context, FirebaseUser firebaseUser) {
         DatabaseReference database = FirebaseDatabase.getInstance().getReference();
-        User user = new User(firebaseUser.getUid(),
-                firebaseUser.getEmail(),
-                new SharedPrefUtil(context).getString(Constant.ARG_FIREBASE_TOKEN));
+        User user = null;
+        try {
+            user = new User(firebaseUser.getUid(),
+                    firebaseUser.getEmail(),
+                    (String) MySharedPreferences.getObject(Constant.ARG_FIREBASE_TOKEN));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         database.child(Constant.ARG_USERS)
                 .child(firebaseUser.getUid())
                 .setValue(user)

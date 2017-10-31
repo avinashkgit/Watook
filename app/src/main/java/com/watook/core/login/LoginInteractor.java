@@ -9,8 +9,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
+import com.watook.application.MySharedPreferences;
 import com.watook.util.Constant;
-import com.watook.util.SharedPrefUtil;
 
 import static android.content.ContentValues.TAG;
 
@@ -41,8 +41,12 @@ public class LoginInteractor implements LoginContract.Interactor {
                         // signed in user can be handled in the listener.
                         if (task.isSuccessful()) {
                             mOnLoginListener.onSuccess(task.getResult().toString());
-                            updateFirebaseToken(task.getResult().getUser().getUid(),
-                                    new SharedPrefUtil(activity.getApplicationContext()).getString(Constant.ARG_FIREBASE_TOKEN, null));
+                            try {
+                                updateFirebaseToken(task.getResult().getUser().getUid(),
+                                        (String)MySharedPreferences.getObject(Constant.ARG_FIREBASE_TOKEN));
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                         } else {
                             mOnLoginListener.onFailure(task.getException().getMessage());
                         }
