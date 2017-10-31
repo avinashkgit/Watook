@@ -7,6 +7,7 @@ import android.support.v4.BuildConfig;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
 
+import com.google.firebase.database.FirebaseDatabase;
 import com.watook.manager.DatabaseManager;
 import com.watook.util.AppLog;
 import com.watook.util.Constant;
@@ -77,7 +78,7 @@ public class MyApplication extends MultiDexApplication {
 //        TypefaceUtil.overrideFont(getApplicationContext(), "MONOSPACE", getResources().getString(R.string.FONT_CAMBAYREGULAR));
 //        TypefaceUtil.overrideFont(getApplicationContext(), "SERIF", getResources().getString(R.string.FONT_TITILLIUMTEXT25L600));
 //        TypefaceUtil.overrideFont(getApplicationContext(), "SANS", getResources().getString(R.string.FONT_MYRIADPRO_REGULAR));
-
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         metrics = new DisplayMetrics();
         density = (int) context.getResources().getDisplayMetrics().density;

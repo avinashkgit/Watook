@@ -19,7 +19,7 @@ public class DatabaseConstants {
     static final String USERS_RESPONSE = "users_response";
 
     static final String TABLE_PREFERENCES = "preferences";
-    static final String PREFERENCES_RESPONSE = "users_response";
+    static final String PREFERENCES_RESPONSE = "preferences_response";
 
 
     /////////////////////////////////////////////////////////////////

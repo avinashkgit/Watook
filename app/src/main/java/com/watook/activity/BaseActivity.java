@@ -91,8 +91,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     public void logout() {
-        clearAllTables();
         MySharedPreferences.clear();
+        clearAllTables();
         LoginManager.getInstance().logOut();
         FirebaseAuth.getInstance().signOut();
         gotToLogin();
