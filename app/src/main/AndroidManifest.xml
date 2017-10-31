@@ -31,6 +31,11 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
 
+        <meta-data
+            android:name="com.google.geo.API_KEY"
+            android:value="@string/firebase_api_key">
+        </meta-data>
+
         <activity
             android:name=".activity.SplashActivity"
             android:theme="@style/AppTheme.FullScreen">
@@ -93,6 +98,17 @@
         <!--<service-->
             <!--android:name=".application.GPSTracker"-->
             <!--android:enabled="true" />-->
+
+        <service android:name=".fcm.MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <service android:name=".fcm.MyFirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
 
 
     </application>

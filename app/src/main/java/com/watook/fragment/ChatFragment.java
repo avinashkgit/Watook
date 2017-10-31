@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.watook.R;
 import com.watook.adapter.ChatRecyclerAdapter;
+import com.watook.application.MyApplication;
 import com.watook.core.chat.ChatContract;
 import com.watook.core.chat.ChatPresenter;
 import com.watook.events.PushNotificationEvent;
@@ -110,7 +111,8 @@ public class ChatFragment extends Fragment implements ChatContract.View, TextVie
         String receiver = getArguments().getString(Constant.ARG_RECEIVER);
         String receiverUid = getArguments().getString(Constant.ARG_RECEIVER_UID);
         String sender = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-        String senderUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+//        String senderUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        String senderUid = MyApplication.getInstance().getUserId();
         String receiverFirebaseToken = getArguments().getString(Constant.ARG_FIREBASE_TOKEN);
         Chat chat = new Chat(sender,
                 receiver,
@@ -152,7 +154,8 @@ public class ChatFragment extends Fragment implements ChatContract.View, TextVie
     @Subscribe
     public void onPushNotificationEvent(PushNotificationEvent pushNotificationEvent) {
         if (mChatRecyclerAdapter == null || mChatRecyclerAdapter.getItemCount() == 0) {
-            mChatPresenter.getMessage(FirebaseAuth.getInstance().getCurrentUser().getUid(),
+//            mChatPresenter.getMessage(FirebaseAuth.getInstance().getCurrentUser().getUid(),
+            mChatPresenter.getMessage(MyApplication.getInstance().getUserId(),
                     pushNotificationEvent.getUid());
         }
     }

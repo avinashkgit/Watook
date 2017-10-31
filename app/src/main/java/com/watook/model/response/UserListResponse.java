@@ -74,6 +74,7 @@ public class UserListResponse implements Serializable {
         private String fbImages;
         private String profileImage;
         private LocationBean location;
+        private String fireBaseToken;
 
         public long getUserId() {
             return userId;
@@ -244,5 +245,16 @@ public class UserListResponse implements Serializable {
                 this.longitude = longitude;
             }
         }
+
+
+        public String getFireBaseToken() {
+            return fireBaseToken;
+        }
+
+        public void setFireBaseToken(String fireBaseToken) {
+            this.fireBaseToken = fireBaseToken;
+        }
     }
+
+
 }

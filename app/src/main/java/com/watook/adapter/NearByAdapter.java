@@ -1,6 +1,7 @@
 package com.watook.adapter;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.location.Location;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.watook.R;
+import com.watook.activity.ChatActivity;
 import com.watook.application.GPSTracker;
 import com.watook.model.response.UserListResponse;
 import com.watook.util.Utils;
@@ -46,13 +48,22 @@ public class NearByAdapter extends RecyclerView.Adapter<NearByAdapter.RecyclerVi
 
     @Override
     public void onBindViewHolder(final RecyclerViewHolder holder, int position) {
-        UserListResponse.UserList user = userList.get(position);
+        final UserListResponse.UserList user = userList.get(position);
         holder.tvName.setText(Utils.emptyIfNull(user.getFirstName()) + " " + Utils.emptyIfNull(user.getLastName()));
         if (!Utils.isEmpty(String.valueOf(user.getLocation().getLatitude()))
                 && !Utils.isEmpty(String.valueOf(user.getLocation().getLongitude()))) {
             holder.tvDist.setText(Utils.getDistance(activity, user.getLocation().getLatitude(), user.getLocation().getLongitude()));
         } else
             holder.tvDist.setText(String.valueOf("NA"));
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ChatActivity.startActivity(activity,
+                        user.getEmailId(),
+                        user.getUserId(),
+                        user.getFireBaseToken());
+            }
+        });
 
 
         Glide.with(activity).load(Utils.emptyIfNull(user.getProfileImage())).asBitmap().centerCrop().into(new BitmapImageViewTarget(holder.ivProfile) {
@@ -71,7 +82,7 @@ public class NearByAdapter extends RecyclerView.Adapter<NearByAdapter.RecyclerVi
         return userList.size();
     }
 
-    class RecyclerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class RecyclerViewHolder extends RecyclerView.ViewHolder {
         TextView tvName, tvDist;
         RelativeLayout rlBack;
         ImageView ivProfile;
@@ -82,11 +93,8 @@ public class NearByAdapter extends RecyclerView.Adapter<NearByAdapter.RecyclerVi
             tvDist = (TextView) itemView.findViewById(R.id.txt_dist);
             rlBack = (RelativeLayout) itemView.findViewById(R.id.rl_profile_back);
             ivProfile = (ImageView) itemView.findViewById(R.id.profile_pic);
-            itemView.setOnClickListener(this);
         }
 
-        @Override
-        public void onClick(View v) {
-        }
+
     }
 }

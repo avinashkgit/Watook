@@ -30,10 +30,19 @@ import com.facebook.HttpMethod;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FacebookAuthProvider;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.watook.R;
 import com.watook.application.GPSTracker;
 import com.watook.application.MyApplication;
 import com.watook.application.MySharedPreferences;
+import com.watook.fcm.MyFirebaseInstanceIDService;
 import com.watook.manager.ApiManager;
 import com.watook.manager.DatabaseManager;
 import com.watook.model.Preferences;
@@ -120,7 +129,7 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 getFacebookData(loginResult);
-
+                handleFacebookAccessToken(loginResult.getAccessToken());
 
             }
 
@@ -375,6 +384,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void navigateView() {
+        dismissProgressDialog();
         Intent i = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(i);
         finish();
@@ -434,6 +444,7 @@ public class LoginActivity extends BaseActivity {
         map.put("workPosition", myProfile.getWorkPosition());
         map.put("workLocation", myProfile.getWorkLocation());
         map.put("profileImage", myProfile.getProfilePicture());
+        map.put("fireBaseToken", FirebaseInstanceId.getInstance().getToken());
 
 
         Call<ProfileSaveResponse> saveProfile = ApiManager.getApiInstance().saveProfile(Constant.CONTENT_TYPE,
@@ -563,6 +574,32 @@ public class LoginActivity extends BaseActivity {
             e.printStackTrace();
         }
     }
+
+
+    private void handleFacebookAccessToken(AccessToken token) {
+        Log.d(TAG, "handleFacebookAccessToken:" + token);
+        final FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "signInWithCredential:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            showAToast("Authentication success.");
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "signInWithCredential:failure", task.getException());
+                            showAToast("Authentication failed.");
+                        }
+
+                        // ...
+                    }
+                });
+    }
+
 
 
 }

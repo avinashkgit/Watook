@@ -15,7 +15,9 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.facebook.login.LoginManager;
+import com.google.firebase.auth.FirebaseAuth;
 import com.watook.R;
+import com.watook.application.MySharedPreferences;
 import com.watook.customview.CustomProgressDialog;
 import com.watook.manager.DatabaseManager;
 import com.watook.util.Utils;
@@ -90,7 +92,9 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     public void logout() {
         clearAllTables();
+        MySharedPreferences.clear();
         LoginManager.getInstance().logOut();
+        FirebaseAuth.getInstance().signOut();
         gotToLogin();
     }
 

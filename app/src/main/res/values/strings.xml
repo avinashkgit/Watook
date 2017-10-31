@@ -2,6 +2,8 @@
     <!--<string name="app_name">Watook</string>-->
     <string name="app_name">Watook</string>
 
+    <string name="firebase_api_key">AIzaSyBVjmHZZnvtswNJ9AakijMj5CezLKD4MzU</string>
+
     <string name="facebook_app_id">1288795094521349</string>
     <string name="fb_login_protocol_scheme">fb1288795094521349</string>
 
