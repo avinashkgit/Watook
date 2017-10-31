@@ -93,7 +93,7 @@ public class ChatFragment extends Fragment implements ChatContract.View, TextVie
         mETxtMessage.setOnEditorActionListener(this);
 
         mChatPresenter = new ChatPresenter(this);
-        mChatPresenter.getMessage(FirebaseAuth.getInstance().getCurrentUser().getUid(),
+        mChatPresenter.getMessage(MyApplication.getInstance().getUserId(),
                 getArguments().getString(Constant.ARG_RECEIVER_UID));
     }
 
