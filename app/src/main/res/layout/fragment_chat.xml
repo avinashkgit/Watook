@@ -1,27 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tool="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/colorBackground">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view_chat"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/edit_text_message"
+        android:layout_above="@+id/lin_lay"
         app:layoutManager="LinearLayoutManager" />
 
-    <EditText
-        android:id="@+id/edit_text_message"
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        style="@style/Widget.AppCompat.ProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true" />
+
+    <LinearLayout
+        android:id="@+id/lin_lay"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_margin="@dimen/margin_small"
-        android:background="@drawable/rounded_rect_bg"
-        android:hint="@string/type_a_message"
-        android:imeOptions="actionSend"
-        android:inputType="text"
-        android:maxLines="1"
-        android:padding="@dimen/margin_small" />
+        android:orientation="horizontal"
+        android:padding="@dimen/margin_small">
+
+        <EditText
+            android:id="@+id/edit_text_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/margin_small"
+            android:layout_marginRight="@dimen/margin_small"
+            android:layout_weight="1"
+            android:background="@drawable/rounded_rect_bg"
+            android:hint="@string/type_a_message"
+            android:inputType="textMultiLine"
+            android:maxLines="4"
+            android:minLines="1"
+            android:padding="@dimen/margin_small"
+            tool:text="" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/action_button_send"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:src="@drawable/ic_send_white_24dp"
+            app:backgroundTint="@color/colorPrimary" />
+    </LinearLayout>
 
 </RelativeLayout>

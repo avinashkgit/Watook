@@ -59,7 +59,7 @@ public class NearByAdapter extends RecyclerView.Adapter<NearByAdapter.RecyclerVi
             @Override
             public void onClick(View v) {
                 ChatActivity.startActivity(activity,
-                        user.getEmailId(),
+                        user.getFirstName() + " " + user.getLastName(),
                         String.valueOf(user.getUserId()),
                         user.getFireBaseToken());
             }

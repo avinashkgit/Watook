@@ -34,6 +34,7 @@ public class ChatActivity extends BaseActivity {
 
     private void init() {
         // set the register screen fragment
+        getSupportActionBar().setTitle(getIntent().getExtras().getString(Constant.ARG_RECEIVER));
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.frame_layout_content_chat,
                 ChatFragment.newInstance(getIntent().getExtras().getString(Constant.ARG_RECEIVER),

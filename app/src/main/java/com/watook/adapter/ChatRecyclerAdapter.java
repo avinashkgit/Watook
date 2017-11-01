@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.watook.R;
+import com.watook.application.MyApplication;
 import com.watook.model.Chat;
 
 import java.util.List;
@@ -50,7 +51,7 @@ public class ChatRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (TextUtils.equals(mChats.get(position).senderUid,
-                FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                MyApplication.getInstance().getUserId())) {
             configureMyChatViewHolder((MyChatViewHolder) holder, position);
         } else {
             configureOtherChatViewHolder((OtherChatViewHolder) holder, position);
@@ -63,7 +64,7 @@ public class ChatRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         String alphabet = chat.sender.substring(0, 1);
 
         myChatViewHolder.txtChatMessage.setText(chat.message);
-        myChatViewHolder.txtUserAlphabet.setText(alphabet);
+//        myChatViewHolder.txtUserAlphabet.setText(alphabet);
     }
 
     private void configureOtherChatViewHolder(OtherChatViewHolder otherChatViewHolder, int position) {
@@ -72,7 +73,7 @@ public class ChatRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         String alphabet = chat.sender.substring(0, 1);
 
         otherChatViewHolder.txtChatMessage.setText(chat.message);
-        otherChatViewHolder.txtUserAlphabet.setText(alphabet);
+//        otherChatViewHolder.txtUserAlphabet.setText(alphabet);
     }
 
     @Override
@@ -85,12 +86,11 @@ public class ChatRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public int getItemViewType(int position) {
-        if (TextUtils.equals(mChats.get(position).senderUid,
-                FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+        if (mChats.get(position).senderUid.equals(MyApplication.getInstance().getUserId()))
             return VIEW_TYPE_ME;
-        } else {
+        else
             return VIEW_TYPE_OTHER;
-        }
+
     }
 
     private static class MyChatViewHolder extends RecyclerView.ViewHolder {
@@ -99,7 +99,7 @@ public class ChatRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         public MyChatViewHolder(View itemView) {
             super(itemView);
             txtChatMessage = (TextView) itemView.findViewById(R.id.text_view_chat_message);
-            txtUserAlphabet = (TextView) itemView.findViewById(R.id.text_view_user_alphabet);
+//            txtUserAlphabet = (TextView) itemView.findViewById(R.id.text_view_user_alphabet);
         }
     }
 
@@ -109,7 +109,7 @@ public class ChatRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         public OtherChatViewHolder(View itemView) {
             super(itemView);
             txtChatMessage = (TextView) itemView.findViewById(R.id.text_view_chat_message);
-            txtUserAlphabet = (TextView) itemView.findViewById(R.id.text_view_user_alphabet);
+//            txtUserAlphabet = (TextView) itemView.findViewById(R.id.text_view_user_alphabet);
         }
     }
 }

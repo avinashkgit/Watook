@@ -3,14 +3,18 @@ package com.watook.fragment;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +28,7 @@ import com.watook.core.chat.ChatPresenter;
 import com.watook.events.PushNotificationEvent;
 import com.watook.model.Chat;
 import com.watook.util.Constant;
+import com.watook.util.Utils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -35,7 +40,8 @@ public class ChatFragment extends Fragment implements ChatContract.View, TextVie
     private RecyclerView mRecyclerViewChat;
     private EditText mETxtMessage;
 
-    private ProgressDialog mProgressDialog;
+    private ProgressBar progressBar;
+    private FloatingActionButton fabSend;
 
     private ChatRecyclerAdapter mChatRecyclerAdapter;
 
@@ -74,8 +80,38 @@ public class ChatFragment extends Fragment implements ChatContract.View, TextVie
     }
 
     private void bindViews(View view) {
+        progressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
         mRecyclerViewChat = (RecyclerView) view.findViewById(R.id.recycler_view_chat);
         mETxtMessage = (EditText) view.findViewById(R.id.edit_text_message);
+        mETxtMessage.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                if(!Utils.isEmpty(mETxtMessage.getText().toString()))
+                    fabSend.setEnabled(true);
+                else
+                    fabSend.setEnabled(false);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        fabSend = (FloatingActionButton) view.findViewById(R.id.action_button_send);
+        fabSend.setEnabled(false );
+        fabSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!Utils.isEmpty(mETxtMessage.getText().toString()))
+                sendMessage();
+            }
+        });
     }
 
     @Override
@@ -85,24 +121,22 @@ public class ChatFragment extends Fragment implements ChatContract.View, TextVie
     }
 
     private void init() {
-        mProgressDialog = new ProgressDialog(getActivity());
-        mProgressDialog.setTitle(getString(R.string.loading));
-        mProgressDialog.setMessage(getString(R.string.please_wait));
-        mProgressDialog.setIndeterminate(true);
 
         mETxtMessage.setOnEditorActionListener(this);
 
         mChatPresenter = new ChatPresenter(this);
         mChatPresenter.getMessage(MyApplication.getInstance().getUserId(),
                 getArguments().getString(Constant.ARG_RECEIVER_UID));
+
+
     }
 
     @Override
     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-        if (actionId == EditorInfo.IME_ACTION_SEND) {
-            sendMessage();
-            return true;
-        }
+//        if (actionId == EditorInfo.IME_ACTION_SEND) {
+//            sendMessage();
+//            return true;
+//        }
         return false;
     }
 
@@ -110,7 +144,7 @@ public class ChatFragment extends Fragment implements ChatContract.View, TextVie
         String message = mETxtMessage.getText().toString();
         String receiver = getArguments().getString(Constant.ARG_RECEIVER);
         String receiverUid = getArguments().getString(Constant.ARG_RECEIVER_UID);
-        String sender = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+        String sender = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
 //        String senderUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         String senderUid = MyApplication.getInstance().getUserId();
         String receiverFirebaseToken = getArguments().getString(Constant.ARG_FIREBASE_TOKEN);
@@ -138,6 +172,7 @@ public class ChatFragment extends Fragment implements ChatContract.View, TextVie
 
     @Override
     public void onGetMessagesSuccess(Chat chat) {
+        progressBar.setVisibility(View.GONE);
         if (mChatRecyclerAdapter == null) {
             mChatRecyclerAdapter = new ChatRecyclerAdapter(new ArrayList<Chat>());
             mRecyclerViewChat.setAdapter(mChatRecyclerAdapter);
