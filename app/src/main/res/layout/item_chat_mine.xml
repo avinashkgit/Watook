@@ -4,43 +4,46 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?android:attr/selectableItemBackground"
-    android:clickable="true"
+    android:clickable="false"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:paddingBottom="@dimen/margin_small"
+    android:paddingBottom="@dimen/margin_2dp"
     android:paddingEnd="@dimen/margin_avg"
     android:paddingStart="@dimen/margin_avg"
-    android:paddingTop="@dimen/margin_small">
+    android:paddingTop="@dimen/margin_2dp">
 
     <TextView
         android:id="@+id/text_view_chat_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_huge"
-        android:layout_marginLeft="@dimen/margin_huge"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:background="@drawable/rounded_rect_bg_primary"
-        android:padding="@dimen/margin_small"
+        android:layout_marginLeft="@dimen/margin_huge"
+        android:layout_marginStart="@dimen/margin_huge"
+        android:background="@drawable/shape_bg_outgoing_bubble"
+        android:paddingBottom="@dimen/margin_10dp"
+        android:paddingLeft="@dimen/margin_15dp"
+        android:paddingRight="@dimen/margin_15dp"
+        android:paddingTop="@dimen/margin_10dp"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/grey_100"
-        tools:text="Noice man !" />
+        tools:text="uyu  gutu ututug utuuutu t" />
 
     <!--<TextView-->
-        <!--android:id="@+id/text_view_user_alphabet"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_alignParentEnd="true"-->
-        <!--android:layout_alignParentRight="true"-->
-        <!--android:layout_marginStart="@dimen/margin_avg"-->
-        <!--android:layout_marginLeft="@dimen/margin_avg"-->
-        <!--android:background="@drawable/circle_accent"-->
-        <!--android:gravity="center"-->
-        <!--android:maxEms="1"-->
-        <!--android:textAllCaps="true"-->
-        <!--android:textAppearance="?android:attr/textAppearanceLarge"-->
-        <!--android:textColor="@color/grey_100"-->
-        <!--android:textStyle="bold"-->
-        <!--tools:text="a" />-->
+    <!--android:id="@+id/text_view_user_alphabet"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_alignParentEnd="true"-->
+    <!--android:layout_alignParentRight="true"-->
+    <!--android:layout_marginStart="@dimen/margin_avg"-->
+    <!--android:layout_marginLeft="@dimen/margin_avg"-->
+    <!--android:background="@drawable/circle_accent"-->
+    <!--android:gravity="center"-->
+    <!--android:maxEms="1"-->
+    <!--android:textAllCaps="true"-->
+    <!--android:textAppearance="?android:attr/textAppearanceLarge"-->
+    <!--android:textColor="@color/grey_100"-->
+    <!--android:textStyle="bold"-->
+    <!--tools:text="a" />-->
 
 </RelativeLayout>
