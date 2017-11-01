@@ -86,15 +86,15 @@ public class ChatFragment extends Fragment implements ChatContract.View, TextVie
         mETxtMessage.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                if(!Utils.isEmpty(mETxtMessage.getText().toString()))
-                    fabSend.setEnabled(true);
-                else
-                    fabSend.setEnabled(false);
+
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                if(!Utils.isEmpty(mETxtMessage.getText().toString()))
+                    fabSend.setEnabled(true);
+                else
+                    fabSend.setEnabled(false);
             }
 
             @Override
