@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -12,35 +12,64 @@
     android:paddingTop="@dimen/margin_2dp">
 
     <!--<TextView-->
-        <!--android:id="@+id/text_view_user_alphabet"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:background="@drawable/circle_accent"-->
-        <!--android:gravity="center"-->
-        <!--android:maxEms="1"-->
-        <!--android:textAllCaps="true"-->
-        <!--android:textAppearance="?android:attr/textAppearanceLarge"-->
-        <!--android:textColor="@color/grey_100"-->
-        <!--android:textStyle="bold"-->
-        <!--tools:text="a" />-->
+    <!--android:id="@+id/text_view_user_alphabet"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:background="@drawable/circle_accent"-->
+    <!--android:gravity="center"-->
+    <!--android:maxEms="1"-->
+    <!--android:textAllCaps="true"-->
+    <!--android:textAppearance="?android:attr/textAppearanceLarge"-->
+    <!--android:textColor="@color/grey_100"-->
+    <!--android:textStyle="bold"-->
+    <!--tools:text="a" />-->
 
     <!--<android.support.v4.widget.Space-->
-        <!--android:layout_width="@dimen/margin_avg"-->
-        <!--android:layout_height="wrap_content" />-->
+    <!--android:layout_width="@dimen/margin_avg"-->
+    <!--android:layout_height="wrap_content" />-->
 
     <TextView
-        android:id="@+id/text_view_chat_message"
+        android:id="@+id/txt_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#949090"
+        android:textSize="@dimen/font_small"
+        android:gravity="center"
+        android:textAllCaps="true"
+        android:padding="@dimen/margin_2dp"
+        tools:text="TODAY"
+        android:visibility="gone"/>
+
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@+id/txt_date"
         android:layout_marginEnd="@dimen/margin_huge"
         android:layout_marginRight="@dimen/margin_huge"
         android:background="@drawable/shape_bg_incoming_bubble"
+        android:paddingBottom="@dimen/margin_small"
         android:paddingLeft="@dimen/margin_15dp"
         android:paddingRight="@dimen/margin_15dp"
-        android:paddingTop="@dimen/margin_small"
-        android:paddingBottom="@dimen/margin_small"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="@color/grey_100"
-        tools:text="Hello" />
+        android:paddingTop="@dimen/margin_small">
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/text_view_chat_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/grey_100"
+            tools:text="h lkjdfgih giuhydfiuhg ifdghihdfi" />
+
+        <TextView
+            android:id="@+id/txt_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorTextPrimaryLight"
+            android:textSize="@dimen/font_small"
+            android:layout_gravity="end"
+            tools:text="12:00 AM" />
+
+    </LinearLayout>
+
+</RelativeLayout>

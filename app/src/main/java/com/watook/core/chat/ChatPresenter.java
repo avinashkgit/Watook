@@ -6,13 +6,13 @@ import com.watook.model.Chat;
 
 
 public class ChatPresenter implements ChatContract.Presenter, ChatContract.OnSendMessageListener,
-        ChatContract.OnGetMessagesListener {
+        ChatContract.OnGetMessagesListener, ChatContract.OnNoRoomFoundListener {
     private ChatContract.View mView;
     private ChatInteractor mChatInteractor;
 
     public ChatPresenter(ChatContract.View view) {
         this.mView = view;
-        mChatInteractor = new ChatInteractor(this, this);
+        mChatInteractor = new ChatInteractor(this, this, this);
     }
 
     @Override
@@ -43,5 +43,11 @@ public class ChatPresenter implements ChatContract.Presenter, ChatContract.OnSen
     @Override
     public void onGetMessagesFailure(String message) {
         mView.onGetMessagesFailure(message);
+    }
+
+
+    @Override
+    public void onNoRoomFound(String message) {
+        mView.onNoRoomFound(message);
     }
 }

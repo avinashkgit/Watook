@@ -1,6 +1,7 @@
 package com.watook.fragment;
 
 import android.app.ProgressDialog;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -15,6 +16,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,6 +48,7 @@ public class ChatFragment extends Fragment implements ChatContract.View, TextVie
     private ChatRecyclerAdapter mChatRecyclerAdapter;
 
     private ChatPresenter mChatPresenter;
+    private RelativeLayout layStart;
 
     public static ChatFragment newInstance(String receiver,
                                            String receiverUid,
@@ -80,6 +83,7 @@ public class ChatFragment extends Fragment implements ChatContract.View, TextVie
     }
 
     private void bindViews(View view) {
+        layStart = (RelativeLayout) view.findViewById(R.id.lay_start);
         progressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
         mRecyclerViewChat = (RecyclerView) view.findViewById(R.id.recycler_view_chat);
         mETxtMessage = (EditText) view.findViewById(R.id.edit_text_message);
@@ -91,10 +95,14 @@ public class ChatFragment extends Fragment implements ChatContract.View, TextVie
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(!Utils.isEmpty(mETxtMessage.getText().toString()))
+                if(!Utils.isEmpty(mETxtMessage.getText().toString())) {
                     fabSend.setEnabled(true);
-                else
+                    fabSend.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorFab)));
+
+                }else {
                     fabSend.setEnabled(false);
+                    fabSend.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.ColorFabDisabled)));
+                }
             }
 
             @Override
@@ -162,7 +170,7 @@ public class ChatFragment extends Fragment implements ChatContract.View, TextVie
     @Override
     public void onSendMessageSuccess() {
         mETxtMessage.setText("");
-        Toast.makeText(getActivity(), "Message sent", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getActivity(), "Message sent", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -170,15 +178,25 @@ public class ChatFragment extends Fragment implements ChatContract.View, TextVie
         Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
     }
 
+
     @Override
     public void onGetMessagesSuccess(Chat chat) {
         progressBar.setVisibility(View.GONE);
+        layStart.setVisibility(View.GONE);
         if (mChatRecyclerAdapter == null) {
             mChatRecyclerAdapter = new ChatRecyclerAdapter(new ArrayList<Chat>());
             mRecyclerViewChat.setAdapter(mChatRecyclerAdapter);
         }
         mChatRecyclerAdapter.add(chat);
         mRecyclerViewChat.smoothScrollToPosition(mChatRecyclerAdapter.getItemCount() - 1);
+    }
+
+    @Override
+    public void onNoRoomFound(String s) {
+        if(s.equals(Constant.NO_ROOM_FOUND)) {
+            progressBar.setVisibility(View.GONE);
+            layStart.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

@@ -46,10 +46,11 @@ public class GPSTracker extends Service implements LocationListener {
 
 
 
+
     // Get Class Name
     private static String TAG = GPSTracker.class.getName();
 
-    private final Context mContext;
+    private Context mContext = MyApplication.getContext();
 
     // flag for GPS Status
     boolean isGPSEnabled = false;
@@ -83,6 +84,10 @@ public class GPSTracker extends Service implements LocationListener {
     public GPSTracker(Context context) {
         this.mContext = context;
         getLocation();
+    }
+
+
+    public GPSTracker() {
     }
 
     /**
@@ -336,7 +341,7 @@ public class GPSTracker extends Service implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
-//        apiCallSaveLocation(location.getLatitude(), location.getLongitude());
+        apiCallSaveLocation(location.getLatitude(), location.getLongitude());
     }
 
     @Override
@@ -361,7 +366,7 @@ public class GPSTracker extends Service implements LocationListener {
 
     private void apiCallSaveLocation(Double latitude, Double longitude) {
         HashMap<String, String> map = new HashMap<>();
-        map.put("userId", DatabaseManager.getInstance(this).getMyProfile().getUserId());
+        map.put("userId", MyApplication.getInstance().getUserId());
         map.put("latitude", latitude + "");
         map.put("longitude", longitude + "");
 
@@ -370,15 +375,15 @@ public class GPSTracker extends Service implements LocationListener {
         saveProfile.enqueue(new Callback<SaveLocationResponse>() {
             @Override
             public void onResponse(@NonNull Call<SaveLocationResponse> call, @NonNull Response<SaveLocationResponse> response) {
-                int statusCode = response.code();
-                SaveLocationResponse saveResponse = response.body();
-                if (statusCode == 200 && saveResponse != null && saveResponse.getStatus() != null && saveResponse.getStatus().equalsIgnoreCase("success")) {
-
-                }
+//                int statusCode = response.code();
+//                SaveLocationResponse saveResponse = response.body();
+//                if (statusCode == 200 && saveResponse != null && saveResponse.getStatus() != null && saveResponse.getStatus().equalsIgnoreCase("success")) {
+//
+//                }
             }
 
             @Override
-            public void onFailure(@NonNull Call<SaveLocationResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<SaveLocationResponse> call,@NonNull Throwable t) {
             }
         });
 

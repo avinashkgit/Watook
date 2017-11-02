@@ -13,12 +13,41 @@
         android:layout_above="@+id/lin_lay"
         app:layoutManager="LinearLayoutManager" />
 
-    <ProgressBar
-        android:id="@+id/progress_bar"
-        style="@style/Widget.AppCompat.ProgressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/lin_lay">
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            style="@style/Widget.AppCompat.ProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/lay_start"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/lin_lay"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/iv_nothing"
+            style="@style/Widget.AppCompat.ProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/vector_drawable_chat"
+            android:layout_centerInParent="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_below="@id/iv_nothing"
+            android:hint="Make the first move!"/>
+    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/lin_lay"
@@ -40,10 +69,10 @@
             android:inputType="textMultiLine"
             android:maxLines="4"
             android:minLines="1"
+            android:paddingBottom="@dimen/margin_10dp"
             android:paddingLeft="@dimen/margin_15dp"
             android:paddingRight="@dimen/margin_15dp"
             android:paddingTop="@dimen/margin_10dp"
-            android:paddingBottom="@dimen/margin_10dp"
             tool:text="" />
 
         <android.support.design.widget.FloatingActionButton
@@ -51,10 +80,10 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_gravity="center_vertical"
-            android:layout_weight="1"
             android:layout_margin="@dimen/margin_5dp"
+            android:layout_weight="1"
             android:src="@drawable/ic_send_white_24dp"
-            app:backgroundTint="@color/colorPrimary" />
+            app:backgroundTint="@color/ColorFabDisabled" />
     </LinearLayout>
 
 </RelativeLayout>

@@ -12,6 +12,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.watook.R;
 import com.watook.application.MyApplication;
 import com.watook.model.Chat;
+import com.watook.util.Utils;
 
 import java.util.List;
 
@@ -60,20 +61,21 @@ public class ChatRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     private void configureMyChatViewHolder(MyChatViewHolder myChatViewHolder, int position) {
         Chat chat = mChats.get(position);
+        if(mChats.size() == 1){
 
-        String alphabet = chat.sender.substring(0, 1);
-
+        }
         myChatViewHolder.txtChatMessage.setText(chat.message);
-//        myChatViewHolder.txtUserAlphabet.setText(alphabet);
+        myChatViewHolder.txtTime.setText(Utils.timeInMillsToTime(chat.timestamp));
     }
 
     private void configureOtherChatViewHolder(OtherChatViewHolder otherChatViewHolder, int position) {
         Chat chat = mChats.get(position);
 
-        String alphabet = chat.sender.substring(0, 1);
+        if(mChats.size() == 1){
 
+        }
         otherChatViewHolder.txtChatMessage.setText(chat.message);
-//        otherChatViewHolder.txtUserAlphabet.setText(alphabet);
+        otherChatViewHolder.txtTime.setText(Utils.timeInMillsToTime(chat.timestamp));
     }
 
     @Override
@@ -90,26 +92,27 @@ public class ChatRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             return VIEW_TYPE_ME;
         else
             return VIEW_TYPE_OTHER;
-
     }
 
     private static class MyChatViewHolder extends RecyclerView.ViewHolder {
-        private TextView txtChatMessage, txtUserAlphabet;
+        private TextView txtChatMessage, txtTime , txtDate;
 
         public MyChatViewHolder(View itemView) {
             super(itemView);
+            txtDate = (TextView) itemView.findViewById(R.id.txt_date);
             txtChatMessage = (TextView) itemView.findViewById(R.id.text_view_chat_message);
-//            txtUserAlphabet = (TextView) itemView.findViewById(R.id.text_view_user_alphabet);
+            txtTime = (TextView) itemView.findViewById(R.id.txt_time);
         }
     }
 
     private static class OtherChatViewHolder extends RecyclerView.ViewHolder {
-        private TextView txtChatMessage, txtUserAlphabet;
+        private TextView txtChatMessage, txtTime, txtDate;
 
         public OtherChatViewHolder(View itemView) {
             super(itemView);
+            txtDate = (TextView) itemView.findViewById(R.id.txt_date);
             txtChatMessage = (TextView) itemView.findViewById(R.id.text_view_chat_message);
-//            txtUserAlphabet = (TextView) itemView.findViewById(R.id.text_view_user_alphabet);
+            txtTime = (TextView) itemView.findViewById(R.id.txt_time);
         }
     }
 }

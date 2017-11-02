@@ -13,7 +13,7 @@
 
     <item>
         <shape android:shape="rectangle">
-            <solid android:color="#46a1f5" />
+            <solid android:color="@color/colorChatBubbleOutgoing" />
             <corners android:radius="25dp" />
         </shape>
     </item>

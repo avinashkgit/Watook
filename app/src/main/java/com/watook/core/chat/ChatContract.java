@@ -14,6 +14,8 @@ public interface ChatContract {
         void onGetMessagesSuccess(Chat chat);
 
         void onGetMessagesFailure(String message);
+
+        void onNoRoomFound(String s);
     }
 
     interface Presenter {
@@ -39,4 +41,9 @@ public interface ChatContract {
 
         void onGetMessagesFailure(String message);
     }
+
+    interface OnNoRoomFoundListener {
+        void onNoRoomFound(String message);
+    }
+
 }

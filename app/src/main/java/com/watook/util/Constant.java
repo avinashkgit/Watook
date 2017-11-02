@@ -25,6 +25,8 @@ public class Constant {
 
     public static final String DISTANCE_UNIT_KM = "distance_unit_km";
 
+    public static final String NO_ROOM_FOUND = "no_room_found";
+
 
 
 }

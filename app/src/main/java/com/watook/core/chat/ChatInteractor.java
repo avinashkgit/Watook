@@ -13,6 +13,7 @@ import com.watook.application.MySharedPreferences;
 import com.watook.fcm.FcmNotificationBuilder;
 import com.watook.model.Chat;
 import com.watook.util.Constant;
+import com.watook.util.Keys;
 
 /**
  * Author: Kartik Sharma
@@ -25,6 +26,8 @@ public class ChatInteractor implements ChatContract.Interactor {
 
     private ChatContract.OnSendMessageListener mOnSendMessageListener;
     private ChatContract.OnGetMessagesListener mOnGetMessagesListener;
+    private ChatContract.OnNoRoomFoundListener mOnNoRoomFoundListener;
+
 
     public ChatInteractor(ChatContract.OnSendMessageListener onSendMessageListener) {
         this.mOnSendMessageListener = onSendMessageListener;
@@ -35,9 +38,10 @@ public class ChatInteractor implements ChatContract.Interactor {
     }
 
     public ChatInteractor(ChatContract.OnSendMessageListener onSendMessageListener,
-                          ChatContract.OnGetMessagesListener onGetMessagesListener) {
+                          ChatContract.OnGetMessagesListener onGetMessagesListener, ChatContract.OnNoRoomFoundListener onNoRoomFoundListener) {
         this.mOnSendMessageListener = onSendMessageListener;
         this.mOnGetMessagesListener = onGetMessagesListener;
+        this.mOnNoRoomFoundListener = onNoRoomFoundListener;
     }
 
     @Override
@@ -172,6 +176,7 @@ public class ChatInteractor implements ChatContract.Interactor {
                     });
                 } else {
                     Log.e(TAG, "getMessageFromFirebaseUser: no such room available");
+                    mOnNoRoomFoundListener.onNoRoomFound(Constant.NO_ROOM_FOUND);
                 }
             }
 

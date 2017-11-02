@@ -6,12 +6,22 @@
     <color name="colorAccentDark">#e6615c</color>
     <color name="colorBackground">#eeeeee</color>
 
+    <color name="colorChatBubbleIncoming">#f57f17</color>
+    <color name="colorChatBubbleOutgoing">#46a1f5</color>
+
+
+    <color name="colorFab">#f06560</color>
+    <color name="ColorFabDisabled">#f18683</color>
+
+
+
+
     <color name="colorOnline">#66bb6a</color>
     <color name="colorOffline">#f06560</color>
     <color name="colorRecentlyOnline">#dce775</color>
 
     <color name="colorTextPrimary">#313234</color>
-    <color name="colorTextPrimaryLight">#4c4d50</color>
+    <color name="colorTextPrimaryLight">#c7c8c9</color>
     <color name="colorTextPrimaryDark">#202021</color>
     <color name="colorTextAccent">#f06560</color>
     <color name="colorTextAccentLight">#ef7975</color>

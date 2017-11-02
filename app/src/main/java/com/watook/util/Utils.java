@@ -14,9 +14,12 @@ import com.watook.application.MyApplication;
 import com.watook.application.MySharedPreferences;
 import com.watook.manager.DatabaseManager;
 
+import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 public class Utils {
 
@@ -159,6 +162,38 @@ public class Utils {
             s = n + " Miles";
         }
         return s;
+    }
+
+    public static String timeInMillsToTime(long timeInMills) {
+        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a", Locale.getDefault());
+        Date resultDate = new Date(timeInMills);
+        return (sdf.format(resultDate));
+    }
+
+    public static int compareDate(long time1, long time2) {
+        Date d1 = new Date(time1);
+        Date d2 = new Date(time1);
+        Calendar c1 = Calendar.getInstance();
+        c1.setTime(d1);
+        Calendar c2 = Calendar.getInstance();
+        c2.setTime(d2);
+        return compare(c1, c2);
+
+    }
+
+    private static int compare(Calendar c1, Calendar c2) {
+
+        int result = compare(c1, c2, Calendar.YEAR);
+        if (result == 0) {
+            result = compare(c1, c2, Calendar.DAY_OF_YEAR);
+        }
+        return result;
+    }
+
+    private static int compare(Calendar c1, Calendar c2, int field) {
+        Integer i1 = c1.get(field);
+        Integer i2 = c2.get(field);
+        return i1.compareTo(i2);
     }
 
 }

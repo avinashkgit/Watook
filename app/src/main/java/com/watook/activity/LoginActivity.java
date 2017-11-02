@@ -482,7 +482,16 @@ public class LoginActivity extends BaseActivity {
     private void saveLocation() {
         GPSTracker gpsTracker = new GPSTracker(this);
         if (gpsTracker.getIsGPSTrackingEnabled()) {
-            apiCallSaveLocation(gpsTracker.getLatitude(), gpsTracker.getLongitude());
+//            apiCallSaveLocation(gpsTracker.getLatitude(), gpsTracker.getLongitude());
+
+            setPreferences();
+            try {
+                MySharedPreferences.putObject(Constant.IS_LOGGED_IN, true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            navigateView();
+
         } else {
             gpsTracker.showSettingsAlert();
         }
@@ -573,6 +582,7 @@ public class LoginActivity extends BaseActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 
 
