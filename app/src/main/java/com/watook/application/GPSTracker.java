@@ -44,21 +44,10 @@ import retrofit2.Response;
 
 public class GPSTracker extends Service implements LocationListener {
 
-
-
-
-    // Get Class Name
     private static String TAG = GPSTracker.class.getName();
-
-    private Context mContext = MyApplication.getContext();
-
-    // flag for GPS Status
+    Context mContext = MyApplication.getContext();
     boolean isGPSEnabled = false;
-
-    // flag for network status
     boolean isNetworkEnabled = false;
-
-    // flag for GPS Tracking is enabled
     boolean isGPSTrackingEnabled = false;
 
     Location location;
@@ -72,7 +61,7 @@ public class GPSTracker extends Service implements LocationListener {
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10; // 10 meters
 
     // The minimum time between updates in milliseconds
-    private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1; // 1 minute
+    private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 2; // 2 minute
 
     // Declaring a Location Manager
     protected LocationManager locationManager;
@@ -357,12 +346,14 @@ public class GPSTracker extends Service implements LocationListener {
     }
 
     @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        return Service.START_STICKY;
+    }
+
+    @Override
     public IBinder onBind(Intent intent) {
         return null;
     }
-
-
-
 
     private void apiCallSaveLocation(Double latitude, Double longitude) {
         HashMap<String, String> map = new HashMap<>();
@@ -375,11 +366,11 @@ public class GPSTracker extends Service implements LocationListener {
         saveProfile.enqueue(new Callback<SaveLocationResponse>() {
             @Override
             public void onResponse(@NonNull Call<SaveLocationResponse> call, @NonNull Response<SaveLocationResponse> response) {
-//                int statusCode = response.code();
-//                SaveLocationResponse saveResponse = response.body();
-//                if (statusCode == 200 && saveResponse != null && saveResponse.getStatus() != null && saveResponse.getStatus().equalsIgnoreCase("success")) {
-//
-//                }
+                int statusCode = response.code();
+                SaveLocationResponse saveResponse = response.body();
+                if (statusCode == 200 && saveResponse != null && saveResponse.getStatus() != null && saveResponse.getStatus().equalsIgnoreCase("success")) {
+//                    Toast.makeText(mContext, "Location Shared", Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override

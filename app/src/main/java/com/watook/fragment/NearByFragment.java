@@ -79,7 +79,7 @@ public class NearByFragment extends Fragment {
 
     private void apiCallGetUserList() {
         Call<UserListResponse> codeValue = ApiManager.getApiInstance().getUserList(Constant.CONTENT_TYPE,
-               DatabaseManager.getInstance(activity).getRegistrationData().getData());
+                DatabaseManager.getInstance(activity).getRegistrationData().getData());
         codeValue.enqueue(new Callback<UserListResponse>() {
             @Override
             public void onResponse(@NonNull Call<UserListResponse> call, @NonNull Response<UserListResponse> response) {
@@ -99,12 +99,11 @@ public class NearByFragment extends Fragment {
     }
 
     private void setData(List<UserListResponse.UserList> data) {
-        DividerItemDecoration itemDecorator = new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL);
+        DividerItemDecoration itemDecorator = new DividerItemDecoration(activity, DividerItemDecoration.VERTICAL);
         itemDecorator.setDrawable(getResources().getDrawable(R.drawable.divider));
 
         recyclerView.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false));
-        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),
-                DividerItemDecoration.VERTICAL));
+        recyclerView.addItemDecoration(itemDecorator);
         nearByAdapter = new NearByAdapter(activity, data);
         recyclerView.setAdapter(nearByAdapter);
     }

@@ -4,7 +4,8 @@
     xmlns:tool="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackground">
+    android:background="@color/colorBackground"
+    android:clipToPadding="false">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view_chat"
@@ -36,8 +37,8 @@
         <ImageView
             android:id="@+id/iv_nothing"
             style="@style/Widget.AppCompat.ProgressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             app:srcCompat="@drawable/vector_drawable_chat"
             android:layout_centerInParent="true" />
 
@@ -64,6 +65,7 @@
             android:layout_marginLeft="@dimen/margin_small"
             android:layout_marginRight="@dimen/margin_3dp"
             android:layout_weight="1"
+            android:elevation="@dimen/margin_1dp"
             android:background="@drawable/rounded_rect_bg"
             android:hint="@string/type_a_message"
             android:inputType="textMultiLine"
@@ -82,6 +84,7 @@
             android:layout_gravity="center_vertical"
             android:layout_margin="@dimen/margin_5dp"
             android:layout_weight="1"
+            android:elevation="@dimen/margin_2dp"
             android:src="@drawable/ic_send_white_24dp"
             app:backgroundTint="@color/ColorFabDisabled" />
     </LinearLayout>

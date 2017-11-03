@@ -46,6 +46,7 @@ public class ChatInteractor implements ChatContract.Interactor {
 
     @Override
     public void sendMessageToFirebaseUser(final Context context, final Chat chat, final String receiverFirebaseToken) {
+
         final String room_type_1 = chat.senderUid + "_" + chat.receiverUid;
         final String room_type_2 = chat.receiverUid + "_" + chat.senderUid;
 
@@ -65,7 +66,7 @@ public class ChatInteractor implements ChatContract.Interactor {
                     databaseReference.child(Constant.ARG_CHAT_ROOMS).child(room_type_1).child(String.valueOf(chat.timestamp)).setValue(chat);
                     getMessageFromFirebaseUser(chat.senderUid, chat.receiverUid);
                 }
-                // send push notification to the receiver
+                //send push notification to the receiver
                 try {
                     sendPushNotificationToReceiver(chat.sender,
                             chat.message,
@@ -102,6 +103,7 @@ public class ChatInteractor implements ChatContract.Interactor {
 
     @Override
     public void getMessageFromFirebaseUser(String senderUid, String receiverUid) {
+
         final String room_type_1 = senderUid + "_" + receiverUid;
         final String room_type_2 = receiverUid + "_" + senderUid;
 

@@ -11,6 +11,9 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
@@ -22,7 +25,11 @@ import android.widget.Toast;
 
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.watook.R;
+import com.watook.activity.ChatActivity;
 import com.watook.adapter.ChatRecyclerAdapter;
 import com.watook.application.MyApplication;
 import com.watook.core.chat.ChatContract;
@@ -49,6 +56,7 @@ public class ChatFragment extends Fragment implements ChatContract.View, TextVie
 
     private ChatPresenter mChatPresenter;
     private RelativeLayout layStart;
+    ChatActivity activity;
 
     public static ChatFragment newInstance(String receiver,
                                            String receiverUid,
@@ -60,6 +68,12 @@ public class ChatFragment extends Fragment implements ChatContract.View, TextVie
         ChatFragment fragment = new ChatFragment();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -79,6 +93,7 @@ public class ChatFragment extends Fragment implements ChatContract.View, TextVie
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View fragmentView = inflater.inflate(R.layout.fragment_chat, container, false);
         bindViews(fragmentView);
+        activity = (ChatActivity) getActivity();
         return fragmentView;
     }
 
@@ -95,11 +110,11 @@ public class ChatFragment extends Fragment implements ChatContract.View, TextVie
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(!Utils.isEmpty(mETxtMessage.getText().toString())) {
+                if (!Utils.isEmpty(mETxtMessage.getText().toString().trim())) {
                     fabSend.setEnabled(true);
                     fabSend.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorFab)));
 
-                }else {
+                } else {
                     fabSend.setEnabled(false);
                     fabSend.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.ColorFabDisabled)));
                 }
@@ -112,12 +127,16 @@ public class ChatFragment extends Fragment implements ChatContract.View, TextVie
         });
 
         fabSend = (FloatingActionButton) view.findViewById(R.id.action_button_send);
-        fabSend.setEnabled(false );
+        fabSend.setEnabled(false);
         fabSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!Utils.isEmpty(mETxtMessage.getText().toString()))
-                sendMessage();
+                if (Utils.isNetworkAvailable()) {
+                    if (!Utils.isEmpty(mETxtMessage.getText().toString()))
+                        sendMessage();
+                } else
+                    activity.showAToast("Internet Connection not available!");
+
             }
         });
     }
@@ -129,9 +148,7 @@ public class ChatFragment extends Fragment implements ChatContract.View, TextVie
     }
 
     private void init() {
-
         mETxtMessage.setOnEditorActionListener(this);
-
         mChatPresenter = new ChatPresenter(this);
         mChatPresenter.getMessage(MyApplication.getInstance().getUserId(),
                 getArguments().getString(Constant.ARG_RECEIVER_UID));
@@ -146,6 +163,48 @@ public class ChatFragment extends Fragment implements ChatContract.View, TextVie
 //            return true;
 //        }
         return false;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_chat, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_clear_all) {
+            deleteConversation();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void deleteConversation() {
+        FirebaseDatabase.getInstance()
+                .getReference()
+                .child(Constant.ARG_CHAT_ROOMS)
+                .child(getArguments().getString(Constant.ARG_RECEIVER_UID) + "_" + MyApplication.getInstance().getUserId()).removeValue(new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                mChatRecyclerAdapter.deleteAll();
+                layStart.setVisibility(View.VISIBLE);
+            }
+        });
+
+        FirebaseDatabase.getInstance()
+                .getReference()
+                .child(Constant.ARG_CHAT_ROOMS)
+                .child(MyApplication.getInstance().getUserId() + "_" + getArguments().getString(Constant.ARG_RECEIVER_UID)).removeValue(new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                mChatRecyclerAdapter.deleteAll();
+                layStart.setVisibility(View.VISIBLE);
+            }
+        });
     }
 
     private void sendMessage() {
@@ -193,7 +252,7 @@ public class ChatFragment extends Fragment implements ChatContract.View, TextVie
 
     @Override
     public void onNoRoomFound(String s) {
-        if(s.equals(Constant.NO_ROOM_FOUND)) {
+        if (s.equals(Constant.NO_ROOM_FOUND)) {
             progressBar.setVisibility(View.GONE);
             layStart.setVisibility(View.VISIBLE);
         }

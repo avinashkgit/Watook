@@ -27,6 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:padding="3dp"
+            android:elevation="@dimen/margin_2dp"
             android:background="@drawable/circular_image_border">
 
             <ImageView

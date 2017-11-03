@@ -5,6 +5,7 @@
     android:layout_height="wrap_content"
     android:background="?android:attr/selectableItemBackground"
     android:clickable="false"
+    android:clipToPadding="false"
     android:focusable="true"
     android:gravity="center_vertical"
     android:orientation="vertical"
@@ -17,13 +18,13 @@
         android:id="@+id/txt_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="@dimen/margin_2dp"
+        android:textAllCaps="true"
         android:textColor="#949090"
         android:textSize="@dimen/font_small"
-        android:gravity="center"
-        android:textAllCaps="true"
-        android:padding="@dimen/margin_2dp"
-        tools:text="TODAY"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        tools:text="TODAY" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -31,31 +32,31 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/txt_date"
+        android:layout_marginLeft="@dimen/margin_huge"
+        android:layout_marginStart="@dimen/margin_huge"
+        android:background="@drawable/shape_bg_outgoing_bubble"
+        android:elevation="@dimen/margin_1dp"
+        android:orientation="vertical"
         android:paddingBottom="@dimen/margin_10dp"
         android:paddingLeft="@dimen/margin_15dp"
         android:paddingRight="@dimen/margin_15dp"
-        android:paddingTop="@dimen/margin_10dp"
-        android:orientation="vertical"
-        android:layout_marginLeft="@dimen/margin_huge"
-        android:layout_marginStart="@dimen/margin_huge"
-        android:background="@drawable/shape_bg_outgoing_bubble">
+        android:paddingTop="@dimen/margin_10dp">
 
         <TextView
             android:id="@+id/text_view_chat_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textSize="@dimen/font_medium"
             android:textColor="@color/grey_100"
+            android:textSize="@dimen/font_medium"
             tools:text="uyu  gutu ututug utuuutu t cghgf hfgh " />
 
         <TextView
             android:id="@+id/txt_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="end"
             android:textColor="@color/colorTextPrimaryLight"
             android:textSize="@dimen/font_small"
-            android:layout_gravity="end"
             tools:text="12:00 AM" />
 
     </LinearLayout>

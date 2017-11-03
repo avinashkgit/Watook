@@ -1,10 +1,10 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item>
+    <item android:left="75dp" android:right="@dimen/margin_20dp">
         <shape
-            android:shape="line"
-            android:thickness="@dimen/margin_1dp">
-            <solid android:color="#2d1111" />
+            android:shape="rectangle">
+            <size android:height="1px" />
+            <solid android:color="#767474" />
         </shape>
     </item>
 

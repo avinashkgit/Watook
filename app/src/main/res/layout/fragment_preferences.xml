@@ -35,7 +35,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="@string/distance"
-                            android:textColor="@color/colorTextPrimaryLight"
+                            android:textColor="@color/colorTextPrimaryHeader"
                             android:textSize="@dimen/font_large" />
 
                         <TextView
@@ -79,7 +79,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="@string/show_distance_in"
-                            android:textColor="@color/colorTextPrimaryLight"
+                            android:textColor="@color/colorTextPrimaryHeader"
                             android:textSize="@dimen/font_large" />
 
                         <TextView
@@ -160,7 +160,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="@string/age_range"
-                            android:textColor="@color/colorTextPrimaryLight"
+                            android:textColor="@color/colorTextPrimaryHeader"
                             android:textSize="@dimen/font_large" />
 
                         <TextView
@@ -202,7 +202,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="@string/show_me"
-                        android:textColor="@color/colorTextPrimaryLight"
+                        android:textColor="@color/colorTextPrimaryHeader"
                         android:textSize="@dimen/font_large" />
 
                     <Switch
@@ -250,7 +250,7 @@
                         android:layout_weight="1"
                         android:padding="@dimen/margin_min"
                         android:text="Discoverable"
-                        android:textColor="@color/colorTextPrimaryLight"
+                        android:textColor="@color/colorTextPrimaryHeader"
                         android:textSize="@dimen/font_large" />
 
                 </LinearLayout>

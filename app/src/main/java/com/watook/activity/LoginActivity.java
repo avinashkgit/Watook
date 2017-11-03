@@ -294,15 +294,42 @@ public class LoginActivity extends BaseActivity {
                         // Application code
                         try {
                             Log.i("Response", response.toString());
-
-                            String id = response.getJSONObject().getString("id");
-                            String email = response.getJSONObject().getString("email");
-                            String firstName = response.getJSONObject().getString("first_name");
-                            String lastName = response.getJSONObject().getString("last_name");
-                            String gender = response.getJSONObject().getString("gender");
-//                            String birthday = response.getJSONObject().getString("birthday");
-                            String picture = "https://graph.facebook.com/" + id + "/picture?type=large";
-
+                            String id = "", email="", firstName="", lastName="", gender="", picture="", birthday="";
+                            try {
+                                id = response.getJSONObject().getString("id");
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            try {
+                                email = response.getJSONObject().getString("email");
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            try {
+                                firstName = response.getJSONObject().getString("first_name");
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            try {
+                                lastName = response.getJSONObject().getString("last_name");
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            try {
+                                gender = response.getJSONObject().getString("gender");
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            try {
+                                birthday = response.getJSONObject().getString("birthday");
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            try {
+                                picture = "https://graph.facebook.com/" + id + "/picture?type=large";
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
 
                             MyProfile myProfile = new MyProfile();
                             myProfile.setFbId(Utils.emptyIfNull(id));
@@ -310,14 +337,14 @@ public class LoginActivity extends BaseActivity {
                             myProfile.setFirstName(Utils.emptyIfNull(firstName));
                             myProfile.setLastName(Utils.emptyIfNull(lastName));
                             myProfile.setGender(Utils.emptyIfNull(gender));
-//                            myProfile.setBirthday(Utils.emptyIfNull(birthday));
+                            myProfile.setBirthday(Utils.emptyIfNull(birthday));
                             myProfile.setProfilePicture(Utils.emptyIfNull(picture));
 
                             getApplicationId(myProfile, loginResult.getAccessToken().getToken());
                             getFriendList(id);
 
 
-                        } catch (JSONException e) {
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
@@ -482,15 +509,17 @@ public class LoginActivity extends BaseActivity {
     private void saveLocation() {
         GPSTracker gpsTracker = new GPSTracker(this);
         if (gpsTracker.getIsGPSTrackingEnabled()) {
-//            apiCallSaveLocation(gpsTracker.getLatitude(), gpsTracker.getLongitude());
+            apiCallSaveLocation(gpsTracker.getLatitude(), gpsTracker.getLongitude());
+            Intent i = new Intent(this, GPSTracker.class);
+            startService(i);
 
-            setPreferences();
-            try {
-                MySharedPreferences.putObject(Constant.IS_LOGGED_IN, true);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            navigateView();
+//            setPreferences();
+//            try {
+//                MySharedPreferences.putObject(Constant.IS_LOGGED_IN, true);
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//            navigateView();
 
         } else {
             gpsTracker.showSettingsAlert();
@@ -578,7 +607,7 @@ public class LoginActivity extends BaseActivity {
 
         DatabaseManager.getInstance(LoginActivity.this).insertPreferences(pref);
         try {
-            MySharedPreferences.putObject(Constant.DISTANCE_UNIT_KM, false );
+            MySharedPreferences.putObject(Constant.DISTANCE_UNIT_KM, false);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -598,7 +627,7 @@ public class LoginActivity extends BaseActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            showAToast("Authentication success.");
+//                            showAToast("Authentication success.");
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
@@ -609,7 +638,6 @@ public class LoginActivity extends BaseActivity {
                     }
                 });
     }
-
 
 
 }
