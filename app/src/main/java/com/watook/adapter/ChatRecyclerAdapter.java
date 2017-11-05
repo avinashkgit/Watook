@@ -66,18 +66,38 @@ public class ChatRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     private void configureMyChatViewHolder(MyChatViewHolder myChatViewHolder, int position) {
         Chat chat = mChats.get(position);
-        if(mChats.size() == 1){
-
+        if (position == 0) {
+            myChatViewHolder.txtDate.setVisibility(View.VISIBLE);
+            myChatViewHolder.txtDate.setText(Utils.getUserFriendlyDate(chat.timestamp));
         }
+//        else {
+//            myChatViewHolder.txtDate.setVisibility(View.GONE);
+//        }
+        else if (position >= 1 && Utils.compareDate(mChats.get(position).timestamp, mChats.get(position - 1).timestamp) != 0) {
+            myChatViewHolder.txtDate.setVisibility(View.VISIBLE);
+            myChatViewHolder.txtDate.setText(Utils.getUserFriendlyDate(chat.timestamp));
+        } else {
+            myChatViewHolder.txtDate.setVisibility(View.GONE);
+        }
+
         myChatViewHolder.txtChatMessage.setText(chat.message);
         myChatViewHolder.txtTime.setText(Utils.timeInMillsToTime(chat.timestamp));
     }
 
     private void configureOtherChatViewHolder(OtherChatViewHolder otherChatViewHolder, int position) {
         Chat chat = mChats.get(position);
-
-        if(mChats.size() == 1){
-
+        if (position == 0) {
+            otherChatViewHolder.txtDate.setVisibility(View.VISIBLE);
+            otherChatViewHolder.txtDate.setText(Utils.getUserFriendlyDate(chat.timestamp));
+        }
+//        else {
+//            otherChatViewHolder.txtDate.setVisibility(View.GONE);
+//        }
+        else if ( position >= 1 && Utils.compareDate(mChats.get(position).timestamp, mChats.get(position - 1).timestamp) != 0) {
+            otherChatViewHolder.txtDate.setVisibility(View.VISIBLE);
+            otherChatViewHolder.txtDate.setText(Utils.getUserFriendlyDate(chat.timestamp));
+        } else {
+            otherChatViewHolder.txtDate.setVisibility(View.GONE);
         }
         otherChatViewHolder.txtChatMessage.setText(chat.message);
         otherChatViewHolder.txtTime.setText(Utils.timeInMillsToTime(chat.timestamp));
@@ -100,7 +120,7 @@ public class ChatRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     private static class MyChatViewHolder extends RecyclerView.ViewHolder {
-        private TextView txtChatMessage, txtTime , txtDate;
+        private TextView txtChatMessage, txtTime, txtDate;
 
         public MyChatViewHolder(View itemView) {
             super(itemView);

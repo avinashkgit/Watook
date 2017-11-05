@@ -46,25 +46,32 @@ public class ChatInteractor implements ChatContract.Interactor {
 
     @Override
     public void sendMessageToFirebaseUser(final Context context, final Chat chat, final String receiverFirebaseToken) {
-
-        final String room_type_1 = chat.senderUid + "_" + chat.receiverUid;
-        final String room_type_2 = chat.receiverUid + "_" + chat.senderUid;
-
+        String room;
+        if (Long.parseLong(chat.receiverUid) > Long.parseLong(chat.senderUid)) {
+            room = chat.senderUid + "_" + chat.receiverUid;
+        } else{
+            room = chat.receiverUid + "_" + chat.senderUid;
+        }
+        final String finalRoom = room;
         final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
 
         databaseReference.child(Constant.ARG_CHAT_ROOMS).getRef().addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.hasChild(room_type_1)) {
-                    Log.e(TAG, "sendMessageToFirebaseUser: " + room_type_1 + " exists");
-                    databaseReference.child(Constant.ARG_CHAT_ROOMS).child(room_type_1).child(String.valueOf(chat.timestamp)).setValue(chat);
-                } else if (dataSnapshot.hasChild(room_type_2)) {
-                    Log.e(TAG, "sendMessageToFirebaseUser: " + room_type_2 + " exists");
-                    databaseReference.child(Constant.ARG_CHAT_ROOMS).child(room_type_2).child(String.valueOf(chat.timestamp)).setValue(chat);
-                } else {
+                if (dataSnapshot.hasChild(finalRoom)) {
+                    Log.e(TAG, "sendMessageToFirebaseUser: " + finalRoom + " exists");
+                    databaseReference.child(Constant.ARG_CHAT_ROOMS).child(finalRoom).child(String.valueOf(chat.timestamp)).setValue(chat);
+                }
+
+                else {
                     Log.e(TAG, "sendMessageToFirebaseUser: success");
-                    databaseReference.child(Constant.ARG_CHAT_ROOMS).child(room_type_1).child(String.valueOf(chat.timestamp)).setValue(chat);
-                    getMessageFromFirebaseUser(chat.senderUid, chat.receiverUid);
+                    databaseReference.child(Constant.ARG_CHAT_ROOMS).child(finalRoom).child(String.valueOf(chat.timestamp)).setValue(chat);
+                    if (Long.parseLong(chat.receiverUid) > Long.parseLong(chat.senderUid)) {
+                        getMessageFromFirebaseUser(chat.senderUid, chat.receiverUid);
+                    } else{
+                        getMessageFromFirebaseUser(chat.receiverUid, chat.senderUid);
+                    }
+
                 }
                 //send push notification to the receiver
                 try {
@@ -103,21 +110,28 @@ public class ChatInteractor implements ChatContract.Interactor {
 
     @Override
     public void getMessageFromFirebaseUser(String senderUid, String receiverUid) {
+        String room;
+        if (Long.parseLong(receiverUid) > Long.parseLong(senderUid)) {
+            room = senderUid + "_" + receiverUid;
+        } else{
+            room = receiverUid + "_" + senderUid;
+        }
+        final String finalRoom = room;
 
-        final String room_type_1 = senderUid + "_" + receiverUid;
-        final String room_type_2 = receiverUid + "_" + senderUid;
+//        final String room_type_1 = senderUid + "_" + receiverUid;
+//        final String room_type_2 = receiverUid + "_" + senderUid;
 
         final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
 
         databaseReference.child(Constant.ARG_CHAT_ROOMS).getRef().addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.hasChild(room_type_1)) {
-                    Log.e(TAG, "getMessageFromFirebaseUser: " + room_type_1 + " exists");
+                if (dataSnapshot.hasChild(finalRoom)) {
+                    Log.e(TAG, "getMessageFromFirebaseUser: " + finalRoom + " exists");
                     FirebaseDatabase.getInstance()
                             .getReference()
                             .child(Constant.ARG_CHAT_ROOMS)
-                            .child(room_type_1).addChildEventListener(new ChildEventListener() {
+                            .child(finalRoom).addChildEventListener(new ChildEventListener() {
                         @Override
                         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                             Chat chat = dataSnapshot.getValue(Chat.class);
@@ -144,39 +158,41 @@ public class ChatInteractor implements ChatContract.Interactor {
                             mOnGetMessagesListener.onGetMessagesFailure("Unable to get message: " + databaseError.getMessage());
                         }
                     });
-                } else if (dataSnapshot.hasChild(room_type_2)) {
-                    Log.e(TAG, "getMessageFromFirebaseUser: " + room_type_2 + " exists");
-                    FirebaseDatabase.getInstance()
-                            .getReference()
-                            .child(Constant.ARG_CHAT_ROOMS)
-                            .child(room_type_2).addChildEventListener(new ChildEventListener() {
-                        @Override
-                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                            Chat chat = dataSnapshot.getValue(Chat.class);
-                            mOnGetMessagesListener.onGetMessagesSuccess(chat);
-                        }
-
-                        @Override
-                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-                        }
-
-                        @Override
-                        public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                        }
-
-                        @Override
-                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-                            mOnGetMessagesListener.onGetMessagesFailure("Unable to get message: " + databaseError.getMessage());
-                        }
-                    });
-                } else {
+                }
+//                else if (dataSnapshot.hasChild(room_type_2)) {
+//                    Log.e(TAG, "getMessageFromFirebaseUser: " + room_type_2 + " exists");
+//                    FirebaseDatabase.getInstance()
+//                            .getReference()
+//                            .child(Constant.ARG_CHAT_ROOMS)
+//                            .child(room_type_2).addChildEventListener(new ChildEventListener() {
+//                        @Override
+//                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+//                            Chat chat = dataSnapshot.getValue(Chat.class);
+//                            mOnGetMessagesListener.onGetMessagesSuccess(chat);
+//                        }
+//
+//                        @Override
+//                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+//
+//                        }
+//
+//                        @Override
+//                        public void onChildRemoved(DataSnapshot dataSnapshot) {
+//
+//                        }
+//
+//                        @Override
+//                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+//
+//                        }
+//
+//                        @Override
+//                        public void onCancelled(DatabaseError databaseError) {
+//                            mOnGetMessagesListener.onGetMessagesFailure("Unable to get message: " + databaseError.getMessage());
+//                        }
+//                    });
+//                }
+                else {
                     Log.e(TAG, "getMessageFromFirebaseUser: no such room available");
                     mOnNoRoomFoundListener.onNoRoomFound(Constant.NO_ROOM_FOUND);
                 }

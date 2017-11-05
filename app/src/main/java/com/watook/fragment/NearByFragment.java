@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,6 +21,7 @@ import com.watook.manager.ApiManager;
 import com.watook.manager.DatabaseManager;
 import com.watook.model.response.UserListResponse;
 import com.watook.util.Constant;
+import com.watook.util.DividerItemDecorator;
 
 import java.util.List;
 
@@ -99,11 +101,8 @@ public class NearByFragment extends Fragment {
     }
 
     private void setData(List<UserListResponse.UserList> data) {
-        DividerItemDecoration itemDecorator = new DividerItemDecoration(activity, DividerItemDecoration.VERTICAL);
-        itemDecorator.setDrawable(getResources().getDrawable(R.drawable.divider));
-
         recyclerView.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false));
-        recyclerView.addItemDecoration(itemDecorator);
+        recyclerView.addItemDecoration(new DividerItemDecorator(getResources().getDrawable(R.drawable.divider)));
         nearByAdapter = new NearByAdapter(activity, data);
         recyclerView.setAdapter(nearByAdapter);
     }

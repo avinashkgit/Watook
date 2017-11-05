@@ -35,7 +35,7 @@
     <dimen name="margin_35dp">35dp</dimen>
 
 
-    <dimen name="font_micro">8sp</dimen>
+    <dimen name="font_micro">10sp</dimen>
     <dimen name="font_small">12sp</dimen>
     <dimen name="font_medium">16sp</dimen>
     <dimen name="font_large">18sp</dimen>

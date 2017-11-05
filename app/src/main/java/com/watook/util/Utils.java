@@ -6,6 +6,7 @@ import android.content.Context;
 import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.text.format.DateUtils;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
@@ -107,15 +108,26 @@ public class Utils {
         locationB.setLatitude(userLat);
         locationB.setLongitude(userLong);
 
-        float distance = locationA.distanceTo(locationB) / 1000; // in meters
+        float distance = locationA.distanceTo(locationB); // in meters
         String setDist = "";
 
+        NumberFormat formatter = NumberFormat.getNumberInstance();
+        formatter.setMaximumFractionDigits(0);
+
         if (distance < 1000) {
-            NumberFormat formatter = NumberFormat.getNumberInstance();
-            formatter.setMaximumFractionDigits(0);
-            setDist = formatter.format(distance) + " mts";
-        }
-        if (distance >= 1000) {
+//            setDist = "Less then " + formatter.format(distance) + " mts";
+            if (distance > 100) {
+                setDist = "Less then " + formatter.format((int) Math.ceil(distance / 100) * 100) + " mts";
+            }
+            if (distance <= 100 && distance > 10) {
+                setDist = "Less then " + formatter.format((int) Math.ceil(distance / 10) * 10) + " mts";
+            }
+            if (distance <= 10) {
+                setDist = "Less then 10 mts";
+            }
+
+
+        } else {
             boolean isDistUnitKm = false;
             try {
                 isDistUnitKm = (boolean) MySharedPreferences.getObject(Constant.DISTANCE_UNIT_KM);
@@ -125,14 +137,16 @@ public class Utils {
 
             if (isDistUnitKm) {
                 distance = distance / 1000;
-                NumberFormat formatter = NumberFormat.getNumberInstance();
-                formatter.setMaximumFractionDigits(1);
-                setDist = formatter.format(distance) + " Kms";
+//                NumberFormat formatter1 = NumberFormat.getNumberInstance();
+//                formatter1.setMaximumFractionDigits(1);
+//                setDist = formatter.format(distance) + " Kms";
+                setDist = (int) Math.ceil(distance) + " Kms";
             } else {
                 distance = (float) (distance * 0.000621371192);
-                NumberFormat formatter = NumberFormat.getNumberInstance();
-                formatter.setMaximumFractionDigits(1);
-                setDist = formatter.format(distance) + " Miles";
+//                NumberFormat formatter2 = NumberFormat.getNumberInstance();
+//                formatter2.setMaximumFractionDigits(1);
+//                setDist = formatter.format(distance) + " Miles";
+                setDist = (int) Math.ceil(distance) + " Miles";
             }
         }
         return setDist;
@@ -172,7 +186,7 @@ public class Utils {
 
     public static int compareDate(long time1, long time2) {
         Date d1 = new Date(time1);
-        Date d2 = new Date(time1);
+        Date d2 = new Date(time2);
         Calendar c1 = Calendar.getInstance();
         c1.setTime(d1);
         Calendar c2 = Calendar.getInstance();
@@ -194,6 +208,23 @@ public class Utils {
         Integer i1 = c1.get(field);
         Integer i2 = c2.get(field);
         return i1.compareTo(i2);
+    }
+
+    public static String getUserFriendlyDate(long time) {
+        Date d1 = new Date(time);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(d1);
+        Calendar today = Calendar.getInstance();
+        Calendar yesterday = Calendar.getInstance();
+        yesterday.add(Calendar.DATE, -1);
+
+        if (calendar.get(Calendar.YEAR) == today.get(Calendar.YEAR) && calendar.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR)) {
+            return "Today";
+        } else if (calendar.get(Calendar.YEAR) == yesterday.get(Calendar.YEAR) && calendar.get(Calendar.DAY_OF_YEAR) == yesterday.get(Calendar.DAY_OF_YEAR)) {
+            return "Yesterday";
+        } else {
+            return new SimpleDateFormat("d MMMM yyyy", Locale.getDefault()).format(d1);
+        }
     }
 
 }

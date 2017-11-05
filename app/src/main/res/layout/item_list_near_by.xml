@@ -4,6 +4,7 @@
     android:layout_height="wrap_content"
     xmlns:tool="http://schemas.android.com/tools"
     android:padding="@dimen/margin_5dp"
+    android:minHeight="?attr/listPreferredItemHeight"
     android:background="?attr/selectableItemBackground"
     android:orientation="horizontal">
 

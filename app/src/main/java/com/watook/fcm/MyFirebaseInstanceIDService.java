@@ -1,13 +1,30 @@
 package com.watook.fcm;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
+import com.watook.R;
+import com.watook.activity.LoginActivity;
+import com.watook.application.MyApplication;
 import com.watook.application.MySharedPreferences;
+import com.watook.manager.ApiManager;
+import com.watook.manager.DatabaseManager;
+import com.watook.model.MyProfile;
+import com.watook.model.response.CodeValueResponse;
+import com.watook.model.response.ProfileSaveResponse;
+import com.watook.model.response.RegistrationResponse;
 import com.watook.util.Constant;
+
+import java.util.HashMap;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
     private static final String TAG = "MyFirebaseIIDService";
@@ -53,6 +70,40 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
                     .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                     .child(Constant.ARG_FIREBASE_TOKEN)
                     .setValue(token);
+        }
+        apiCallSaveProfile();
+    }
+
+    private void apiCallSaveProfile() {
+        MyProfile myProfile = DatabaseManager.getInstance(MyApplication.getContext()).getMyProfile();
+        List<CodeValueResponse.CodeValue> codeValues = DatabaseManager.getInstance(MyApplication.getContext()).getCodeValue();
+        if(myProfile != null && codeValues!= null) {
+            long statusCode = 0;
+            for (CodeValueResponse.CodeValue cv : codeValues) {
+                if (cv.getCodeValue().equalsIgnoreCase("online"))
+                    statusCode = cv.getCodeValueID();
+            }
+
+            HashMap<String, String> map = new HashMap<>();
+            map.put("fbId", myProfile.getFbId());
+            map.put("firstName", myProfile.getFirstName());
+            map.put("statusInfo", statusCode + "");
+            map.put("fireBaseToken", FirebaseInstanceId.getInstance().getToken());
+
+
+            Call<ProfileSaveResponse> saveProfile = ApiManager.getApiInstance().saveProfile(Constant.CONTENT_TYPE,
+                    MyApplication.getInstance().getToken(), map);
+            saveProfile.enqueue(new Callback<ProfileSaveResponse>() {
+                @Override
+                public void onResponse(@NonNull Call<ProfileSaveResponse> call, @NonNull Response<ProfileSaveResponse> response) {
+
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<ProfileSaveResponse> call, @NonNull Throwable t) {
+
+                }
+            });
         }
     }
 }

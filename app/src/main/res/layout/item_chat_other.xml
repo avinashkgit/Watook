@@ -36,7 +36,7 @@
         android:gravity="center"
         android:padding="@dimen/margin_2dp"
         android:textAllCaps="true"
-        android:textColor="#949090"
+        android:textColor="@color/colorPrimary"
         android:textSize="@dimen/font_small"
         android:visibility="gone"
         tools:text="TODAY" />
@@ -69,7 +69,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:textColor="@color/colorTextPrimaryLight"
-            android:textSize="@dimen/font_small"
+            android:textSize="@dimen/font_micro"
             tools:text="12:00 AM" />
 
     </LinearLayout>

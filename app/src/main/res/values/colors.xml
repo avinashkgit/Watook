@@ -21,7 +21,7 @@
     <color name="colorRecentlyOnline">#dce775</color>
 
     <color name="colorTextPrimary">#313234</color>
-    <color name="colorTextPrimaryLight">#c7c8c9</color>
+    <color name="colorTextPrimaryLight">#eeeeee</color>
     <color name="colorTextPrimaryHeader">#3e3f41</color>
     <color name="colorTextPrimaryDark">#202021</color>
     <color name="colorTextAccent">#f06560</color>

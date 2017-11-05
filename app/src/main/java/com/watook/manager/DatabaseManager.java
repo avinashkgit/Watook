@@ -35,7 +35,7 @@ import javax.crypto.spec.SecretKeySpec;
 public class DatabaseManager extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "watook.db";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 1;
     private static DatabaseManager instance;
     private static Cipher cipher;
     private final String DATABASE_PATH;

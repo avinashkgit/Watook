@@ -247,7 +247,8 @@ public class ChatFragment extends Fragment implements ChatContract.View, TextVie
             mRecyclerViewChat.setAdapter(mChatRecyclerAdapter);
         }
         mChatRecyclerAdapter.add(chat);
-        mRecyclerViewChat.smoothScrollToPosition(mChatRecyclerAdapter.getItemCount() - 1);
+        mRecyclerViewChat.scrollToPosition(mChatRecyclerAdapter.getItemCount() - 1);
+//        mRecyclerViewChat.smoothScrollToPosition(mChatRecyclerAdapter.getItemCount() - 1);
     }
 
     @Override
