@@ -35,7 +35,9 @@ import com.watook.application.MyApplication;
 import com.watook.core.chat.ChatContract;
 import com.watook.core.chat.ChatPresenter;
 import com.watook.events.PushNotificationEvent;
+import com.watook.manager.DatabaseManager;
 import com.watook.model.Chat;
+import com.watook.model.UserChat;
 import com.watook.util.Constant;
 import com.watook.util.Utils;
 
@@ -43,6 +45,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class ChatFragment extends Fragment implements ChatContract.View, TextView.OnEditorActionListener {
@@ -249,6 +252,20 @@ public class ChatFragment extends Fragment implements ChatContract.View, TextVie
         mChatRecyclerAdapter.add(chat);
         mRecyclerViewChat.scrollToPosition(mChatRecyclerAdapter.getItemCount() - 1);
 //        mRecyclerViewChat.smoothScrollToPosition(mChatRecyclerAdapter.getItemCount() - 1);
+
+        HashMap<Long, UserChat> map = DatabaseManager.getInstance(activity).getUserChats();
+        if (map == null) {
+            map = new HashMap<>();
+        }
+        UserChat userChat = new UserChat();
+        userChat.setLastModified(System.currentTimeMillis());
+        userChat.setUserId(Long.parseLong(getArguments().getString(Constant.ARG_RECEIVER_UID)));
+        userChat.setName(getArguments().getString(Constant.ARG_RECEIVER));
+        userChat.setLastMessage(chat.message);
+        map.put(Long.parseLong(getArguments().getString(Constant.ARG_RECEIVER_UID)), userChat);
+        DatabaseManager.getInstance(activity).insertUserChat(map);
+
+
     }
 
     @Override

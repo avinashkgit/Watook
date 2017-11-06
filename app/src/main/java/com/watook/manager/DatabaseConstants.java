@@ -21,6 +21,9 @@ public class DatabaseConstants {
     static final String TABLE_PREFERENCES = "preferences";
     static final String PREFERENCES_RESPONSE = "preferences_response";
 
+    static final String TABLE_USER_CHAT = "user_chat";
+    static final String USER_CHAT_RESPONSE = "user_chat_response";
+
 
     /////////////////////////////////////////////////////////////////
 
@@ -42,6 +45,9 @@ public class DatabaseConstants {
 
     static final String CREATE_TABLE_PREFERENCES = "CREATE TABLE IF NOT EXISTS " + TABLE_PREFERENCES
             + " (" + PREFERENCES_RESPONSE + " BLOB" + " )";
+
+    static final String CREATE_TABLE_USER_CHAT = "CREATE TABLE IF NOT EXISTS " + TABLE_USER_CHAT
+            + " (" + USER_CHAT_RESPONSE + " BLOB" + " )";
 
 
 }

@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.watook.model.MyProfile;
 import com.watook.model.Preferences;
+import com.watook.model.UserChat;
 import com.watook.model.response.CodeValueResponse;
 import com.watook.model.response.NearByListResponse;
 import com.watook.model.response.RegistrationResponse;
@@ -21,6 +22,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.crypto.Cipher;
@@ -60,6 +62,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
         db.execSQL(DatabaseConstants.CREATE_TABLE_CODE_VALUE);
         db.execSQL(DatabaseConstants.CREATE_TABLE_USERS);
         db.execSQL(DatabaseConstants.CREATE_TABLE_PREFERENCES);
+        db.execSQL(DatabaseConstants.CREATE_TABLE_USER_CHAT);
 
     }
 
@@ -70,6 +73,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
         database.execSQL("delete from " + DatabaseConstants.TABLE_CODE_VALUE);
         database.execSQL("delete from " + DatabaseConstants.TABLE_NEARBY_USERS);
         database.execSQL("delete from " + DatabaseConstants.TABLE_PREFERENCES);
+        database.execSQL("delete from " + DatabaseConstants.TABLE_USER_CHAT);
     }
 
     @Override
@@ -379,4 +383,43 @@ public class DatabaseManager extends SQLiteOpenHelper {
         }
         return obj;
     }
+
+
+
+    public void insertUserChat(HashMap<Long, UserChat> map) {
+        try {
+            database = this.getWritableDatabase();
+            database.execSQL("delete from " + DatabaseConstants.TABLE_USER_CHAT);
+            final ContentValues values = new ContentValues();
+            values.put(DatabaseConstants.USER_CHAT_RESPONSE, objToByte(map));
+            database.insert(DatabaseConstants.TABLE_USER_CHAT, null, values);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    public HashMap<Long, UserChat> getUserChats() {
+        Cursor cursor = null;
+        byte[] blob;
+        HashMap<Long, UserChat> obj = null;
+        try {
+            cursor = database.query(DatabaseConstants.TABLE_USER_CHAT, new String[]{"*"}, null, null, null, null, null);
+            if (cursor != null && cursor.getCount() > 0) {
+                cursor.moveToLast();
+                blob = cursor.getBlob(cursor.getColumnIndex(DatabaseConstants.USER_CHAT_RESPONSE));
+                if (blob != null)
+                    obj = (HashMap<Long, UserChat>) byteToObj(blob);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return obj;
+    }
+
 }
