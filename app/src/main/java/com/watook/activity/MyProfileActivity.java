@@ -104,7 +104,7 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
         } catch (Exception e) {
             e.printStackTrace();
         }
-        String nameAge = myProfile.getFirstName() + " " + myProfile.getLastName();
+        String nameAge = Utils.emptyIfNull(myProfile.getFirstName()) + " " + Utils.emptyIfNull(myProfile.getLastName());
         if (age > 18)
             nameAge = nameAge + ", " + age;
         tvNameAge.setText(nameAge);

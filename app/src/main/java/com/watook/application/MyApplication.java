@@ -15,6 +15,8 @@ import com.watook.util.Constant;
 import java.io.IOException;
 import java.security.SecureRandom;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.HashSet;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
@@ -28,7 +30,7 @@ public class MyApplication extends MultiDexApplication {
     DisplayMetrics metrics;
     private String userId;
     private String token;
-    private int height,width;
+    private int height, width;
 
 
     private byte[] key;
@@ -200,5 +202,30 @@ public class MyApplication extends MultiDexApplication {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public static HashMap<Long, String> getRequestStatusCode() {
+        HashMap<Long, String> set = new HashMap<>();
+        set.put(Long.parseLong("501"), Constant.ACCEPT);
+        set.put(Long.parseLong("502"), Constant.REJECT);
+        set.put(Long.parseLong("503"), Constant.REQUEST_SENT);
+        set.put(Long.parseLong("504"), Constant.BLOCKED);
+        return set;
+    }
+
+
+    public static HashMap<String, Long> getGenderCode() {
+        HashMap<String, Long> set = new HashMap<>();
+        set.put(Constant.FEMALE, Long.parseLong("201"));
+        set.put(Constant.MALE, Long.parseLong("202"));
+        return set;
+    }
+
+    public static HashMap<String, Long> getDistanceCode() {
+        HashMap<String, Long> set = new HashMap<>();
+        set.put(Constant.KILO_METER, Long.parseLong("601"));
+        set.put(Constant.MILES, Long.parseLong("602"));
+        set.put(Constant.METER, Long.parseLong("603"));
+        return set;
     }
 }

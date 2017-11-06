@@ -2,6 +2,7 @@ package com.watook.callback;
 
 import com.watook.model.response.ApplicationIdResponse;
 import com.watook.model.response.CodeValueResponse;
+import com.watook.model.response.NearByListResponse;
 import com.watook.model.response.PreferencesSaveResponse;
 import com.watook.model.response.ProfileSaveResponse;
 import com.watook.model.response.RegistrationResponse;
@@ -38,12 +39,15 @@ public interface WatookApi {
     @GET("user/list")
     Call<UserListResponse> getUserList(@Header("Content-Type") String content_type, @Header("token") String token);
 
+    @GET("user/nearbylist")
+    Call<NearByListResponse> getNearByList(@Header("Content-Type") String content_type, @Header("token") String token, @Query("userId") String s);
+
     @POST("location/save")
     Call<SaveLocationResponse> saveLocation(@Header("Content-Type") String content_type, @Header("token") String token, @Body HashMap map);
 
     @GET
     Call<ApplicationIdResponse> getApplicationId(@Url String url, @Query("access_token") String token);
 
-    @POST("setting/save")
+    @POST("prefernces/save")
     Call<PreferencesSaveResponse> setPreferences(@Header("Content-Type") String content_type, @Header("token") String token, @Body HashMap map);
 }

@@ -16,7 +16,7 @@ public class UserListResponse implements Serializable {
      */
 
     private String status;
-    private List<UserList> data;
+    private List<User> data;
 
     public String getStatus() {
         return status;
@@ -26,15 +26,15 @@ public class UserListResponse implements Serializable {
         this.status = status;
     }
 
-    public List<UserList> getData() {
+    public List<User> getData() {
         return data;
     }
 
-    public void setData(List<UserList> data) {
+    public void setData(List<User> data) {
         this.data = data;
     }
 
-    public static class UserList implements Serializable{
+    public static class User implements Serializable{
         /**
          * userId : 15
          * fbId : 12366
@@ -62,6 +62,7 @@ public class UserListResponse implements Serializable {
         private String middleName;
         private String firstName;
         private long genderId;
+        private String birthday;
         private String contactMobile;
         private String contactMobile2;
         private String emailId;
@@ -75,6 +76,8 @@ public class UserListResponse implements Serializable {
         private String profileImage;
         private LocationBean location;
         private String fireBaseToken;
+        private long requestStatus;
+
 
         public long getUserId() {
             return userId;
@@ -212,22 +215,29 @@ public class UserListResponse implements Serializable {
             this.profileImage = profileImage;
         }
 
-        public LocationBean getLocation() {
-            return location;
-        }
 
         public void setLocation(LocationBean location) {
             this.location = location;
         }
 
-        public static class LocationBean {
+        public static class LocationBean implements Serializable{
             /**
+             * double : 22.525497
              * latitude : 3.2445659999999998
              * longitude : 13.584555
              */
 
+            private  double distance;
             private double latitude;
             private double longitude;
+
+            public double getDistance() {
+                return distance;
+            }
+
+            public void setDistance(double distance) {
+                this.distance = distance;
+            }
 
             public double getLatitude() {
                 return latitude;
@@ -253,6 +263,22 @@ public class UserListResponse implements Serializable {
 
         public void setFireBaseToken(String fireBaseToken) {
             this.fireBaseToken = fireBaseToken;
+        }
+
+        public String getBirthday() {
+            return birthday;
+        }
+
+        public void setBirthday(String birthday) {
+            this.birthday = birthday;
+        }
+
+        public long getRequestStatus() {
+            return requestStatus;
+        }
+
+        public void setRequestStatus(long requestStatus) {
+            this.requestStatus = requestStatus;
         }
     }
 

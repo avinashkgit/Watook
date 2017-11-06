@@ -14,6 +14,7 @@ public class PreferencesActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_preferences);
         setUpToolBar();
+        getSupportActionBar().setTitle("Preferences");
         setFragment();
     }
 

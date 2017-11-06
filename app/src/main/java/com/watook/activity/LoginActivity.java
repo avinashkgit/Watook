@@ -49,6 +49,7 @@ import com.watook.model.Preferences;
 import com.watook.model.response.ApplicationIdResponse;
 import com.watook.model.MyProfile;
 import com.watook.model.response.CodeValueResponse;
+import com.watook.model.response.PreferencesSaveResponse;
 import com.watook.model.response.ProfileSaveResponse;
 import com.watook.model.response.RegistrationResponse;
 import com.watook.model.response.SaveLocationResponse;
@@ -294,7 +295,7 @@ public class LoginActivity extends BaseActivity {
                         // Application code
                         try {
                             Log.i("Response", response.toString());
-                            String id = "", email="", firstName="", lastName="", gender="", picture="", birthday="";
+                            String id = "", email = "", firstName = "", lastName = "", gender = "", picture = "", birthday = "";
                             try {
                                 id = response.getJSONObject().getString("id");
                             } catch (Exception e) {
@@ -542,12 +543,6 @@ public class LoginActivity extends BaseActivity {
                 SaveLocationResponse saveResponse = response.body();
                 if (statusCode == 200 && saveResponse != null && saveResponse.getStatus() != null && saveResponse.getStatus().equalsIgnoreCase("success")) {
                     setPreferences();
-                    try {
-                        MySharedPreferences.putObject(Constant.IS_LOGGED_IN, true);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    navigateView();
                 } else {
                     dismissProgressDialog();
                     showAToast(getResources().getString(R.string.oops_something_went_wrong));
@@ -564,36 +559,45 @@ public class LoginActivity extends BaseActivity {
     }
 
 
-//    private void apiCallSavePreferences() {
-//        HashMap<String, String> map = new HashMap<>();
-//        map.put("userId", DatabaseManager.getInstance(this).getMyProfile().getUserId());
-//        map.put("latitude", latitude + "");
-//        map.put("longitude", longitude + "");
-//
-//
-//        Call<PreferencesSaveResponse> saveProfile = ApiManager.getApiInstance().setPreferences(Constant.CONTENT_TYPE,
-//                DatabaseManager.getInstance(this).getRegistrationData().getData(), map);
-//        saveProfile.enqueue(new Callback<PreferencesSaveResponse>() {
-//            @Override
-//            public void onResponse(@NonNull Call<PreferencesSaveResponse> call, @NonNull Response<PreferencesSaveResponse> response) {
-//                int statusCode = response.code();
-//                PreferencesSaveResponse saveResponse = response.body();
-//                if (statusCode == 200 && saveResponse != null && saveResponse.getStatus() != null && saveResponse.getStatus().equalsIgnoreCase("success")) {
-//                    navigateView();
-//                } else {
-//                    dismissProgressDialog();
-//                    showAToast(getResources().getString(R.string.oops_something_went_wrong));
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(@NonNull Call<PreferencesSaveResponse> call, @NonNull Throwable t) {
-//                showAToast(getResources().getString(R.string.oops_something_went_wrong));
-//                dismissProgressDialog();
-//            }
-//        });
-//
-//    }
+    private void apiCallSavePreferences(Preferences pref) {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("userId", MyApplication.getInstance().getUserId());
+        map.put("distanceRange", pref.getDistanceRange() + "");
+        map.put("distanceIn", MyApplication.getDistanceCode().get(Constant.METER)+"");
+        map.put("ageMin", pref.getAgeMin() + "");
+        map.put("ageMax", pref.getAgeMax() + "");
+        map.put("femaleInterest", MyApplication.getGenderCode().get(Constant.FEMALE) +"");
+        map.put("maleInterest",  MyApplication.getGenderCode().get(Constant.MALE) +"");
+
+
+        Call<PreferencesSaveResponse> saveProfile = ApiManager.getApiInstance().setPreferences(Constant.CONTENT_TYPE,
+                DatabaseManager.getInstance(this).getRegistrationData().getData(), map);
+        saveProfile.enqueue(new Callback<PreferencesSaveResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<PreferencesSaveResponse> call, @NonNull Response<PreferencesSaveResponse> response) {
+                int statusCode = response.code();
+                PreferencesSaveResponse saveResponse = response.body();
+                if (statusCode == 200 && saveResponse != null && saveResponse.getStatus() != null && saveResponse.getStatus().equalsIgnoreCase("success")) {
+                    try {
+                        MySharedPreferences.putObject(Constant.IS_LOGGED_IN, true);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    navigateView();
+                } else {
+                    dismissProgressDialog();
+                    showAToast(getResources().getString(R.string.oops_something_went_wrong));
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<PreferencesSaveResponse> call, @NonNull Throwable t) {
+                showAToast(getResources().getString(R.string.oops_something_went_wrong));
+                dismissProgressDialog();
+            }
+        });
+
+    }
 
     private void setPreferences() {
         Preferences pref = new Preferences();
@@ -612,6 +616,7 @@ public class LoginActivity extends BaseActivity {
             e.printStackTrace();
         }
 
+        apiCallSavePreferences(pref);
     }
 
 

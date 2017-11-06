@@ -53,6 +53,7 @@ public class MainActivity extends BaseActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setUpToolBar();
+        getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
         inItView();
 
     }

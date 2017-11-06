@@ -139,6 +139,10 @@
     <string name="show_me">Show Me</string>
     <string name="feature_in">Feature In</string>
     <string name="show_distance_in">Show Distance In</string>
+    <string name="like">Like</string>
+    <string name="like_back">Like Back</string>
+    <string name="reject">Reject</string>
+    <string name="bio">Bio...</string>
 
 
 </resources>

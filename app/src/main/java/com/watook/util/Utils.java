@@ -31,8 +31,19 @@ public class Utils {
             return s;
     }
 
+    public static String emptyIfNull(Integer s) {
+        if (s == null)
+            return "";
+        else
+            return s + "";
+    }
+
     public static boolean isEmpty(String s) {
         return s == null || s.equals("");
+    }
+
+    public static boolean isEmpty(Integer s) {
+        return s == null;
     }
 
     public static boolean isNetworkAvailable() {

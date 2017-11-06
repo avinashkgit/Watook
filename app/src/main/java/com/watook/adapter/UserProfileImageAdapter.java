@@ -16,6 +16,7 @@ import com.bumptech.glide.request.target.Target;
 import com.watook.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Avinash on 14-08-2017.
@@ -23,12 +24,12 @@ import java.util.ArrayList;
 
 public class UserProfileImageAdapter extends PagerAdapter {
 
-    private ArrayList<String> IMAGES;
+    private List<String> IMAGES;
     private LayoutInflater inflater;
     private Context context;
 
 
-    public UserProfileImageAdapter(Context context, ArrayList<String> IMAGES) {
+    public UserProfileImageAdapter(Context context, List<String> IMAGES) {
         this.context = context;
         this.IMAGES = IMAGES;
         inflater = LayoutInflater.from(context);

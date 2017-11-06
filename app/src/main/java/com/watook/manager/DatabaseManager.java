@@ -10,8 +10,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.watook.model.MyProfile;
 import com.watook.model.Preferences;
 import com.watook.model.response.CodeValueResponse;
+import com.watook.model.response.NearByListResponse;
 import com.watook.model.response.RegistrationResponse;
-import com.watook.model.response.UserListResponse;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -68,7 +68,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
         database.execSQL("delete from " + DatabaseConstants.TABLE_USER_PROFILE);
         database.execSQL("delete from " + DatabaseConstants.TABLE_REGISTRATION);
         database.execSQL("delete from " + DatabaseConstants.TABLE_CODE_VALUE);
-        database.execSQL("delete from " + DatabaseConstants.TABLE_USERS);
+        database.execSQL("delete from " + DatabaseConstants.TABLE_NEARBY_USERS);
         database.execSQL("delete from " + DatabaseConstants.TABLE_PREFERENCES);
     }
 
@@ -306,13 +306,13 @@ public class DatabaseManager extends SQLiteOpenHelper {
     }
 
 
-    public void insertUsersList(List<UserListResponse.UserList> lst) {
+    public void insertNearByUsersList(List<NearByListResponse.User> lst) {
         try {
             database = this.getWritableDatabase();
-            database.execSQL("delete from " + DatabaseConstants.TABLE_USERS);
+            database.execSQL("delete from " + DatabaseConstants.TABLE_NEARBY_USERS);
             final ContentValues values = new ContentValues();
-            values.put(DatabaseConstants.USERS_RESPONSE, objToByte(lst));
-            database.insert(DatabaseConstants.TABLE_USERS, null, values);
+            values.put(DatabaseConstants.NEARBY_USERS_RESPONSE, objToByte(lst));
+            database.insert(DatabaseConstants.TABLE_NEARBY_USERS, null, values);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -320,17 +320,17 @@ public class DatabaseManager extends SQLiteOpenHelper {
     }
 
 
-    public List<UserListResponse.UserList> getUsersList() {
+    public List<NearByListResponse.User> getUsersList() {
         Cursor cursor = null;
         byte[] blob;
-        List<UserListResponse.UserList> obj = null;
+        List<NearByListResponse.User> obj = null;
         try {
-            cursor = database.query(DatabaseConstants.TABLE_USERS, new String[]{"*"}, null, null, null, null, null);
+            cursor = database.query(DatabaseConstants.TABLE_NEARBY_USERS, new String[]{"*"}, null, null, null, null, null);
             if (cursor != null && cursor.getCount() > 0) {
                 cursor.moveToLast();
-                blob = cursor.getBlob(cursor.getColumnIndex(DatabaseConstants.USERS_RESPONSE));
+                blob = cursor.getBlob(cursor.getColumnIndex(DatabaseConstants.NEARBY_USERS_RESPONSE));
                 if (blob != null)
-                    obj = (List<UserListResponse.UserList>) byteToObj(blob);
+                    obj = (List<NearByListResponse.User>) byteToObj(blob);
             }
         } catch (Exception e) {
             e.printStackTrace();

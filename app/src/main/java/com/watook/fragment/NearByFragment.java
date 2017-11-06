@@ -3,9 +3,6 @@ package com.watook.fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -19,6 +16,7 @@ import com.watook.adapter.NearByAdapter;
 import com.watook.application.MyApplication;
 import com.watook.manager.ApiManager;
 import com.watook.manager.DatabaseManager;
+import com.watook.model.response.NearByListResponse;
 import com.watook.model.response.UserListResponse;
 import com.watook.util.Constant;
 import com.watook.util.DividerItemDecorator;
@@ -70,9 +68,9 @@ public class NearByFragment extends Fragment {
     }
 
     private void bindUi() {
-        List<UserListResponse.UserList> usrList = DatabaseManager.getInstance(getActivity()).getUsersList();
+        List<NearByListResponse.User> usrList = DatabaseManager.getInstance(getActivity()).getUsersList();
         if (usrList != null) {
-            setData(usrList);
+//            setData(usrList);
             apiCallGetUserList();
         } else {
             apiCallGetUserList();
@@ -80,27 +78,27 @@ public class NearByFragment extends Fragment {
     }
 
     private void apiCallGetUserList() {
-        Call<UserListResponse> codeValue = ApiManager.getApiInstance().getUserList(Constant.CONTENT_TYPE,
-                DatabaseManager.getInstance(activity).getRegistrationData().getData());
-        codeValue.enqueue(new Callback<UserListResponse>() {
+        Call<NearByListResponse> codeValue = ApiManager.getApiInstance().getNearByList(Constant.CONTENT_TYPE,
+                DatabaseManager.getInstance(activity).getRegistrationData().getData(), MyApplication.getInstance().getUserId());
+        codeValue.enqueue(new Callback<NearByListResponse>() {
             @Override
-            public void onResponse(@NonNull Call<UserListResponse> call, @NonNull Response<UserListResponse> response) {
+            public void onResponse(@NonNull Call<NearByListResponse> call, @NonNull Response<NearByListResponse> response) {
                 int statusCode = response.code();
-                UserListResponse codeValueResponse = response.body();
+                NearByListResponse codeValueResponse = response.body();
                 if (statusCode == 200 && codeValueResponse != null && codeValueResponse.getStatus() != null && codeValueResponse.getStatus().equalsIgnoreCase("success")) {
-                    DatabaseManager.getInstance(getActivity()).insertUsersList(codeValueResponse.getData());
+                    DatabaseManager.getInstance(getActivity()).insertNearByUsersList(codeValueResponse.getData());
                     setData(codeValueResponse.getData());
                 }
             }
 
             @Override
-            public void onFailure(@NonNull Call<UserListResponse> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<NearByListResponse> call, @NonNull Throwable t) {
                 activity.showAToast(getResources().getString(R.string.oops_something_went_wrong));
             }
         });
     }
 
-    private void setData(List<UserListResponse.UserList> data) {
+    private void setData(List<NearByListResponse.User> data) {
         recyclerView.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false));
         recyclerView.addItemDecoration(new DividerItemDecorator(getResources().getDrawable(R.drawable.divider)));
         nearByAdapter = new NearByAdapter(activity, data);

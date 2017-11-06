@@ -1,9 +1,7 @@
 package com.watook.adapter;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Bitmap;
-import android.os.Parcelable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.RecyclerView;
@@ -18,27 +16,23 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.watook.R;
 import com.watook.activity.ChatActivity;
-import com.watook.activity.UserProfileActivity;
 import com.watook.model.response.NearByListResponse;
-import com.watook.model.response.UserListResponse;
-import com.watook.util.Constant;
 import com.watook.util.Utils;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**
- * Created by Avinash.Kumar on 24-Oct-17.
+ * Created by Avinash.Kumar on 06-Nov-17.
  */
 
-public class NearByAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class FriendsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Activity activity;
     private List<NearByListResponse.User> user;
 
     private static final int FOOTER_VIEW = 1;
 
-    public NearByAdapter(Activity activity, List<NearByListResponse.User> user) {
+    public FriendsListAdapter(Activity activity, List<NearByListResponse.User> user) {
         this.activity = activity;
         this.user = user;
     }
@@ -96,14 +90,14 @@ public class NearByAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
 
-    public class FooterViewHolder extends ViewHolder {
+    public class FooterViewHolder extends FriendsListAdapter.ViewHolder {
         FooterViewHolder(View itemView) {
             super(itemView);
         }
     }
 
 
-    class RecyclerViewHolder extends ViewHolder {
+    class RecyclerViewHolder extends FriendsListAdapter.ViewHolder {
         RecyclerViewHolder(View itemView) {
             super(itemView);
 
@@ -126,7 +120,7 @@ public class NearByAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
 
         public void bindView(int position) {
-            final NearByListResponse.User user = NearByAdapter.this.user.get(position);
+            final NearByListResponse.User user = FriendsListAdapter.this.user.get(position);
             tvName.setText(Utils.emptyIfNull(user.getFirstName()) + " " + Utils.emptyIfNull(user.getLastName()));
             if (!Utils.isEmpty(String.valueOf(user.getLatitude()))
                     && !Utils.isEmpty(String.valueOf(user.getLongitude()))) {
@@ -136,13 +130,11 @@ public class NearByAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    ChatActivity.startActivity(activity,
-//                            user.getFirstName() + " " + user.getLastName(),
-//                            String.valueOf(user.getUserId()),
-//                            user.getFireBaseToken());
-                    Intent i = new Intent(activity, UserProfileActivity.class);
-                    i.putExtra(Constant.ARG_USERS, user);
-                    activity.startActivity(i);
+                    ChatActivity.startActivity(activity,
+                            user.getFirstName() + " " + user.getLastName(),
+                            String.valueOf(user.getUserId()),
+                            user.getFireBaseToken());
+
                 }
             });
 
@@ -159,3 +151,4 @@ public class NearByAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
     }
 }
+

@@ -5,8 +5,8 @@
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-     <uses-permission android:name="android.permission.READ_SMS" />
-     <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
@@ -22,20 +22,18 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <!--<meta-data android:name="DATABASE" android:value="watook_ex.db" />-->
-        <!--<meta-data android:name="VERSION" android:value="2" />-->
-        <!--<meta-data android:name="QUERY_LOG" android:value="true" />-->
-        <!--<meta-data android:name="DOMAIN_PACKAGE_NAME" android:value="com.watook" />-->
-        <!--<meta-data android:name="ENCRYPTION_KEY" android:value="mySecretKey" />-->
+        <!-- <meta-data android:name="DATABASE" android:value="watook_ex.db" /> -->
+        <!-- <meta-data android:name="VERSION" android:value="2" /> -->
+        <!-- <meta-data android:name="QUERY_LOG" android:value="true" /> -->
+        <!-- <meta-data android:name="DOMAIN_PACKAGE_NAME" android:value="com.watook" /> -->
+        <!-- <meta-data android:name="ENCRYPTION_KEY" android:value="mySecretKey" /> -->
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
-
         <meta-data
             android:name="com.google.geo.API_KEY"
-            android:value="@string/firebase_api_key">
-        </meta-data>
+            android:value="@string/firebase_api_key"></meta-data>
 
         <activity
             android:name=".activity.SplashActivity"
@@ -74,43 +72,46 @@
         </activity>
         <activity
             android:name=".activity.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:hardwareAccelerated="true"/>
+            android:hardwareAccelerated="true"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.FriendsListActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:hardwareAccelerated="true"/>
+            android:hardwareAccelerated="true"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.PreferencesActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:hardwareAccelerated="true"/>
+            android:hardwareAccelerated="true"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.ProfileActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:hardwareAccelerated="true"/>
+            android:hardwareAccelerated="true"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.BlockedActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:hardwareAccelerated="true"/>
+            android:hardwareAccelerated="true"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.SettingsActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:hardwareAccelerated="true"/>
+            android:hardwareAccelerated="true"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.MyProfileActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:hardwareAccelerated="true"/>
-
+            android:hardwareAccelerated="true"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.ChatActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:hardwareAccelerated="true"/>
+            android:hardwareAccelerated="true"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.UserProfileActivity"
+            android:hardwareAccelerated="true"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <service android:name=".service.ApiService" />
 
-        <!--<service-->
-            <!--android:name=".application.GPSTracker"-->
-            <!--android:enabled="true" />-->
+        <!-- <service -->
+        <!-- android:name=".application.GPSTracker" -->
+        <!-- android:enabled="true" /> -->
 
         <service android:name=".fcm.MyFirebaseMessagingService">
             <intent-filter>
@@ -122,11 +123,9 @@
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
-
         <service android:name=".application.GPSTracker" />
 
 
     </application>
-
 
 </manifest>

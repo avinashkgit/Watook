@@ -28,5 +28,19 @@ public class Constant {
     public static final String NO_ROOM_FOUND = "no_room_found";
 
 
+    public static final String ACCEPT = "accept";
+    public static final String REJECT = "reject";
+    public static final String REQUEST_SENT = "request_sent";
+    public static final String BLOCKED = "blocked";
+
+
+    public static final String FEMALE = "female";
+    public static final String MALE = "male";
+
+
+    public static final String KILO_METER = "kilo_meter";
+    public static final String METER = "meter";
+    public static final String MILES = "miles";
+
 
 }
