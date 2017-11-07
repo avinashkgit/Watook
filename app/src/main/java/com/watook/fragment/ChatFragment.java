@@ -227,12 +227,12 @@ public class ChatFragment extends Fragment implements ChatContract.View, TextVie
         mChatPresenter.sendMessage(getActivity().getApplicationContext(),
                 chat,
                 receiverFirebaseToken);
+        updateChatList(chat);
     }
 
     @Override
     public void onSendMessageSuccess() {
         mETxtMessage.setText("");
-//        Toast.makeText(getActivity(), "Message sent", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -252,19 +252,24 @@ public class ChatFragment extends Fragment implements ChatContract.View, TextVie
         mChatRecyclerAdapter.add(chat);
         mRecyclerViewChat.scrollToPosition(mChatRecyclerAdapter.getItemCount() - 1);
 //        mRecyclerViewChat.smoothScrollToPosition(mChatRecyclerAdapter.getItemCount() - 1);
+        updateChatList(chat);
 
+    }
+
+    private void updateChatList(final Chat chat) {
         HashMap<Long, UserChat> map = DatabaseManager.getInstance(activity).getUserChats();
         if (map == null) {
             map = new HashMap<>();
         }
         UserChat userChat = new UserChat();
-        userChat.setLastModified(System.currentTimeMillis());
+        userChat.setLastModified(chat.timestamp);
+        userChat.setSentById(Long.parseLong(chat.receiverUid));
         userChat.setUserId(Long.parseLong(getArguments().getString(Constant.ARG_RECEIVER_UID)));
         userChat.setName(getArguments().getString(Constant.ARG_RECEIVER));
         userChat.setLastMessage(chat.message);
+        userChat.setFireBaseToken(getArguments().getString(Constant.ARG_FIREBASE_TOKEN));
         map.put(Long.parseLong(getArguments().getString(Constant.ARG_RECEIVER_UID)), userChat);
         DatabaseManager.getInstance(activity).insertUserChat(map);
-
 
     }
 

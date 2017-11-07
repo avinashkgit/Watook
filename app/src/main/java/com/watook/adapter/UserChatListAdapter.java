@@ -16,25 +16,36 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.watook.R;
 import com.watook.activity.ChatActivity;
-import com.watook.model.response.NearByListResponse;
+import com.watook.application.MyApplication;
+import com.watook.model.UserChat;
 import com.watook.util.Utils;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 /**
- * Created by Avinash.Kumar on 06-Nov-17.
+ * Created by Avinash.Kumar on 07-Nov-17.
  */
 
-public class FriendsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class UserChatListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Activity activity;
-    private List<NearByListResponse.User> user;
+    private List<UserChat> users;
 
     private static final int FOOTER_VIEW = 1;
 
-    public FriendsListAdapter(Activity activity, List<NearByListResponse.User> user) {
+    public UserChatListAdapter(Activity activity, List<UserChat> users) {
         this.activity = activity;
-        this.user = user;
+        this.users = users;
+
+        Collections.sort(users, Collections.reverseOrder(new Comparator<UserChat>() {
+            @Override
+            public int compare(UserChat o1, UserChat o2) {
+                return o1.getLastModified().compareTo(o2.getLastModified());
+            }
+        }));
     }
 
     @Override
@@ -43,21 +54,21 @@ public class FriendsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         View view;
         if (viewType == FOOTER_VIEW) {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_footer, parent, false);
-            return new FooterViewHolder(view);
+            return new UserChatListAdapter.FooterViewHolder(view);
         }
         view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_default, parent, false);
-        return new RecyclerViewHolder(view);
+        return new UserChatListAdapter.RecyclerViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
         try {
-            if (holder instanceof RecyclerViewHolder) {
-                RecyclerViewHolder vh = (RecyclerViewHolder) holder;
+            if (holder instanceof UserChatListAdapter.RecyclerViewHolder) {
+                UserChatListAdapter.RecyclerViewHolder vh = (UserChatListAdapter.RecyclerViewHolder) holder;
                 vh.bindView(position);
 
-            } else if (holder instanceof FooterViewHolder) {
-                FooterViewHolder vh = (FooterViewHolder) holder;
+            } else if (holder instanceof UserChatListAdapter.FooterViewHolder) {
+                UserChatListAdapter.FooterViewHolder vh = (UserChatListAdapter.FooterViewHolder) holder;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -66,22 +77,22 @@ public class FriendsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public int getItemCount() {
-        if (user == null) {
+        if (users == null) {
             return 0;
         }
 
-        if (user.size() == 0) {
+        if (users.size() == 0) {
             //Return 1 here to show nothing
             return 1;
         }
 
         // Add extra view to show the footer view
-        return user.size() + 1;
+        return users.size() + 1;
     }
 
     @Override
     public int getItemViewType(int position) {
-        if (position == user.size()) {
+        if (position == users.size()) {
             // This is where we'll add footer.
             return FOOTER_VIEW;
         }
@@ -90,14 +101,14 @@ public class FriendsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
 
-    public class FooterViewHolder extends FriendsListAdapter.ViewHolder {
+    public class FooterViewHolder extends UserChatListAdapter.ViewHolder {
         FooterViewHolder(View itemView) {
             super(itemView);
         }
     }
 
 
-    class RecyclerViewHolder extends FriendsListAdapter.ViewHolder {
+    class RecyclerViewHolder extends UserChatListAdapter.ViewHolder {
         RecyclerViewHolder(View itemView) {
             super(itemView);
 
@@ -120,18 +131,18 @@ public class FriendsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
 
         public void bindView(int position) {
-            final NearByListResponse.User user = FriendsListAdapter.this.user.get(position);
-            tvName.setText(Utils.emptyIfNull(user.getFirstName()) + " " + Utils.emptyIfNull(user.getLastName()));
-            if (!Utils.isEmpty(String.valueOf(user.getLatitude()))
-                    && !Utils.isEmpty(String.valueOf(user.getLongitude()))) {
-                tvDist.setText(Utils.getDistance(activity, user.getLatitude(), user.getLongitude()));
-            } else
-                tvDist.setText(String.valueOf("NA"));
+            final UserChat user = UserChatListAdapter.this.users.get(position);
+            tvName.setText(Utils.emptyIfNull(user.getName()));
+            tvDist.setText(Utils.emptyIfNull(user.getLastMessage()));
+            if (user.getSentById() != Long.parseLong(MyApplication.getInstance().getUserId()))
+                tvDist.setCompoundDrawablesWithIntrinsicBounds(activity.getResources().getDrawable(R.drawable.ic_reply_blue_grey_600_18dp), null, null, null);
+            else
+                tvDist.setCompoundDrawablesWithIntrinsicBounds(activity.getResources().getDrawable(R.drawable.ic_reply_recieved_blue_grey_600_18dp), null, null, null);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     ChatActivity.startActivity(activity,
-                            user.getFirstName() + " " + user.getLastName(),
+                            user.getName(),
                             String.valueOf(user.getUserId()),
                             user.getFireBaseToken());
 
@@ -151,4 +162,3 @@ public class FriendsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
     }
 }
-

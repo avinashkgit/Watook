@@ -1,16 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
-<vector xmlns:android="http://schemas.android.com/apk/res/android" android:viewportWidth="58"
-    android:viewportHeight="58" android:width="58dp" android:height="58dp">
-    <group>
-        <path android:fillColor="@color/colorChatBubbleIncoming" android:pathData="M1.653,13.5C0.74,13.5,0,14.24,0,15.153V48.5v8l8-8h35.347C44.26,48.5,45,47.76,45,46.847V15.153
-		c0-0.913-0.74-1.653-1.653-1.653H1.653z" />
-        <path android:fillColor="@color/colorChatBubbleOutgoing" android:pathData="M56.347,1.5H11.653C10.74,1.5,10,2.24,10,3.153V13.5h33.347C44.26,13.5,45,14.24,45,15.153V39.5h5
-		l8,8v-8V3.153C58,2.24,57.26,1.5,56.347,1.5z" />
-        <path android:fillColor="#FFFFFF"
-            android:pathData="M22,24.5H10c-0.553,0-1-0.448-1-1s0.447-1,1-1h12c0.553,0,1,0.448,1,1S22.553,24.5,22,24.5z" />
-        <path android:fillColor="#FFFFFF"
-            android:pathData="M35,31.5H10c-0.553,0-1-0.448-1-1s0.447-1,1-1h25c0.553,0,1,0.448,1,1S35.553,31.5,35,31.5z" />
-        <path android:fillColor="#FFFFFF"
-            android:pathData="M35,38.5H10c-0.553,0-1-0.448-1-1s0.447-1,1-1h25c0.553,0,1,0.448,1,1S35.553,38.5,35,38.5z" />
-    </group>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+        android:width="512dp"
+        android:height="512dp"
+        android:viewportWidth="512.0"
+        android:viewportHeight="512.0">
+    <path
+        android:pathData="M337.5,133.9C433.9,133.9 512,196 512,272.5c0,54.7 -39.8,101.9 -97.7,124.5c-4,26.2 3.9,54 24,74.2c-38.4,0 -70.9,-25.6 -81.5,-60.9c-6.3,0.5 -12.7,0.8 -19.2,0.8c-96.4,0 -174.5,-62.1 -174.5,-138.6C162.9,196 241.1,133.9 337.5,133.9z"
+        android:fillColor="@color/colorChatBubbleOutgoing"/>
+    <path
+        android:pathData="M174.5,40.8C78.1,40.8 0,102.9 0,179.4c0,54.7 39.8,101.9 97.7,124.5c4,26.2 -3.9,54 -24,74.2c38.4,0 70.9,-25.6 81.5,-60.9c6.3,0.5 12.7,0.8 19.2,0.8c96.4,0 174.5,-62.1 174.5,-138.6C349.1,102.9 270.9,40.8 174.5,40.8z"
+        android:fillColor="@color/colorChatBubbleIncoming"/>
 </vector>

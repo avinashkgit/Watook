@@ -3,28 +3,26 @@ package com.watook.adapter;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.os.Parcelable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.watook.R;
-import com.watook.activity.ChatActivity;
 import com.watook.activity.UserProfileActivity;
 import com.watook.model.response.NearByListResponse;
-import com.watook.model.response.UserListResponse;
 import com.watook.util.Constant;
 import com.watook.util.Utils;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -115,10 +113,12 @@ public class NearByAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         TextView tvName, tvDist;
         RelativeLayout rlBack;
         ImageView ivProfile;
+        LinearLayout cardView;
 
         public ViewHolder(View itemView) {
             super(itemView);
             // Find view by ID and initialize here
+            cardView = (LinearLayout) itemView.findViewById(R.id.card_view);
             tvName = (TextView) itemView.findViewById(R.id.txt_name);
             tvDist = (TextView) itemView.findViewById(R.id.txt_dist);
             rlBack = (RelativeLayout) itemView.findViewById(R.id.rl_profile_back);
@@ -133,7 +133,7 @@ public class NearByAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 tvDist.setText(Utils.getDistance(activity, user.getLatitude(), user.getLongitude()));
             } else
                 tvDist.setText(String.valueOf("NA"));
-            itemView.setOnClickListener(new View.OnClickListener() {
+            cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 //                    ChatActivity.startActivity(activity,
@@ -147,15 +147,17 @@ public class NearByAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             });
 
 
-            Glide.with(activity).load(Utils.emptyIfNull(user.getProfileImage())).asBitmap().centerCrop().into(new BitmapImageViewTarget(ivProfile) {
-                @Override
-                protected void setResource(Bitmap resource) {
-                    RoundedBitmapDrawable circularBitmapDrawable =
-                            RoundedBitmapDrawableFactory.create(activity.getResources(), resource);
-                    circularBitmapDrawable.setCircular(true);
-                    ivProfile.setImageDrawable(circularBitmapDrawable);
-                }
-            });
+//            Glide.with(activity).load(Utils.emptyIfNull(user.getProfileImage())).asBitmap().centerCrop().into(new BitmapImageViewTarget(ivProfile) {
+//                @Override
+//                protected void setResource(Bitmap resource) {
+//                    RoundedBitmapDrawable circularBitmapDrawable =
+//                            RoundedBitmapDrawableFactory.create(activity.getResources(), resource);
+//                    circularBitmapDrawable.setCircular(true);
+//                    ivProfile.setImageDrawable(circularBitmapDrawable);
+//                }
+//            });
+
+            Glide.with(activity).load(Utils.emptyIfNull(user.getProfileImage())).asBitmap().centerCrop().into(ivProfile);
         }
     }
 }

@@ -2,7 +2,9 @@ package com.watook.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -54,6 +56,12 @@ public class NearByFragment extends Fragment {
         return v;
     }
 
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        bindUi();
+    }
+
     private void inItView(View view) {
         activity = (MainActivity) getActivity();
         recyclerView = (RecyclerView) view.findViewById(R.id.rv_near_by);
@@ -63,7 +71,6 @@ public class NearByFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        bindUi();
 
     }
 
@@ -99,8 +106,8 @@ public class NearByFragment extends Fragment {
     }
 
     private void setData(List<NearByListResponse.User> data) {
-        recyclerView.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false));
-        recyclerView.addItemDecoration(new DividerItemDecorator(getResources().getDrawable(R.drawable.divider)));
+        recyclerView.setLayoutManager(new GridLayoutManager(activity, 2));
+//        recyclerView.addItemDecoration(new DividerItemDecorator(getResources().getDrawable(R.drawable.divider)));
         nearByAdapter = new NearByAdapter(activity, data);
         recyclerView.setAdapter(nearByAdapter);
     }

@@ -26,6 +26,7 @@ public class UserChat implements Serializable {
     private String fbImages;
     private String lastMessage;
     private Long lastModified;
+    private Long sentById;
 
     public Long getUserId() {
         return userId;
@@ -178,5 +179,13 @@ public class UserChat implements Serializable {
 
     public void setLastModified(Long lastModified) {
         this.lastModified = lastModified;
+    }
+
+    public Long getSentById() {
+        return sentById;
+    }
+
+    public void setSentById(Long sentById) {
+        this.sentById = sentById;
     }
 }

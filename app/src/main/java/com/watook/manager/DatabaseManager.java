@@ -422,4 +422,8 @@ public class DatabaseManager extends SQLiteOpenHelper {
         return obj;
     }
 
+//    public String getProfilePic(Context context, Long id){
+//
+//    }
+
 }

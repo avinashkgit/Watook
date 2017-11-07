@@ -2,7 +2,6 @@ package com.watook.activity;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.TextView;
@@ -43,6 +42,7 @@ public class FriendsListActivity extends BaseActivity {
         recyclerView = (RecyclerView) findViewById(R.id.rv_near_by);
         txtNoData = (TextView) findViewById(R.id.txt_no_data_found);
     }
+
     @Override
     public void onResume() {
         super.onResume();

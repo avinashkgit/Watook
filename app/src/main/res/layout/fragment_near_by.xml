@@ -7,7 +7,8 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_near_by"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:padding="@dimen/margin_3dp">
 
     </android.support.v7.widget.RecyclerView>
 
@@ -17,6 +18,6 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:text="@string/hello_blank_fragment"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
 </RelativeLayout>

@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -38,6 +39,7 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.zxing.common.StringUtils;
 import com.watook.R;
 import com.watook.application.GPSTracker;
 import com.watook.application.MyApplication;
@@ -83,6 +85,11 @@ public class LoginActivity extends BaseActivity {
 
     private LoginButton loginButton;
     private CallbackManager callbackManager;
+    MyProfile myProfile;
+    private ArrayList<String> imagesIdArray = new ArrayList<>();
+    private ArrayList<String> imagesURLArray = new ArrayList<>();
+    List<CodeValueResponse.CodeValue> codeValues;
+    int photoCounter = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -332,7 +339,7 @@ public class LoginActivity extends BaseActivity {
                                 e.printStackTrace();
                             }
 
-                            MyProfile myProfile = new MyProfile();
+                            myProfile = new MyProfile();
                             myProfile.setFbId(Utils.emptyIfNull(id));
                             myProfile.setEmail(Utils.emptyIfNull(email));
                             myProfile.setFirstName(Utils.emptyIfNull(firstName));
@@ -341,7 +348,7 @@ public class LoginActivity extends BaseActivity {
                             myProfile.setBirthday(Utils.emptyIfNull(birthday));
                             myProfile.setProfilePicture(Utils.emptyIfNull(picture));
 
-                            getApplicationId(myProfile, loginResult.getAccessToken().getToken());
+                            getApplicationId(loginResult.getAccessToken().getToken());
                             getFriendList(id);
 
 
@@ -356,7 +363,7 @@ public class LoginActivity extends BaseActivity {
         request.executeAsync();
     }
 
-    private void getApplicationId(final MyProfile myProfile, final String accessToken) {
+    private void getApplicationId(final String accessToken) {
         Call<ApplicationIdResponse> registrationResponseCall = ApiManager.getApiInstance().getApplicationId("https://graph.facebook.com/app", accessToken);
         registrationResponseCall.enqueue(new Callback<ApplicationIdResponse>() {
             @Override
@@ -365,7 +372,7 @@ public class LoginActivity extends BaseActivity {
                 ApplicationIdResponse registrationResponse = response.body();
                 if (statusCode == 200 && registrationResponse != null && registrationResponse.getId() != null) {
                     if (!Utils.isEmpty(registrationResponse.getId())) {
-                        registerUser(registrationResponse.getId(), accessToken, myProfile);
+                        registerUser(registrationResponse.getId(), accessToken);
                     }
                 }
             }
@@ -378,7 +385,7 @@ public class LoginActivity extends BaseActivity {
 
     }
 
-    private void registerUser(String AppID, String accessToken, final MyProfile myProfile) {
+    private void registerUser(String AppID, String accessToken) {
         showProgressDialog("Loading...", null);
 
         Call<RegistrationResponse> registrationResponseCall = ApiManager.getApiInstance().authenticate(
@@ -396,7 +403,7 @@ public class LoginActivity extends BaseActivity {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    apiCallGetCodeValue(myProfile, registrationResponse);
+                    apiCallGetCodeValue();
                 } else {
                     dismissProgressDialog();
                     showAToast(getResources().getString(R.string.oops_something_went_wrong));
@@ -419,9 +426,9 @@ public class LoginActivity extends BaseActivity {
     }
 
 
-    private void apiCallGetCodeValue(final MyProfile myProfile, final RegistrationResponse registrationResponse) {
-        Call<CodeValueResponse> codeValue = ApiManager.getApiInstance().getCodeValue(Constant.CONTENT_TYPE,
-                registrationResponse.getData());
+    private void apiCallGetCodeValue() {
+        final Call<CodeValueResponse> codeValue = ApiManager.getApiInstance().getCodeValue(Constant.CONTENT_TYPE,
+                MyApplication.getInstance().getToken());
         codeValue.enqueue(new Callback<CodeValueResponse>() {
             @Override
             public void onResponse(@NonNull Call<CodeValueResponse> call, @NonNull Response<CodeValueResponse> response) {
@@ -429,7 +436,8 @@ public class LoginActivity extends BaseActivity {
                 CodeValueResponse codeValueResponse = response.body();
                 if (statusCode == 200 && codeValueResponse != null && codeValueResponse.getStatus() != null && codeValueResponse.getStatus().equalsIgnoreCase("success")) {
                     DatabaseManager.getInstance(LoginActivity.this).insertCodeValue(codeValueResponse.getData());
-                    apiCallSaveProfile(myProfile, codeValueResponse.getData(), registrationResponse);
+                    codeValues = codeValueResponse.getData();
+                    apiCallSaveProfile();
                 } else {
                     dismissProgressDialog();
                     showAToast(getResources().getString(R.string.oops_something_went_wrong));
@@ -444,7 +452,7 @@ public class LoginActivity extends BaseActivity {
         });
     }
 
-    private void apiCallSaveProfile(final MyProfile myProfile, List<CodeValueResponse.CodeValue> codeValues, final RegistrationResponse rp) {
+    private void apiCallSaveProfile() {
         long genderId = 0;
         long statusCode = 0;
         for (CodeValueResponse.CodeValue cv : codeValues) {
@@ -476,7 +484,7 @@ public class LoginActivity extends BaseActivity {
 
 
         Call<ProfileSaveResponse> saveProfile = ApiManager.getApiInstance().saveProfile(Constant.CONTENT_TYPE,
-                rp.getData(), map);
+                MyApplication.getInstance().getToken(), map);
         saveProfile.enqueue(new Callback<ProfileSaveResponse>() {
             @Override
             public void onResponse(@NonNull Call<ProfileSaveResponse> call, @NonNull Response<ProfileSaveResponse> response) {
@@ -558,47 +566,6 @@ public class LoginActivity extends BaseActivity {
 
     }
 
-
-    private void apiCallSavePreferences(Preferences pref) {
-        HashMap<String, String> map = new HashMap<>();
-        map.put("userId", MyApplication.getInstance().getUserId());
-        map.put("distanceRange", pref.getDistanceRange() + "");
-        map.put("distanceIn", MyApplication.getDistanceCode().get(Constant.METER)+"");
-        map.put("ageMin", pref.getAgeMin() + "");
-        map.put("ageMax", pref.getAgeMax() + "");
-        map.put("femaleInterest", MyApplication.getGenderCode().get(Constant.FEMALE) +"");
-        map.put("maleInterest",  MyApplication.getGenderCode().get(Constant.MALE) +"");
-
-
-        Call<PreferencesSaveResponse> saveProfile = ApiManager.getApiInstance().setPreferences(Constant.CONTENT_TYPE,
-                DatabaseManager.getInstance(this).getRegistrationData().getData(), map);
-        saveProfile.enqueue(new Callback<PreferencesSaveResponse>() {
-            @Override
-            public void onResponse(@NonNull Call<PreferencesSaveResponse> call, @NonNull Response<PreferencesSaveResponse> response) {
-                int statusCode = response.code();
-                PreferencesSaveResponse saveResponse = response.body();
-                if (statusCode == 200 && saveResponse != null && saveResponse.getStatus() != null && saveResponse.getStatus().equalsIgnoreCase("success")) {
-                    try {
-                        MySharedPreferences.putObject(Constant.IS_LOGGED_IN, true);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    navigateView();
-                } else {
-                    dismissProgressDialog();
-                    showAToast(getResources().getString(R.string.oops_something_went_wrong));
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<PreferencesSaveResponse> call, @NonNull Throwable t) {
-                showAToast(getResources().getString(R.string.oops_something_went_wrong));
-                dismissProgressDialog();
-            }
-        });
-
-    }
-
     private void setPreferences() {
         Preferences pref = new Preferences();
         pref.setDistanceUnitKm(false);
@@ -620,6 +587,193 @@ public class LoginActivity extends BaseActivity {
     }
 
 
+    private void apiCallSavePreferences(Preferences pref) {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("userId", MyApplication.getInstance().getUserId());
+        map.put("distanceRange", pref.getDistanceRange() + "");
+        map.put("distanceIn", MyApplication.getDistanceCode().get(Constant.METER) + "");
+        map.put("ageMin", pref.getAgeMin() + "");
+        map.put("ageMax", pref.getAgeMax() + "");
+        map.put("femaleInterest", MyApplication.getGenderCode().get(Constant.FEMALE) + "");
+        map.put("maleInterest", MyApplication.getGenderCode().get(Constant.MALE) + "");
+
+
+        Call<PreferencesSaveResponse> saveProfile = ApiManager.getApiInstance().setPreferences(Constant.CONTENT_TYPE,
+                DatabaseManager.getInstance(this).getRegistrationData().getData(), map);
+        saveProfile.enqueue(new Callback<PreferencesSaveResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<PreferencesSaveResponse> call, @NonNull Response<PreferencesSaveResponse> response) {
+                int statusCode = response.code();
+                PreferencesSaveResponse saveResponse = response.body();
+                if (statusCode == 200 && saveResponse != null && saveResponse.getStatus() != null && saveResponse.getStatus().equalsIgnoreCase("success")) {
+                    try {
+                        MySharedPreferences.putObject(Constant.IS_LOGGED_IN, true);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    getAlbum();
+                } else {
+                    dismissProgressDialog();
+                    showAToast(getResources().getString(R.string.oops_something_went_wrong));
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<PreferencesSaveResponse> call, @NonNull Throwable t) {
+                showAToast(getResources().getString(R.string.oops_something_went_wrong));
+                dismissProgressDialog();
+            }
+        });
+
+    }
+
+    public void getAlbum() {
+        String token = AccessToken.getCurrentAccessToken().getToken();
+        final String graphPath = "/" + myProfile.getFbId() + "/albums?" + "access_token=" + token;
+
+        GraphRequest request = new GraphRequest(AccessToken.getCurrentAccessToken(), graphPath, null, HttpMethod.GET, new GraphRequest.Callback() {
+            @Override
+            public void onCompleted(GraphResponse graphResponse) {
+                JSONObject object = graphResponse.getJSONObject();
+                try {
+                    JSONArray jsonArray = object.getJSONArray("data");
+                    if (jsonArray.length() > 1) {
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject jsonObject = jsonArray.getJSONObject(i);
+                            String albumName = jsonObject.getString("name");
+                            if (albumName.equalsIgnoreCase("Profile Pictures")) {
+                                String id = jsonObject.getString("id");
+                                getProfilePictures(id);
+                            }
+                        }
+                    } else {
+                        imagesURLArray.add(myProfile.getProfilePicture());
+                        navigateView();
+
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    imagesURLArray.add(myProfile.getProfilePicture());
+                    navigateView();
+                }
+            }
+        });
+        Bundle param = new Bundle();
+        param.putString("fields", "name");
+        request.setParameters(param);
+        request.executeAsync();
+    }
+
+    private void getProfilePictures(String id) {
+        Bundle params = new Bundle();
+        params.putString("url", "{image-url}");
+
+        new GraphRequest(
+                AccessToken.getCurrentAccessToken(),
+                "/" + id + "/photos",
+                params,
+                HttpMethod.GET,
+                new GraphRequest.Callback() {
+                    @Override
+                    public void onCompleted(GraphResponse graphResponse) {
+                        JSONObject object = graphResponse.getJSONObject();
+                        try {
+                            JSONArray jsonArray = object.getJSONArray("data");
+                            if (jsonArray.length() > 1) {
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                    String id = jsonObject.getString("id");
+                                    imagesIdArray.add(id);
+
+                                }
+                            } else {
+                                imagesURLArray.add(myProfile.getProfilePicture());
+                                navigateView();
+                            }
+                            if (imagesIdArray.size() > 0)
+                                for (String id : imagesIdArray) {
+                                    fetchPhoto(id);
+                                }
+                            else
+                                navigateView();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            imagesURLArray.add(myProfile.getProfilePicture());
+                            navigateView();
+                        }
+                    }
+                }).executeAsync();
+
+    }
+
+    public void fetchPhoto(String id) {
+        new GraphRequest(
+                AccessToken.getCurrentAccessToken(),
+                "/" + id + "?fields=images&type=large",
+                null,
+                HttpMethod.GET,
+                new GraphRequest.Callback() {
+                    public void onCompleted(GraphResponse response) {
+                        JSONObject object = response.getJSONObject();
+                        try {
+                            JSONArray jsonArray = object.getJSONArray("images");
+                            JSONObject jsonObject = jsonArray.getJSONObject(0);
+                            String url = jsonObject.getString("source");
+                            imagesURLArray.add(url);
+                            myProfile.setListOfProfilePic(imagesURLArray);
+                            photoCounter++;
+                            DatabaseManager.getInstance(LoginActivity.this).insertMyProfile(myProfile);
+                            if (photoCounter == imagesIdArray.size()) {
+                                apiCallSaveFbImages();
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+        ).executeAsync();
+    }
+
+    private void apiCallSaveFbImages() {
+        long statusCode = 0;
+        for (CodeValueResponse.CodeValue cv : codeValues) {
+            if (cv.getCodeValue().equalsIgnoreCase("online"))
+                statusCode = cv.getCodeValueID();
+        }
+
+        HashMap<String, String> map = new HashMap<>();
+        map.put("fbId", myProfile.getFbId());
+        map.put("firstName", myProfile.getFirstName());
+        map.put("statusInfo", statusCode + "");
+        map.put("fbImages", TextUtils.join(",", imagesURLArray));
+
+
+        Call<ProfileSaveResponse> saveProfile = ApiManager.getApiInstance().saveProfile(Constant.CONTENT_TYPE,
+                MyApplication.getInstance().getToken(), map);
+        saveProfile.enqueue(new Callback<ProfileSaveResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<ProfileSaveResponse> call, @NonNull Response<ProfileSaveResponse> response) {
+                int statusCode = response.code();
+                ProfileSaveResponse saveResponse = response.body();
+                if (statusCode == 200 && saveResponse != null && saveResponse.getStatus() != null && saveResponse.getStatus().equalsIgnoreCase("success")) {
+                    navigateView();
+                } else {
+                    dismissProgressDialog();
+                    showAToast(getResources().getString(R.string.oops_something_went_wrong));
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<ProfileSaveResponse> call, @NonNull Throwable t) {
+                dismissProgressDialog();
+                showAToast(getResources().getString(R.string.oops_something_went_wrong));
+            }
+        });
+    }
+
+
     private void handleFacebookAccessToken(AccessToken token) {
         Log.d(TAG, "handleFacebookAccessToken:" + token);
         final FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -629,12 +783,8 @@ public class LoginActivity extends BaseActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-//                            showAToast("Authentication success.");
                         } else {
-                            // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
                             showAToast("Authentication failed.");
                         }

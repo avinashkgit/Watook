@@ -2,18 +2,36 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.watook.fragment.ChatsListFragment">
 
     <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view_chat_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
     </android.support.v7.widget.RecyclerView>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="@string/hello_blank_fragment" />
+    <RelativeLayout
+        android:id="@+id/lay_start"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/lin_lay"
+        android:visibility="visible">
+
+        <ImageView
+            android:id="@+id/iv_nothing"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            app:srcCompat="@drawable/vector_drawable_chat"
+            android:layout_centerInParent="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_below="@id/iv_nothing"
+            android:hint="Make the first move!"/>
+    </RelativeLayout>
+
 
 </RelativeLayout>
