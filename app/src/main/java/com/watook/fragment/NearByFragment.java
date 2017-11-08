@@ -95,12 +95,13 @@ public class NearByFragment extends Fragment {
                 if (statusCode == 200 && codeValueResponse != null && codeValueResponse.getStatus() != null && codeValueResponse.getStatus().equalsIgnoreCase("success")) {
                     DatabaseManager.getInstance(getActivity()).insertNearByUsersList(codeValueResponse.getData());
                     setData(codeValueResponse.getData());
-                }
+                } else
+                    activity.showAToast(getResources().getString(R.string.oops_something_went_wrong));
             }
 
             @Override
             public void onFailure(@NonNull Call<NearByListResponse> call, @NonNull Throwable t) {
-                activity.showAToast(getResources().getString(R.string.oops_something_went_wrong));
+                activity.showAToast(getResources().getString(R.string.oops_server_response_failure));
             }
         });
     }

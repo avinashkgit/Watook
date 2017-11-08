@@ -8,9 +8,11 @@ import android.util.DisplayMetrics;
 import android.view.WindowManager;
 
 import com.google.firebase.database.FirebaseDatabase;
+import com.watook.R;
 import com.watook.manager.DatabaseManager;
 import com.watook.util.AppLog;
 import com.watook.util.Constant;
+import com.watook.util.TypefaceUtil;
 
 import java.io.IOException;
 import java.security.SecureRandom;
@@ -76,9 +78,9 @@ public class MyApplication extends MultiDexApplication {
         super.onCreate();
         MyApplication.context = getApplicationContext();
 
-//        TypefaceUtil.overrideFont(getApplicationContext(), "NORMAL", getResources().getString(R.string.FONT_PROXIMANOVASEMIBOLD));
+//        TypefaceUtil.overrideFont(getApplicationContext(), "NORMAL", getResources().getString(R.string.FONT_MY_RIADPRO_REGULAR));
 //        TypefaceUtil.overrideFont(getApplicationContext(), "MONOSPACE", getResources().getString(R.string.FONT_CAMBAYREGULAR));
-//        TypefaceUtil.overrideFont(getApplicationContext(), "SERIF", getResources().getString(R.string.FONT_TITILLIUMTEXT25L600));
+//        TypefaceUtil.overrideFont(getApplicationContext(), "SERIF", getResources().getString(R.string.FONT_CAMBAYREGULAR));
 //        TypefaceUtil.overrideFont(getApplicationContext(), "SANS", getResources().getString(R.string.FONT_MYRIADPRO_REGULAR));
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);

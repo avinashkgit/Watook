@@ -80,7 +80,7 @@ import retrofit2.Response;
 public class LoginActivity extends BaseActivity {
 
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 1;
-    String TAG = "Permissions";
+    String TAG = LoginActivity.class.getSimpleName();
     Button btnLogin;
 
     private LoginButton loginButton;
@@ -379,7 +379,8 @@ public class LoginActivity extends BaseActivity {
 
             @Override
             public void onFailure(@NonNull Call<ApplicationIdResponse> call, @NonNull Throwable t) {
-                showAToast(getResources().getString(R.string.oops_something_went_wrong));
+                showAToast(getResources().getString(R.string.oops_server_response_failure));
+
             }
         });
 
@@ -412,7 +413,7 @@ public class LoginActivity extends BaseActivity {
 
             @Override
             public void onFailure(@NonNull Call<RegistrationResponse> call, @NonNull Throwable t) {
-                showAToast(getResources().getString(R.string.oops_something_went_wrong));
+                showAToast(getResources().getString(R.string.oops_server_response_failure));
                 dismissProgressDialog();
             }
         });
@@ -447,7 +448,7 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void onFailure(@NonNull Call<CodeValueResponse> call, @NonNull Throwable t) {
                 dismissProgressDialog();
-                showAToast(getResources().getString(R.string.oops_something_went_wrong));
+                showAToast(getResources().getString(R.string.oops_server_response_failure));
             }
         });
     }
@@ -481,8 +482,7 @@ public class LoginActivity extends BaseActivity {
         map.put("workLocation", myProfile.getWorkLocation());
         map.put("profileImage", myProfile.getProfilePicture());
         map.put("fireBaseToken", FirebaseInstanceId.getInstance().getToken());
-
-
+        System.out.println(TAG + map.toString());
         Call<ProfileSaveResponse> saveProfile = ApiManager.getApiInstance().saveProfile(Constant.CONTENT_TYPE,
                 MyApplication.getInstance().getToken(), map);
         saveProfile.enqueue(new Callback<ProfileSaveResponse>() {
@@ -510,7 +510,7 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void onFailure(@NonNull Call<ProfileSaveResponse> call, @NonNull Throwable t) {
                 dismissProgressDialog();
-                showAToast(getResources().getString(R.string.oops_something_went_wrong));
+                showAToast(getResources().getString(R.string.oops_server_response_failure));
             }
         });
     }
@@ -559,7 +559,7 @@ public class LoginActivity extends BaseActivity {
 
             @Override
             public void onFailure(@NonNull Call<SaveLocationResponse> call, @NonNull Throwable t) {
-                showAToast(getResources().getString(R.string.oops_something_went_wrong));
+                showAToast(getResources().getString(R.string.oops_server_response_failure));
                 dismissProgressDialog();
             }
         });
@@ -620,7 +620,7 @@ public class LoginActivity extends BaseActivity {
 
             @Override
             public void onFailure(@NonNull Call<PreferencesSaveResponse> call, @NonNull Throwable t) {
-                showAToast(getResources().getString(R.string.oops_something_went_wrong));
+                showAToast(getResources().getString(R.string.oops_server_response_failure));
                 dismissProgressDialog();
             }
         });
@@ -768,7 +768,7 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void onFailure(@NonNull Call<ProfileSaveResponse> call, @NonNull Throwable t) {
                 dismissProgressDialog();
-                showAToast(getResources().getString(R.string.oops_something_went_wrong));
+                showAToast(getResources().getString(R.string.oops_server_response_failure));
             }
         });
     }

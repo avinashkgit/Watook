@@ -33,7 +33,7 @@
             android:value="@string/facebook_app_id" />
         <meta-data
             android:name="com.google.geo.API_KEY"
-            android:value="@string/firebase_api_key"></meta-data>
+            android:value="@string/firebase_api_key"/>
 
         <activity
             android:name=".activity.SplashActivity"
@@ -72,40 +72,31 @@
         </activity>
         <activity
             android:name=".activity.MainActivity"
-            android:hardwareAccelerated="true"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:hardwareAccelerated="true"/>
         <activity
             android:name=".activity.FriendsListActivity"
-            android:hardwareAccelerated="true"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:hardwareAccelerated="true"/>
         <activity
             android:name=".activity.PreferencesActivity"
-            android:hardwareAccelerated="true"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:hardwareAccelerated="true"/>
         <activity
             android:name=".activity.ProfileActivity"
-            android:hardwareAccelerated="true"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:hardwareAccelerated="true" />
         <activity
             android:name=".activity.BlockedActivity"
-            android:hardwareAccelerated="true"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:hardwareAccelerated="true" />
         <activity
             android:name=".activity.SettingsActivity"
-            android:hardwareAccelerated="true"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:hardwareAccelerated="true"/>
         <activity
             android:name=".activity.MyProfileActivity"
-            android:hardwareAccelerated="true"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:hardwareAccelerated="true" />
         <activity
             android:name=".activity.ChatActivity"
-            android:hardwareAccelerated="true"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:hardwareAccelerated="true"/>
         <activity
             android:name=".activity.UserProfileActivity"
-            android:hardwareAccelerated="true"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:hardwareAccelerated="true"/>
 
         <service android:name=".service.ApiService" />
 

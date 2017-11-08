@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.watook.R;
 import com.watook.fragment.ChatFragment;
@@ -12,6 +14,8 @@ import com.watook.util.FirebaseChatMainApp;
 
 
 public class ChatActivity extends BaseActivity {
+    TextView txtName;
+    ImageView imgProgile;
 
     public static void startActivity(Context context,
                                      String receiver,
@@ -30,11 +34,16 @@ public class ChatActivity extends BaseActivity {
         setContentView(R.layout.activity_chat);
         setUpToolBar();
         init();
+        bindView();
+    }
+
+    private void bindView() {
+        txtName.setText(getIntent().getExtras().getString(Constant.ARG_RECEIVER));
     }
 
     private void init() {
         // set the register screen fragment
-        getSupportActionBar().setTitle(getIntent().getExtras().getString(Constant.ARG_RECEIVER));
+//        getSupportActionBar().setTitle(getIntent().getExtras().getString(Constant.ARG_RECEIVER));
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.frame_layout_content_chat,
                 ChatFragment.newInstance(getIntent().getExtras().getString(Constant.ARG_RECEIVER),
@@ -42,6 +51,8 @@ public class ChatActivity extends BaseActivity {
                         getIntent().getExtras().getString(Constant.ARG_FIREBASE_TOKEN)),
                 ChatFragment.class.getSimpleName());
         fragmentTransaction.commit();
+        imgProgile = (ImageView) findViewById(R.id.profile_pic);
+        txtName = (TextView) findViewById(R.id.txt_name);
     }
 
     @Override

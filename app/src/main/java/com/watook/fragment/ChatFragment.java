@@ -283,7 +283,7 @@ public class ChatFragment extends Fragment implements ChatContract.View, TextVie
 
     @Override
     public void onGetMessagesFailure(String message) {
-        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+       activity.showAToast(message);
     }
 
     @Subscribe

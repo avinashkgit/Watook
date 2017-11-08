@@ -149,6 +149,7 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
                 break;
             case R.id.btn_like:
                 likeClicked();
+                apiCallSetRequest(LIKE);
                 break;
             case R.id.btn_accept:
                 acceptClicked();
@@ -162,7 +163,9 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
 
     private void likeClicked() {
         btnLike.setEnabled(false);
-        apiCallSetRequest(LIKE);
+        btnLike.setText("Liked");
+        btnLike.setTextColor(getResources().getColor(R.color.colorTextWhite));
+        layLike.setBackground(getResources().getDrawable(R.drawable.btn_round_accent));
     }
 
     private void acceptClicked() {

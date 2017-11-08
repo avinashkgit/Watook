@@ -135,9 +135,9 @@ public class UserChatListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             tvName.setText(Utils.emptyIfNull(user.getName()));
             tvDist.setText(Utils.emptyIfNull(user.getLastMessage()));
             if (user.getSentById() != Long.parseLong(MyApplication.getInstance().getUserId()))
-                tvDist.setCompoundDrawablesWithIntrinsicBounds(activity.getResources().getDrawable(R.drawable.ic_reply_blue_grey_600_18dp), null, null, null);
+                tvDist.setCompoundDrawablesWithIntrinsicBounds(activity.getResources().getDrawable(R.drawable.ic_reply_outgoing_18dp), null, null, null);
             else
-                tvDist.setCompoundDrawablesWithIntrinsicBounds(activity.getResources().getDrawable(R.drawable.ic_reply_recieved_blue_grey_600_18dp), null, null, null);
+                tvDist.setCompoundDrawablesWithIntrinsicBounds(activity.getResources().getDrawable(R.drawable.ic_reply_incoming_18dp), null, null, null);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

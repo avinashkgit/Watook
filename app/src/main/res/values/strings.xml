@@ -7,17 +7,29 @@
     <string name="facebook_app_id">1288795094521349</string>
     <string name="fb_login_protocol_scheme">fb1288795094521349</string>
 
-
-    <string name="FONT_PROXIMANOVALIGHT">fonts/ProximaNovaLight0.otf</string>
-    <string name="FONT_PROXIMANOVAREGULAR">fonts/ProximaNovaRegular0.otf</string>
-    <string name="FONT_PROXIMANOVASEMIBOLD">fonts/ProximaNovaSemibold0.otf</string>
-    <string name="FONT_TITILLIUMTEXT25L600">fonts/TitilliumText25L002.otf</string>
-    <string name="FONT_TITILLIUMTEXT25L400">fonts/TitilliumText25L003.otf</string>
-    <string name="FONT_TITILLIUMTEXT25L004_250">fonts/TitilliumText25L004_250.otf</string>
-    <string name="FONT_MYRIADPRO_REGULAR">fonts/MyriadPro-Regular.otf</string>
-    <string name="FONT_OPENSANS_LIGHT">fonts/OpenSans-Light.ttf</string>
-    <string name="FONT_OPENSANS_REGULAR">fonts/OpenSans-Regular.ttf</string>
     <string name="FONT_CAMBAYREGULAR">fonts/CambayRegular.ttf</string>
+    <string name="FONT_MY_RIADPRO_REGULAR">fonts/MyriadPro-Regular.otf</string>
+    <string name="FONT_OPEN_SANS_BOLD">fonts/OpenSans-Bold.ttf</string>
+    <string name="FONT_OPEN_SANS_BOLD_ITALIC">fonts/OpenSans-BoldItalic.ttf</string>
+    <string name="FONT_OPEN_SANS_EXTRA_BOLD">fonts/OpenSans-ExtraBold.ttf</string>
+    <string name="FONT_OPEN_SANS_EXTRA_BOLD_ITALIC">fonts/OpenSans-ExtraBoldItalic.ttf</string>
+    <string name="FONT_OPEN_SANS_ITALIC">fonts/OpenSans-Italic.ttf</string>
+    <string name="FONT_OPEN_SANS_LIGHT">fonts/OpenSans-Light.ttf</string>
+    <string name="FONT_OPEN_SANS_LIGHT_ITALIC">fonts/OpenSans-LightItalic.ttf</string>
+    <string name="FONT_OPEN_SANS_REGULAR">fonts/OpenSans-Regular.ttf</string>
+    <string name="FONT_OPEN_SANS_SEMI_BOLD">fonts/OpenSans-Semibold.ttf</string>
+    <string name="FONT_OPEN_SANS_SEMI_BOLD_ITALIC">fonts/OpenSans-SemiboldItalic.ttf</string>
+    <string name="FONT_PROXI_MANOVA_LIGHT">fonts/ProximaNovaLight0.otf</string>
+    <string name="FONT_PROXI_MANOVA_REGULAR">fonts/ProximaNovaRegular0.otf</string>
+    <string name="FONT_PROXI_MANOVA_SEMI_BOLD">fonts/ProximaNovaSemibold0.otf</string>
+    <string name="FONT_TITILLIUM_TEXT25L600">fonts/TitilliumText25L002.otf</string>
+    <string name="FONT_TITILLIUM_TEXT25L400">fonts/TitilliumText25L003.otf</string>
+    <string name="FONT_TITILLIUM_TEXT25L004_250">fonts/TitilliumText25L004_250.otf</string>
+
+
+
+
+
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
@@ -43,6 +55,7 @@
     <string name="login">Login</string>
     <string name="login_register">New user, tap here to register !</string>
     <string name="oops_something_went_wrong">Oops! Something went wrong…</string>
+    <string name="oops_server_response_failure">Oops! Server response failure…</string>
 
     <string name="user_successfully_added">User successfully added!</string>
     <string name="user_unable_to_add">Unable to add user!</string>

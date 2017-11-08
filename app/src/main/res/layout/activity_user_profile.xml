@@ -56,7 +56,6 @@
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorBackground"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
 
@@ -71,7 +70,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_3dp"
-                android:background="@color/colorAccent">
+                android:background="@drawable/btn_round_outline_accent">
 
                 <Button
                     android:id="@+id/btn_like"
@@ -80,8 +79,9 @@
                     android:background="?attr/selectableItemBackground"
                     android:clickable="true"
                     android:focusable="true"
+                    android:elevation="@dimen/margin_2dp"
                     android:text="@string/like"
-                    android:textColor="@color/colorTextWhite" />
+                    android:textColor="@color/colorTextPrimary" />
 
             </LinearLayout>
 
@@ -90,8 +90,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:baselineAligned="false"
-                android:visibility="gone"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
 
                 <LinearLayout
@@ -138,6 +138,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
+                android:layout_marginBottom="@dimen/margin_10dp"
                 android:padding="@dimen/margin_avg"
                 android:textColor="@color/colorPrimary"
                 android:textSize="@dimen/font_large"
@@ -154,27 +155,20 @@
             <!--android:textColor="@color/colorAccent"-->
             <!--android:textSize="@dimen/font_description" />-->
 
-            <LinearLayout
-                android:layout_width="match_parent"
+
+            <TextView
+                android:id="@+id/txt_bio"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:baselineAligned="false"
-                android:orientation="horizontal">
+                android:layout_gravity="center_vertical"
+                android:background="@android:color/transparent"
+                android:hint="@string/bio"
+                android:inputType="none"
+                android:paddingLeft="@dimen/margin_avg"
+                android:paddingRight="@dimen/margin_avg"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/font_medium" />
 
-                <TextView
-                    android:id="@+id/txt_bio"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:background="@android:color/transparent"
-                    android:hint="@string/bio"
-                    android:inputType="none"
-                    android:padding="@dimen/margin_avg"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="@dimen/font_medium" />
-
-            </LinearLayout>
 
             <!--<TextView-->
             <!--android:layout_width="match_parent"-->
@@ -187,21 +181,16 @@
             <!--android:textColor="@color/colorAccent"-->
             <!--android:textSize="@dimen/font_description" />-->
 
-            <LinearLayout
+
+            <TextView
+                android:id="@+id/txt_work"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:baselineAligned="false">
-
-                <TextView
-                    android:id="@+id/txt_work"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/margin_avg"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="@dimen/font_medium"
-                    tool:text="Android Developer" />
-            </LinearLayout>
+                android:paddingLeft="@dimen/margin_avg"
+                android:paddingRight="@dimen/margin_avg"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/font_medium"
+                tool:text="Android Developer" />
 
 
             <!--<TextView-->

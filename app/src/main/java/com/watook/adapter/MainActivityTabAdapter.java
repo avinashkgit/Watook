@@ -10,7 +10,7 @@ import com.watook.fragment.RequestsFragment;
 
 
 public class MainActivityTabAdapter extends FragmentStatePagerAdapter {
-    private String tabTitles[] = new String[]{"CHATS", "NEAR BY", "REQUESTS"};
+    private String tabTitles[] = new String[]{"CHATS", "NEAR BY", "LIKES"};
 
 
     public MainActivityTabAdapter(FragmentManager fm) {
