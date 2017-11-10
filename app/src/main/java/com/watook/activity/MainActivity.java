@@ -48,6 +48,8 @@ public class MainActivity extends BaseActivity
     ImageView profileBackground;
     ImageView profilePic;
 
+    DrawerLayout drawer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,7 +84,7 @@ public class MainActivity extends BaseActivity
             }
         });
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,
                 drawer,
@@ -162,7 +164,6 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -207,20 +208,30 @@ public class MainActivity extends BaseActivity
             case R.id.nav_preferences:
                 intent = new Intent(MainActivity.this, PreferencesActivity.class);
                 startActivity(intent);
+                closeDrawer();
                 break;
             case R.id.nav_profile:
                 intent = new Intent(MainActivity.this, MyProfileActivity.class);
                 startActivity(intent);
+                closeDrawer();
                 break;
             case R.id.nav_blocked:
                 intent = new Intent(MainActivity.this, BlockedActivity.class);
                 startActivity(intent);
+                closeDrawer();
                 break;
             case R.id.nav_settings:
                 intent = new Intent(MainActivity.this, SettingsActivity.class);
                 startActivity(intent);
+                closeDrawer();
                 break;
 
+        }
+    }
+
+    private void closeDrawer(){
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
         }
     }
 }

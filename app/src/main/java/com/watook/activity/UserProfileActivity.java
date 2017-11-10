@@ -2,6 +2,7 @@ package com.watook.activity;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.ViewPager;
 import android.view.View;
@@ -13,15 +14,23 @@ import com.viewpagerindicator.CirclePageIndicator;
 import com.watook.R;
 import com.watook.adapter.UserProfileImageAdapter;
 import com.watook.application.MyApplication;
+import com.watook.manager.ApiManager;
 import com.watook.manager.DatabaseManager;
 import com.watook.model.response.CodeValueResponse;
 import com.watook.model.response.NearByListResponse;
+import com.watook.model.response.RequestSaveResponse;
+import com.watook.model.response.UserResponse;
 import com.watook.util.Constant;
 import com.watook.util.Utils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class UserProfileActivity extends BaseActivity implements View.OnClickListener {
 
@@ -30,10 +39,11 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
     FloatingActionButton actionButton;
     LinearLayout layLike, layRequest;
     Button btnLike, btnAccept, btnReject;
-    NearByListResponse.User user;
+    UserResponse.User user;
     TextView txtNameAge, txtBio, txtInfo;
     ViewPager mPager;
     CirclePageIndicator indicator;
+    Long othersID;
 
 
     @Override
@@ -43,7 +53,7 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
         context = this;
         setUpToolBar();
         inItView();
-        bindView();
+//        bindView();
     }
 
 
@@ -63,50 +73,64 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
         btnAccept.setOnClickListener(this);
         btnReject = (Button) findViewById(R.id.btn_reject);
         btnReject.setOnClickListener(this);
+
+        othersID = getIntent().getLongExtra(Constant.OTHERS_ID, -1);
+        apiCallGetUser();
     }
 
     private void bindView() {
-        user = (NearByListResponse.User) getIntent().getSerializableExtra(Constant.ARG_USERS);
-        List<CodeValueResponse.CodeValue> codeValues = DatabaseManager.getInstance(this).getCodeValue();
-
         if (user != null) {
-            for (CodeValueResponse.CodeValue cv : codeValues) {
-//                if (MyApplication.getRequestStatusCode().containsKey(cv.getCodeTypeID())) {
-                String code = MyApplication.getRequestStatusCode().get(cv.getCodeTypeID());
-                switch (Utils.emptyIfNull(code)) {
-                    case Constant.ACCEPT:
-                        layLike.setVisibility(View.GONE);
-                        layRequest.setVisibility(View.GONE);
-                        actionButton.setVisibility(View.VISIBLE);
-                        break;
-                    case Constant.REJECT:
-                        layLike.setVisibility(View.VISIBLE);
-                        layRequest.setVisibility(View.GONE);
-                        actionButton.setVisibility(View.GONE);
-                        break;
-                    case Constant.REQUEST_SENT:
-                        btnLike.setText("Liked");
-                        btnLike.setEnabled(false);
-                        layLike.setVisibility(View.VISIBLE);
-                        layRequest.setVisibility(View.GONE);
-                        actionButton.setVisibility(View.GONE);
-                        break;
-                    case Constant.BLOCKED:
-                        break;
+            Long accpted = MyApplication.getRequestStatusCode().get(Constant.ACCEPTED);
+            Long rejected = MyApplication.getRequestStatusCode().get(Constant.REJECTED);
+            Long liked = MyApplication.getRequestStatusCode().get(Constant.LIKED);
+            Long blocked = MyApplication.getRequestStatusCode().get(Constant.BLOCKED);
 
-                    default:
-                        layLike.setVisibility(View.VISIBLE);
-                        layRequest.setVisibility(View.GONE);
-                        actionButton.setVisibility(View.GONE);
+            if (user.getRequest().getReqstatus().equals(MyApplication.getRequestStatusCode().get(Constant.ACCEPTED))) {
+                layLike.setVisibility(View.GONE);
+                layRequest.setVisibility(View.GONE);
+                actionButton.setVisibility(View.VISIBLE);
+                setFriends();
+
+            } else if (user.getRequest().getReqstatus().equals(MyApplication.getRequestStatusCode().get(Constant.REJECTED))) {
+                layLike.setVisibility(View.VISIBLE);
+                layRequest.setVisibility(View.GONE);
+                actionButton.setVisibility(View.GONE);
+
+            } else if (user.getRequest().getReqstatus().equals(MyApplication.getRequestStatusCode().get(Constant.LIKED))) {
+                if (user.getRequest().getRequestBy() == Long.parseLong(MyApplication.getInstance().getUserId())) {
+                    setLiked();
+                    btnLike.setEnabled(false);
+                    layLike.setVisibility(View.VISIBLE);
+                    layRequest.setVisibility(View.GONE);
+                    actionButton.setVisibility(View.GONE);
+                } else {
+                    layLike.setVisibility(View.GONE);
+                    layRequest.setVisibility(View.VISIBLE);
+                    actionButton.setVisibility(View.GONE);
                 }
-//                }
+
+            } else if (user.getRequest().getReqstatus().equals(MyApplication.getRequestStatusCode().get(Constant.BLOCKED))) {
+                layLike.setVisibility(View.GONE);
+                layRequest.setVisibility(View.GONE);
+                actionButton.setVisibility(View.GONE);
+            } else {
+                layLike.setVisibility(View.VISIBLE);
+                layRequest.setVisibility(View.GONE);
+                actionButton.setVisibility(View.GONE);
             }
 
 
             String nameAge = Utils.emptyIfNull(user.getFirstName()) + " " + Utils.emptyIfNull(user.getLastName());
-            if (!Utils.isEmpty(user.getAge()))
-                nameAge = nameAge + ", " + Utils.emptyIfNull(user.getAge());
             txtNameAge.setText(nameAge);
+            txtBio.setText(user.getAboutYou());
+            String workInfo = "";
+            if (!Utils.isEmpty(user.getWorkPosition()))
+                workInfo = user.getWorkPosition() + ",";
+            if (!Utils.isEmpty(user.getWorkEmployer()))
+                workInfo = workInfo + " " + user.getWorkEmployer() + ",";
+            if (!Utils.isEmpty(user.getWorkPosition()))
+                workInfo = workInfo + " " + user.getWorkPosition() + ",";
+            txtInfo.setText(workInfo);
 
 
             String s = "";
@@ -148,7 +172,6 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
                         user.getFireBaseToken());
                 break;
             case R.id.btn_like:
-                likeClicked();
                 apiCallSetRequest(LIKE);
                 break;
             case R.id.btn_accept:
@@ -161,11 +184,18 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
 
     }
 
-    private void likeClicked() {
+    private void setLiked() {
         btnLike.setEnabled(false);
         btnLike.setText("Liked");
         btnLike.setTextColor(getResources().getColor(R.color.colorTextWhite));
         layLike.setBackground(getResources().getDrawable(R.drawable.btn_round_accent));
+    }
+
+    private void setFriends() {
+        btnLike.setEnabled(false);
+        btnLike.setText("You both like each other!");
+        btnLike.setTextColor(getResources().getColor(R.color.colorTextWhite));
+        layLike.setBackground(getResources().getDrawable(R.drawable.btn_round_primary));
     }
 
     private void acceptClicked() {
@@ -176,7 +206,69 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
         apiCallSetRequest(REJECT);
     }
 
-    private void apiCallSetRequest(int code) {
+    private void apiCallSetRequest(final int code) {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("requestBy", MyApplication.getInstance().getUserId());
+        map.put("requestTo", othersID.toString());
+        if (code == LIKE)
+            map.put("reqstatus", MyApplication.getRequestStatusCode().get(Constant.LIKED) + "");
+        if (code == ACCEPT)
+            map.put("reqstatus", MyApplication.getRequestStatusCode().get(Constant.ACCEPTED) + "");
+        if (code == REJECT)
+            map.put("reqstatus", MyApplication.getRequestStatusCode().get(Constant.REJECTED) + "");
+        if (code == BLOCK)
+            map.put("reqstatus", MyApplication.getRequestStatusCode().get(Constant.BLOCKED) + "");
+
+        Call<RequestSaveResponse> codeValue = ApiManager.getApiInstance().saveRequest(Constant.CONTENT_TYPE,
+                MyApplication.getInstance().getToken(), map);
+        codeValue.enqueue(new Callback<RequestSaveResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<RequestSaveResponse> call, @NonNull Response<RequestSaveResponse> response) {
+                int statusCode = response.code();
+                RequestSaveResponse saveResponse = response.body();
+                if (statusCode == 200 && saveResponse != null && saveResponse.getStatus() != null && saveResponse.getStatus().equalsIgnoreCase("success")) {
+//                    if (code == LIKE)
+//                        setLiked();
+//                    if (code == ACCEPT)
+//                        setFriends();
+//                    if (code == REJECT)
+//                        setRejected();
+//                    if (code == BLOCK)
+//                        setBlocked();
+                    apiCallGetUser();
+                } else
+                    showAToast(getResources().getString(R.string.oops_something_went_wrong));
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<RequestSaveResponse> call, @NonNull Throwable t) {
+                showAToast(getResources().getString(R.string.oops_server_response_failure));
+            }
+        });
 
     }
+
+    private void apiCallGetUser() {
+        Call<UserResponse> codeValue = ApiManager.getApiInstance().getUser(Constant.CONTENT_TYPE,
+                DatabaseManager.getInstance(UserProfileActivity.this).getRegistrationData().getData(), MyApplication.getInstance().getUserId(), othersID.toString());
+        codeValue.enqueue(new Callback<UserResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<UserResponse> call, @NonNull Response<UserResponse> response) {
+                int statusCode = response.code();
+                UserResponse userResponse = response.body();
+                if (statusCode == 200 && userResponse != null && userResponse.getStatus() != null && userResponse.getStatus().equalsIgnoreCase("success")) {
+                    user = userResponse.getData();
+                    bindView();
+                } else
+                    showAToast(getResources().getString(R.string.oops_something_went_wrong));
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<UserResponse> call, @NonNull Throwable t) {
+                showAToast(getResources().getString(R.string.oops_server_response_failure));
+            }
+        });
+    }
+
+
 }

@@ -6,8 +6,10 @@ import com.watook.model.response.NearByListResponse;
 import com.watook.model.response.PreferencesSaveResponse;
 import com.watook.model.response.ProfileSaveResponse;
 import com.watook.model.response.RegistrationResponse;
+import com.watook.model.response.RequestSaveResponse;
 import com.watook.model.response.SaveLocationResponse;
 import com.watook.model.response.UserListResponse;
+import com.watook.model.response.UserResponse;
 
 import java.util.HashMap;
 
@@ -50,4 +52,11 @@ public interface WatookApi {
 
     @POST("prefernces/save")
     Call<PreferencesSaveResponse> setPreferences(@Header("Content-Type") String content_type, @Header("token") String token, @Body HashMap map);
+
+    @GET("user/get")
+    Call<UserResponse> getUser(@Header("Content-Type") String content_type, @Header("token") String token, @Query("userId") String s, @Query("requestId") String j);
+
+    @POST("request/save")
+    Call<RequestSaveResponse> saveRequest(@Header("Content-Type") String content_type, @Header("token") String token, @Body HashMap map);
+
 }

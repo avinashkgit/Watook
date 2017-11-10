@@ -141,7 +141,7 @@ public class NearByAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 //                            String.valueOf(user.getUserId()),
 //                            user.getFireBaseToken());
                     Intent i = new Intent(activity, UserProfileActivity.class);
-                    i.putExtra(Constant.ARG_USERS, user);
+                    i.putExtra(Constant.OTHERS_ID, user.getUserId());
                     activity.startActivity(i);
                 }
             });

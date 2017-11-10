@@ -10,12 +10,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.watook.R;
 import com.watook.activity.MainActivity;
 import com.watook.adapter.NearByAdapter;
 import com.watook.application.MyApplication;
+import com.watook.application.MySharedPreferences;
 import com.watook.manager.ApiManager;
 import com.watook.manager.DatabaseManager;
 import com.watook.model.response.NearByListResponse;
@@ -35,6 +37,7 @@ public class NearByFragment extends Fragment {
     TextView txtNoData;
     NearByAdapter nearByAdapter;
     MainActivity activity;
+    ProgressBar progressBar;
 
 
     public static NearByFragment newInstance() {
@@ -66,11 +69,26 @@ public class NearByFragment extends Fragment {
         activity = (MainActivity) getActivity();
         recyclerView = (RecyclerView) view.findViewById(R.id.rv_near_by);
         txtNoData = (TextView) view.findViewById(R.id.txt_no_data_found);
+        progressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        boolean prefChanged = false;
+        try {
+            prefChanged = (boolean) MySharedPreferences.getObject(Constant.IS_PREFERENCES_CHANGED);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } if(prefChanged) {
+            apiCallGetUserList();
+            try {
+                MySharedPreferences.putObject(Constant.IS_PREFERENCES_CHANGED, false);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
 
     }
 
@@ -85,6 +103,7 @@ public class NearByFragment extends Fragment {
     }
 
     private void apiCallGetUserList() {
+        progressBar.setVisibility(View.VISIBLE);
         Call<NearByListResponse> codeValue = ApiManager.getApiInstance().getNearByList(Constant.CONTENT_TYPE,
                 DatabaseManager.getInstance(activity).getRegistrationData().getData(), MyApplication.getInstance().getUserId());
         codeValue.enqueue(new Callback<NearByListResponse>() {
@@ -95,13 +114,16 @@ public class NearByFragment extends Fragment {
                 if (statusCode == 200 && codeValueResponse != null && codeValueResponse.getStatus() != null && codeValueResponse.getStatus().equalsIgnoreCase("success")) {
                     DatabaseManager.getInstance(getActivity()).insertNearByUsersList(codeValueResponse.getData());
                     setData(codeValueResponse.getData());
-                } else
+                } else {
                     activity.showAToast(getResources().getString(R.string.oops_something_went_wrong));
+                    progressBar.setVisibility(View.GONE);
+                }
             }
 
             @Override
             public void onFailure(@NonNull Call<NearByListResponse> call, @NonNull Throwable t) {
                 activity.showAToast(getResources().getString(R.string.oops_server_response_failure));
+                progressBar.setVisibility(View.GONE);
             }
         });
     }
@@ -111,5 +133,6 @@ public class NearByFragment extends Fragment {
 //        recyclerView.addItemDecoration(new DividerItemDecorator(getResources().getDrawable(R.drawable.divider)));
         nearByAdapter = new NearByAdapter(activity, data);
         recyclerView.setAdapter(nearByAdapter);
+        progressBar.setVisibility(View.GONE);
     }
 }

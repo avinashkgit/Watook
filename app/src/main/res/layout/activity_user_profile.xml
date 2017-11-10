@@ -5,240 +5,243 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/appBar"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:fitsSystemWindows="true"
-        android:overScrollMode="ifContentScrolls"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-        <android.support.design.widget.CollapsingToolbarLayout
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/appBar"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:fitsSystemWindows="true"
+            android:overScrollMode="ifContentScrolls"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+            <android.support.design.widget.CollapsingToolbarLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_scrollFlags="scroll|snap">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+
+                    <android.support.v4.view.ViewPager
+                        android:id="@+id/pager"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentTop="true" />
+
+                    <com.viewpagerindicator.CirclePageIndicator
+                        android:id="@+id/indicator"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:gravity="bottom"
+                        android:padding="10dp"
+                        app:centered="true"
+                        app:fillColor="@color/colorAccent"
+                        app:pageColor="@color/colorPrimary"
+                        app:snap="false" />
+
+                    <android.support.v7.widget.Toolbar
+                        android:id="@+id/toolbar"
+                        android:layout_width="match_parent"
+                        android:layout_height="?attr/actionBarSize"
+                        app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+                </RelativeLayout>
+            </android.support.design.widget.CollapsingToolbarLayout>
+        </android.support.design.widget.AppBarLayout>
+
+
+        <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_scrollFlags="scroll|snap">
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-
-                <android.support.v4.view.ViewPager
-                    android:id="@+id/pager"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentTop="true" />
-
-                <com.viewpagerindicator.CirclePageIndicator
-                    android:id="@+id/indicator"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    android:gravity="bottom"
-                    android:padding="10dp"
-                    app:centered="true"
-                    app:fillColor="@color/colorAccent"
-                    app:pageColor="@color/colorPrimary"
-                    app:snap="false" />
-
-                <android.support.v7.widget.Toolbar
-                    android:id="@+id/toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    app:popupTheme="@style/AppTheme.PopupOverlay" />
-
-            </RelativeLayout>
-        </android.support.design.widget.CollapsingToolbarLayout>
-    </android.support.design.widget.AppBarLayout>
-
-
-    <android.support.v4.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:baselineAligned="false"
-            android:orientation="vertical">
 
             <LinearLayout
-                android:id="@+id/lay_like"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_3dp"
-                android:background="@drawable/btn_round_outline_accent">
-
-                <Button
-                    android:id="@+id/btn_like"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="?attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:elevation="@dimen/margin_2dp"
-                    android:text="@string/like"
-                    android:textColor="@color/colorTextPrimary" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/lay_has_request"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:baselineAligned="false"
-                android:orientation="horizontal"
-                android:visibility="gone">
-
+                android:orientation="vertical">
 
                 <LinearLayout
+                    android:id="@+id/lay_like"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/margin_3dp"
-                    android:layout_weight="1"
-                    android:background="@color/colorPrimary">
+                    android:background="@drawable/btn_round_outline_accent">
 
                     <Button
-                        android:id="@+id/btn_accept"
+                        android:id="@+id/btn_like"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="?attr/selectableItemBackground"
                         android:clickable="true"
+                        android:elevation="@dimen/margin_2dp"
                         android:focusable="true"
-                        android:text="@string/like_back"
-                        android:textColor="@color/colorTextWhite" />
+                        android:text="@string/like"
+                        android:textColor="@color/colorTextPrimary" />
+
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/lay_has_request"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/margin_3dp"
-                    android:layout_weight="1"
-                    android:background="@color/colorAccent">
+                    android:baselineAligned="false"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
 
-                    <Button
-                        android:id="@+id/btn_reject"
+
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:text="@string/reject"
-                        android:textColor="@color/colorTextWhite" />
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/margin_3dp"
+                        android:layout_weight="1"
+                        android:background="@color/colorPrimary">
+
+                        <Button
+                            android:id="@+id/btn_accept"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="?attr/selectableItemBackground"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:text="@string/like_back"
+                            android:textColor="@color/colorTextWhite" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/margin_3dp"
+                        android:layout_weight="1"
+                        android:background="@color/colorAccent">
+
+                        <Button
+                            android:id="@+id/btn_reject"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="?attr/selectableItemBackground"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:text="@string/reject"
+                            android:textColor="@color/colorTextWhite" />
+                    </LinearLayout>
+
                 </LinearLayout>
+
+
+                <TextView
+                    android:id="@+id/tv_name_age"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/margin_10dp"
+                    android:background="@color/white"
+                    android:padding="@dimen/margin_avg"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/font_large"
+                    tool:text="Avinash kumar, 26" />
+
+                <!--<TextView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginLeft="@dimen/margin_avg"-->
+                <!--android:layout_marginStart="@dimen/margin_avg"-->
+                <!--android:paddingBottom="@dimen/margin_min"-->
+                <!--android:paddingTop="@dimen/margin_min"-->
+                <!--android:text="About"-->
+                <!--android:textColor="@color/colorAccent"-->
+                <!--android:textSize="@dimen/font_description" />-->
+
+
+                <TextView
+                    android:id="@+id/txt_bio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:background="@android:color/transparent"
+                    android:hint="@string/bio"
+                    android:inputType="none"
+                    android:paddingLeft="@dimen/margin_avg"
+                    android:paddingRight="@dimen/margin_avg"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/font_medium" />
+
+
+                <!--<TextView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginLeft="@dimen/margin_avg"-->
+                <!--android:layout_marginStart="@dimen/margin_avg"-->
+                <!--android:paddingBottom="@dimen/margin_min"-->
+                <!--android:paddingTop="@dimen/margin_min"-->
+                <!--android:text="Work Info"-->
+                <!--android:textColor="@color/colorAccent"-->
+                <!--android:textSize="@dimen/font_description" />-->
+
+
+                <TextView
+                    android:id="@+id/txt_work"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/margin_avg"
+                    android:paddingRight="@dimen/margin_avg"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/font_medium"
+                    tool:text="Android Developer" />
+
+
+                <!--<TextView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginLeft="@dimen/margin_avg"-->
+                <!--android:layout_marginStart="@dimen/margin_avg"-->
+                <!--android:paddingBottom="@dimen/margin_min"-->
+                <!--android:paddingTop="@dimen/margin_min"-->
+                <!--android:text="Gender"-->
+                <!--android:textColor="@color/colorAccent"-->
+                <!--android:textSize="@dimen/font_description" />-->
+
+                <!--<RadioGroup-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:background="@color/white">-->
+
+                <!--<RadioButton-->
+                <!--android:id="@+id/rb_male"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginLeft="@dimen/margin_avg"-->
+                <!--android:layout_marginStart="@dimen/margin_avg"-->
+                <!--android:text="Male" />-->
+
+                <!--<RadioButton-->
+                <!--android:id="@+id/rb_female"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginLeft="@dimen/margin_avg"-->
+                <!--android:layout_marginStart="@dimen/margin_avg"-->
+                <!--android:text="Female" />-->
+                <!--</RadioGroup>-->
+
 
             </LinearLayout>
 
 
-            <TextView
-                android:id="@+id/tv_name_age"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:layout_marginBottom="@dimen/margin_10dp"
-                android:padding="@dimen/margin_avg"
-                android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/font_large"
-                tool:text="Avinash kumar, 26" />
-
-            <!--<TextView-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginLeft="@dimen/margin_avg"-->
-            <!--android:layout_marginStart="@dimen/margin_avg"-->
-            <!--android:paddingBottom="@dimen/margin_min"-->
-            <!--android:paddingTop="@dimen/margin_min"-->
-            <!--android:text="About"-->
-            <!--android:textColor="@color/colorAccent"-->
-            <!--android:textSize="@dimen/font_description" />-->
+        </android.support.v4.widget.NestedScrollView>
 
 
-            <TextView
-                android:id="@+id/txt_bio"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:background="@android:color/transparent"
-                android:hint="@string/bio"
-                android:inputType="none"
-                android:paddingLeft="@dimen/margin_avg"
-                android:paddingRight="@dimen/margin_avg"
-                android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/font_medium" />
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/fab_margin"
+            app:srcCompat="@drawable/ic_chat_white_24dp" />
 
 
-            <!--<TextView-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginLeft="@dimen/margin_avg"-->
-            <!--android:layout_marginStart="@dimen/margin_avg"-->
-            <!--android:paddingBottom="@dimen/margin_min"-->
-            <!--android:paddingTop="@dimen/margin_min"-->
-            <!--android:text="Work Info"-->
-            <!--android:textColor="@color/colorAccent"-->
-            <!--android:textSize="@dimen/font_description" />-->
-
-
-            <TextView
-                android:id="@+id/txt_work"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/margin_avg"
-                android:paddingRight="@dimen/margin_avg"
-                android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/font_medium"
-                tool:text="Android Developer" />
-
-
-            <!--<TextView-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginLeft="@dimen/margin_avg"-->
-            <!--android:layout_marginStart="@dimen/margin_avg"-->
-            <!--android:paddingBottom="@dimen/margin_min"-->
-            <!--android:paddingTop="@dimen/margin_min"-->
-            <!--android:text="Gender"-->
-            <!--android:textColor="@color/colorAccent"-->
-            <!--android:textSize="@dimen/font_description" />-->
-
-            <!--<RadioGroup-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:background="@color/white">-->
-
-            <!--<RadioButton-->
-            <!--android:id="@+id/rb_male"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginLeft="@dimen/margin_avg"-->
-            <!--android:layout_marginStart="@dimen/margin_avg"-->
-            <!--android:text="Male" />-->
-
-            <!--<RadioButton-->
-            <!--android:id="@+id/rb_female"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginLeft="@dimen/margin_avg"-->
-            <!--android:layout_marginStart="@dimen/margin_avg"-->
-            <!--android:text="Female" />-->
-            <!--</RadioGroup>-->
-
-
-        </LinearLayout>
-
-
-    </android.support.v4.widget.NestedScrollView>
-
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@drawable/ic_chat_white_24dp" />
 
 </android.support.design.widget.CoordinatorLayout>

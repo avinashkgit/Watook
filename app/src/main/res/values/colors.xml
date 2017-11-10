@@ -5,6 +5,7 @@
     <color name="colorAccent">#f06560</color>
     <color name="colorAccentDark">#e6615c</color>
     <color name="colorBackground">#eeeeee</color>
+    <color name="colorControlHighlight">#cc747070</color>
 
     <color name="colorChatBubbleIncoming">#f57f17</color>
     <color name="colorChatBubbleOutgoing">#46a1f5</color>

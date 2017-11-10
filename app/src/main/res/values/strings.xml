@@ -7,6 +7,9 @@
     <string name="facebook_app_id">1288795094521349</string>
     <string name="fb_login_protocol_scheme">fb1288795094521349</string>
 
+
+
+
     <string name="FONT_CAMBAYREGULAR">fonts/CambayRegular.ttf</string>
     <string name="FONT_MY_RIADPRO_REGULAR">fonts/MyriadPro-Regular.otf</string>
     <string name="FONT_OPEN_SANS_BOLD">fonts/OpenSans-Bold.ttf</string>
@@ -25,6 +28,9 @@
     <string name="FONT_TITILLIUM_TEXT25L600">fonts/TitilliumText25L002.otf</string>
     <string name="FONT_TITILLIUM_TEXT25L400">fonts/TitilliumText25L003.otf</string>
     <string name="FONT_TITILLIUM_TEXT25L004_250">fonts/TitilliumText25L004_250.otf</string>
+
+
+
 
 
 
@@ -155,7 +161,7 @@
     <string name="like">Like</string>
     <string name="like_back">Like Back</string>
     <string name="reject">Reject</string>
-    <string name="bio">Bio...</string>
+    <string name="bio">Bio…</string>
 
 
 </resources>

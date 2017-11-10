@@ -78,7 +78,7 @@ public class MyApplication extends MultiDexApplication {
         super.onCreate();
         MyApplication.context = getApplicationContext();
 
-//        TypefaceUtil.overrideFont(getApplicationContext(), "NORMAL", getResources().getString(R.string.FONT_MY_RIADPRO_REGULAR));
+//        TypefaceUtil.overrideFont(this, "normal", getResources().getString(R.string.FONT_PROXI_MANOVA_LIGHT));
 //        TypefaceUtil.overrideFont(getApplicationContext(), "MONOSPACE", getResources().getString(R.string.FONT_CAMBAYREGULAR));
 //        TypefaceUtil.overrideFont(getApplicationContext(), "SERIF", getResources().getString(R.string.FONT_CAMBAYREGULAR));
 //        TypefaceUtil.overrideFont(getApplicationContext(), "SANS", getResources().getString(R.string.FONT_MYRIADPRO_REGULAR));
@@ -206,12 +206,12 @@ public class MyApplication extends MultiDexApplication {
         this.token = token;
     }
 
-    public static HashMap<Long, String> getRequestStatusCode() {
-        HashMap<Long, String> set = new HashMap<>();
-        set.put(Long.parseLong("501"), Constant.ACCEPT);
-        set.put(Long.parseLong("502"), Constant.REJECT);
-        set.put(Long.parseLong("503"), Constant.REQUEST_SENT);
-        set.put(Long.parseLong("504"), Constant.BLOCKED);
+    public static HashMap<String, Long> getRequestStatusCode() {
+        HashMap<String, Long> set = new HashMap<>();
+        set.put(Constant.ACCEPTED, Long.parseLong("501"));
+        set.put(Constant.REJECTED, Long.parseLong("502"));
+        set.put(Constant.LIKED, Long.parseLong("503"));
+        set.put(Constant.BLOCKED, Long.parseLong("504"));
         return set;
     }
 

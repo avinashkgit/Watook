@@ -334,7 +334,7 @@ public class LoginActivity extends BaseActivity {
                                 e.printStackTrace();
                             }
                             try {
-                                picture = "https://graph.facebook.com/" + id + "/picture?type=large";
+                                picture = "https://graph.facebook.com/" + id + "/picture?width=9999";
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }

@@ -39,7 +39,7 @@ public class Utils {
     }
 
     public static boolean isEmpty(String s) {
-        return s == null || s.equals("");
+        return s == null || s.equals("") ||s.equals("null");
     }
 
     public static boolean isEmpty(Integer s) {
@@ -56,7 +56,7 @@ public class Utils {
     }
 
     public static int getAge(String date, String format) throws Exception {
-        SimpleDateFormat sdf = new SimpleDateFormat(format);
+        SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.getDefault());
         Calendar dob = Calendar.getInstance();
         dob.setTime(sdf.parse(date));
 

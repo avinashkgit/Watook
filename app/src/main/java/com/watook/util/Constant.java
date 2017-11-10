@@ -28,9 +28,9 @@ public class Constant {
     public static final String NO_ROOM_FOUND = "no_room_found";
 
 
-    public static final String ACCEPT = "accept";
-    public static final String REJECT = "reject";
-    public static final String REQUEST_SENT = "request_sent";
+    public static final String ACCEPTED = "accepted";
+    public static final String REJECTED = "rejected";
+    public static final String LIKED = "liked";
     public static final String BLOCKED = "blocked";
 
 
@@ -42,5 +42,7 @@ public class Constant {
     public static final String METER = "meter";
     public static final String MILES = "miles";
 
+    public static final String OTHERS_ID = "others_id";
+    public static final String IS_PREFERENCES_CHANGED = "is_preferences_changed";
 
 }
