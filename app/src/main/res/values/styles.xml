@@ -7,8 +7,8 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorControlHighlight">@color/colorControlHighlight</item>
-
-        <item name="android:textAppearance">@style/CustomTextAppearance</item>
+        <item name="android:typeface">serif</item>
+        <!--<item name="android:textAppearance">@style/CustomTextAppearance</item>-->
 
     </style>
 

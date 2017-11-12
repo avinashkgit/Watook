@@ -33,9 +33,10 @@
             android:id="@+id/txt_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/font_large"
+            android:textSize="@dimen/font_medium"
             android:ellipsize="end"
             android:maxLines="1"
+            android:textStyle="bold"
             android:textColor="@color/colorTextPrimary"
             tool:text="Avinah Kumar"/>
 
@@ -43,7 +44,7 @@
             android:id="@+id/txt_dist"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/font_medium"
+            android:textSize="@dimen/font_small"
             android:ellipsize="end"
             android:maxLines="1"
             tool:text="2Km"/>

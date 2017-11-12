@@ -9,31 +9,10 @@
 
 
 
-
-    <string name="FONT_CAMBAYREGULAR">fonts/CambayRegular.ttf</string>
-    <string name="FONT_MY_RIADPRO_REGULAR">fonts/MyriadPro-Regular.otf</string>
-    <string name="FONT_OPEN_SANS_BOLD">fonts/OpenSans-Bold.ttf</string>
-    <string name="FONT_OPEN_SANS_BOLD_ITALIC">fonts/OpenSans-BoldItalic.ttf</string>
-    <string name="FONT_OPEN_SANS_EXTRA_BOLD">fonts/OpenSans-ExtraBold.ttf</string>
-    <string name="FONT_OPEN_SANS_EXTRA_BOLD_ITALIC">fonts/OpenSans-ExtraBoldItalic.ttf</string>
-    <string name="FONT_OPEN_SANS_ITALIC">fonts/OpenSans-Italic.ttf</string>
-    <string name="FONT_OPEN_SANS_LIGHT">fonts/OpenSans-Light.ttf</string>
-    <string name="FONT_OPEN_SANS_LIGHT_ITALIC">fonts/OpenSans-LightItalic.ttf</string>
-    <string name="FONT_OPEN_SANS_REGULAR">fonts/OpenSans-Regular.ttf</string>
-    <string name="FONT_OPEN_SANS_SEMI_BOLD">fonts/OpenSans-Semibold.ttf</string>
-    <string name="FONT_OPEN_SANS_SEMI_BOLD_ITALIC">fonts/OpenSans-SemiboldItalic.ttf</string>
-    <string name="FONT_PROXI_MANOVA_LIGHT">fonts/ProximaNovaLight0.otf</string>
-    <string name="FONT_PROXI_MANOVA_REGULAR">fonts/ProximaNovaRegular0.otf</string>
-    <string name="FONT_PROXI_MANOVA_SEMI_BOLD">fonts/ProximaNovaSemibold0.otf</string>
-    <string name="FONT_TITILLIUM_TEXT25L600">fonts/TitilliumText25L002.otf</string>
-    <string name="FONT_TITILLIUM_TEXT25L400">fonts/TitilliumText25L003.otf</string>
-    <string name="FONT_TITILLIUM_TEXT25L004_250">fonts/TitilliumText25L004_250.otf</string>
-
-
-
-
-
-
+    <string name="FONT_MONTSERRAT_BOLD">fonts/Montserrat-Bold.otf</string>
+    <string name="FONT_MONTSERRAT_ITALIC">fonts/Montserrat-Italic.otf</string>
+    <string name="FONT_MONTSERRAT_REGULAR">fonts/Montserrat-Regular.otf</string>
+    <string name="FONT_MONTSERRAT_SEMI_BOLD">fonts/Montserrat-SemiBold.otf</string>
 
 
 

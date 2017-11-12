@@ -362,14 +362,14 @@ public class GPSTracker extends Service implements LocationListener {
         map.put("longitude", longitude + "");
 
         Call<SaveLocationResponse> saveProfile = ApiManager.getApiInstance().saveLocation(Constant.CONTENT_TYPE,
-                DatabaseManager.getInstance(this).getRegistrationData().getData(), map);
+                MyApplication.getInstance().getToken(), map);
         saveProfile.enqueue(new Callback<SaveLocationResponse>() {
             @Override
             public void onResponse(@NonNull Call<SaveLocationResponse> call, @NonNull Response<SaveLocationResponse> response) {
                 int statusCode = response.code();
                 SaveLocationResponse saveResponse = response.body();
                 if (statusCode == 200 && saveResponse != null && saveResponse.getStatus() != null && saveResponse.getStatus().equalsIgnoreCase("success")) {
-//                    Toast.makeText(mContext, "Location Shared", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(MyApplication.getContext(), "Location Shared", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -379,4 +379,5 @@ public class GPSTracker extends Service implements LocationListener {
         });
 
     }
+
 }

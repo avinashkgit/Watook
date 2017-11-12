@@ -346,6 +346,7 @@ public class LoginActivity extends BaseActivity {
                             myProfile.setLastName(Utils.emptyIfNull(lastName));
                             myProfile.setGender(Utils.emptyIfNull(gender));
                             myProfile.setBirthday(Utils.emptyIfNull(birthday));
+                            myProfile.setBirthday(Utils.emptyIfNull("12/02/1991"));
                             myProfile.setProfilePicture(Utils.emptyIfNull(picture));
 
                             getApplicationId(loginResult.getAccessToken().getToken());

@@ -34,16 +34,17 @@ import retrofit2.Response;
 
 public class UserProfileActivity extends BaseActivity implements View.OnClickListener {
 
-    static final int LIKE = 1, ACCEPT = 2, REJECT = 3, BLOCK = 4;
+    static final int LIKE = 1, ACCEPT = 2, REJECT = 3, BLOCK = 4, UNLIKE = 5;
     Context context;
     FloatingActionButton actionButton;
-    LinearLayout layLike, layRequest;
+    LinearLayout layRequest;
     Button btnLike, btnAccept, btnReject;
     UserResponse.User user;
     TextView txtNameAge, txtBio, txtInfo;
     ViewPager mPager;
     CirclePageIndicator indicator;
     Long othersID;
+    boolean isliked = false;
 
 
     @Override
@@ -65,7 +66,6 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
         txtNameAge = (TextView) findViewById(R.id.tv_name_age);
         txtBio = (TextView) findViewById(R.id.txt_bio);
         txtInfo = (TextView) findViewById(R.id.txt_work);
-        layLike = (LinearLayout) findViewById(R.id.lay_like);
         layRequest = (LinearLayout) findViewById(R.id.lay_has_request);
         btnLike = (Button) findViewById(R.id.btn_like);
         btnLike.setOnClickListener(this);
@@ -80,41 +80,37 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
 
     private void bindView() {
         if (user != null) {
-            Long accpted = MyApplication.getRequestStatusCode().get(Constant.ACCEPTED);
-            Long rejected = MyApplication.getRequestStatusCode().get(Constant.REJECTED);
-            Long liked = MyApplication.getRequestStatusCode().get(Constant.LIKED);
-            Long blocked = MyApplication.getRequestStatusCode().get(Constant.BLOCKED);
 
             if (user.getRequest().getReqstatus().equals(MyApplication.getRequestStatusCode().get(Constant.ACCEPTED))) {
-                layLike.setVisibility(View.GONE);
+                btnLike.setVisibility(View.GONE);
                 layRequest.setVisibility(View.GONE);
                 actionButton.setVisibility(View.VISIBLE);
                 setFriends();
 
             } else if (user.getRequest().getReqstatus().equals(MyApplication.getRequestStatusCode().get(Constant.REJECTED))) {
-                layLike.setVisibility(View.VISIBLE);
+                btnLike.setVisibility(View.VISIBLE);
                 layRequest.setVisibility(View.GONE);
                 actionButton.setVisibility(View.GONE);
 
             } else if (user.getRequest().getReqstatus().equals(MyApplication.getRequestStatusCode().get(Constant.LIKED))) {
                 if (user.getRequest().getRequestBy() == Long.parseLong(MyApplication.getInstance().getUserId())) {
+                    isliked = true;
                     setLiked();
-                    btnLike.setEnabled(false);
-                    layLike.setVisibility(View.VISIBLE);
+                    btnLike.setVisibility(View.VISIBLE);
                     layRequest.setVisibility(View.GONE);
                     actionButton.setVisibility(View.GONE);
                 } else {
-                    layLike.setVisibility(View.GONE);
+                    btnLike.setVisibility(View.GONE);
                     layRequest.setVisibility(View.VISIBLE);
                     actionButton.setVisibility(View.GONE);
                 }
 
             } else if (user.getRequest().getReqstatus().equals(MyApplication.getRequestStatusCode().get(Constant.BLOCKED))) {
-                layLike.setVisibility(View.GONE);
+                btnLike.setVisibility(View.GONE);
                 layRequest.setVisibility(View.GONE);
                 actionButton.setVisibility(View.GONE);
             } else {
-                layLike.setVisibility(View.VISIBLE);
+                btnLike.setVisibility(View.VISIBLE);
                 layRequest.setVisibility(View.GONE);
                 actionButton.setVisibility(View.GONE);
             }
@@ -172,7 +168,10 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
                         user.getFireBaseToken());
                 break;
             case R.id.btn_like:
-                apiCallSetRequest(LIKE);
+                if (!isliked)
+                    apiCallSetRequest(LIKE);
+                else
+                    apiCallSetRequest(UNLIKE);
                 break;
             case R.id.btn_accept:
                 acceptClicked();
@@ -185,17 +184,16 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void setLiked() {
-        btnLike.setEnabled(false);
-        btnLike.setText("Liked");
+        btnLike.setText("Unlike");
         btnLike.setTextColor(getResources().getColor(R.color.colorTextWhite));
-        layLike.setBackground(getResources().getDrawable(R.drawable.btn_round_accent));
+        btnLike.setBackground(getResources().getDrawable(R.drawable.btn_round_accent));
     }
 
     private void setFriends() {
         btnLike.setEnabled(false);
         btnLike.setText("You both like each other!");
         btnLike.setTextColor(getResources().getColor(R.color.colorTextWhite));
-        layLike.setBackground(getResources().getDrawable(R.drawable.btn_round_primary));
+        btnLike.setBackground(getResources().getDrawable(R.drawable.btn_round_primary));
     }
 
     private void acceptClicked() {
@@ -218,6 +216,8 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
             map.put("reqstatus", MyApplication.getRequestStatusCode().get(Constant.REJECTED) + "");
         if (code == BLOCK)
             map.put("reqstatus", MyApplication.getRequestStatusCode().get(Constant.BLOCKED) + "");
+        if (code == UNLIKE)
+            map.put("reqstatus", 0 + "");
 
         Call<RequestSaveResponse> codeValue = ApiManager.getApiInstance().saveRequest(Constant.CONTENT_TYPE,
                 MyApplication.getInstance().getToken(), map);

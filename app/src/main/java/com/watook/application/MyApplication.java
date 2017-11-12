@@ -78,10 +78,8 @@ public class MyApplication extends MultiDexApplication {
         super.onCreate();
         MyApplication.context = getApplicationContext();
 
-//        TypefaceUtil.overrideFont(this, "normal", getResources().getString(R.string.FONT_PROXI_MANOVA_LIGHT));
-//        TypefaceUtil.overrideFont(getApplicationContext(), "MONOSPACE", getResources().getString(R.string.FONT_CAMBAYREGULAR));
-//        TypefaceUtil.overrideFont(getApplicationContext(), "SERIF", getResources().getString(R.string.FONT_CAMBAYREGULAR));
-//        TypefaceUtil.overrideFont(getApplicationContext(), "SANS", getResources().getString(R.string.FONT_MYRIADPRO_REGULAR));
+        TypefaceUtil.setDefaultFont(this, "SERIF", getResources().getString(R.string.FONT_MONTSERRAT_REGULAR));
+
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         metrics = new DisplayMetrics();
@@ -218,8 +216,8 @@ public class MyApplication extends MultiDexApplication {
 
     public static HashMap<String, Long> getGenderCode() {
         HashMap<String, Long> set = new HashMap<>();
-        set.put(Constant.FEMALE, Long.parseLong("201"));
-        set.put(Constant.MALE, Long.parseLong("202"));
+        set.put(Constant.FEMALE, Long.parseLong("202"));
+        set.put(Constant.MALE, Long.parseLong("201"));
         return set;
     }
 

@@ -55,9 +55,9 @@
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
                     android:layout_margin="@dimen/margin_avg"
+                    android:numStars="1"
                     android:src="@drawable/shape_profile_not_selected"
-                    android:stepSize="1"
-                    android:numStars="1" />
+                    android:stepSize="1" />
 
 
             </RelativeLayout>
@@ -107,12 +107,12 @@
 
                 <EditText
                     android:id="@+id/et_status"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
                     android:background="@android:color/transparent"
-                    android:hint="Bio..."
+                    android:hint="What's special about you?"
                     android:inputType="none"
                     android:padding="@dimen/margin_avg"
                     android:textColor="@color/colorPrimary"
@@ -123,6 +123,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/margin_10dp"
                     android:layout_marginRight="@dimen/margin_10dp"
                     android:padding="@dimen/margin_5dp"
                     android:src="@drawable/ic_mode_edit_primary_18dp" />
@@ -143,16 +144,31 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white">
+                android:background="@color/white"
+                android:orientation="horizontal">
 
-                <TextView
+                <EditText
                     android:id="@+id/tv_work"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:hint="Where do you work?"
+                    android:inputType="none"
                     android:padding="@dimen/margin_avg"
-                    android:text="Android Developer"
                     android:textColor="@color/colorPrimary"
                     android:textSize="@dimen/font_medium" />
+
+                <ImageView
+                    android:id="@+id/iv_edit_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/margin_10dp"
+                    android:layout_marginRight="@dimen/margin_10dp"
+                    android:padding="@dimen/margin_5dp"
+                    android:src="@drawable/ic_mode_edit_primary_18dp" />
             </LinearLayout>
 
 
@@ -178,8 +194,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/margin_avg"
                     android:layout_marginStart="@dimen/margin_avg"
-                    android:textSize="@dimen/font_medium"
-                    android:text="Male" />
+                    android:text="Male"
+                    android:textSize="@dimen/font_medium" />
 
                 <RadioButton
                     android:id="@+id/rb_female"
@@ -187,8 +203,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/margin_avg"
                     android:layout_marginStart="@dimen/margin_avg"
-                    android:textSize="@dimen/font_medium"
-                    android:text="Female" />
+                    android:text="Female"
+                    android:textSize="@dimen/font_medium" />
             </RadioGroup>
 
             <TextView
@@ -201,7 +217,7 @@
                 android:text="Status"
                 android:textColor="@color/colorAccent"
                 android:textSize="@dimen/font_description"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
             <LinearLayout
                 android:layout_width="match_parent"

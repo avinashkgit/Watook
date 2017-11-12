@@ -52,7 +52,6 @@ public class PreferencesFragment extends Fragment implements View.OnClickListene
     CrystalRangeSeekbar ageSeekBar;
     CrystalSeekbar distanceBar;
     TextView txtAgeRange, txtDistance;
-    LinearLayout layKm, layMiles;
     Button btnKm, btnMiles;
     Switch switchMen;
     Switch switchWomen;
@@ -140,9 +139,6 @@ public class PreferencesFragment extends Fragment implements View.OnClickListene
         activity = (PreferencesActivity) getActivity();
         txtAgeRange = (TextView) view.findViewById(R.id.txt_age_range);
         txtDistance = (TextView) view.findViewById(R.id.txt_dist);
-
-        layKm = (LinearLayout) view.findViewById(R.id.lay_km);
-        layMiles = (LinearLayout) view.findViewById(R.id.lay_miles);
 
         btnKm = (Button) view.findViewById(R.id.btn_km);
         btnKm.setOnClickListener(this);
@@ -236,8 +232,8 @@ public class PreferencesFragment extends Fragment implements View.OnClickListene
     }
 
     private void setMilesBackground() {
-        layMiles.setBackground(getResources().getDrawable(R.drawable.rounded_rect_bg_accent));
-        layKm.setBackground(getResources().getDrawable(R.drawable.rounded_rect_bg_accent_empty));
+        btnMiles.setBackground(getResources().getDrawable(R.drawable.rounded_rect_bg_accent));
+        btnKm.setBackground(getResources().getDrawable(R.drawable.rounded_rect_bg_accent_empty));
         btnKm.setTextColor(getResources().getColor(R.color.colorTextPrimaryDark));
         btnMiles.setTextColor(getResources().getColor(R.color.colorTextWhite));
     }
@@ -257,8 +253,8 @@ public class PreferencesFragment extends Fragment implements View.OnClickListene
     }
 
     private void setKmBackground() {
-        layKm.setBackground(getResources().getDrawable(R.drawable.rounded_rect_bg_accent));
-        layMiles.setBackground(getResources().getDrawable(R.drawable.rounded_rect_bg_accent_empty));
+        btnKm.setBackground(getResources().getDrawable(R.drawable.rounded_rect_bg_accent));
+        btnMiles.setBackground(getResources().getDrawable(R.drawable.rounded_rect_bg_accent_empty));
         btnMiles.setTextColor(getResources().getColor(R.color.colorTextPrimaryDark));
         btnKm.setTextColor(getResources().getColor(R.color.colorTextWhite));
     }

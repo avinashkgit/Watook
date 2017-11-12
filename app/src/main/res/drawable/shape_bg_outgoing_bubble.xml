@@ -13,7 +13,9 @@
 
     <item>
         <shape android:shape="rectangle">
-            <solid android:color="@color/colorChatBubbleOutgoing" />
+            <gradient
+                android:startColor="@color/colorChatBubbleOutgoing"
+                android:endColor="@color/colorChatBubbleOutgoingDark" />
             <corners android:radius="25dp" />
 
         </shape>

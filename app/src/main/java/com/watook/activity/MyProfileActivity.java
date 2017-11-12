@@ -39,11 +39,11 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
     private ArrayList<String> ImagesURLArray = new ArrayList<>();
     TextView tvNameAge;
     EditText etStatus;
-    TextView tvWork;
+    EditText etInfo;
     TextView tvAddress;
     TextView tvRelationStatus;
-    ImageView ivEditStatus;
-    Boolean editStatus = false;
+    ImageView ivEditStatus, ivEditInfo;
+    Boolean editStatus = false, editInfo=false;
     BroadcastReceiver broadcastReceiver;
     Context context;
     ImageView ivProfileSelection;
@@ -62,13 +62,13 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
         inIt();
 
         if (myProfile.getBio() == null)
-            getAboutStatus(myProfile.getFbId());
+            getAboutStatus();
         if (myProfile.getRelationshipStatus() == null)
-            getRelationshipStatus(myProfile.getFbId());
+            getRelationshipStatus();
         if (myProfile.getWorkPosition() == null)
-            getWorkInfo(myProfile.getFbId());
+            getWorkInfo();
         if (myProfile.getListOfProfilePic() == null)
-            getAlbum(myProfile.getFbId());
+            getAlbum();
         else {
             ImagesURLArray = myProfile.getListOfProfilePic();
             setData();
@@ -95,7 +95,7 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
         if (!Utils.isEmpty(myProfile.getWorkLocation()))
             s = s + ",\n" + myProfile.getWorkLocation();
 
-        tvWork.setText(s);
+        etInfo.setText(s);
 
         // bind name age
         Integer age = 0;
@@ -153,11 +153,13 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
         etStatus = (EditText) findViewById(R.id.et_status);
         etStatus.setEnabled(false);
 
-        tvWork = (TextView) findViewById(R.id.tv_work);
+        etInfo = (EditText) findViewById(R.id.tv_work);
 //        tvAddress = (TextView) findViewById(R.id.tv_address);
         tvRelationStatus = (TextView) findViewById(R.id.tv_relation_status);
         ivEditStatus = (ImageView) findViewById(R.id.iv_edit_status);
         ivEditStatus.setOnClickListener(this);
+        ivEditInfo = (ImageView) findViewById(R.id.iv_edit_info);
+        ivEditInfo.setOnClickListener(this);
         rbMale = (RadioButton) findViewById(R.id.rb_male);
         rbFemale = (RadioButton) findViewById(R.id.rb_female);
         ivProfileSelection = (ImageView) findViewById(R.id.iv_profile);
@@ -181,9 +183,9 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
     }
 
 
-    public void getAlbum(String fbId) {
+    public void getAlbum() {
         String token = AccessToken.getCurrentAccessToken().getToken();
-        final String graphPath = "/" + fbId + "/albums?" + "access_token=" + token;
+        final String graphPath = "/" + myProfile.getFbId() + "/albums?" + "access_token=" + token;
 
         GraphRequest request = new GraphRequest(AccessToken.getCurrentAccessToken(), graphPath, null, HttpMethod.GET, new GraphRequest.Callback() {
             @Override
@@ -297,10 +299,29 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
                     editStatus = false;
                     ivEditStatus.setImageResource(R.drawable.ic_mode_edit_primary_18dp);
                     etStatus.setEnabled(false);
+                    Utils.hideSoftKeyboard(context);
+
                 }
 
             }
             break;
+
+            case R.id.iv_edit_info: {
+                if (!editInfo) {
+                    editInfo = true;
+                    ivEditInfo.setImageResource(R.drawable.ic_check_primary_24dp);
+                    etInfo.setEnabled(true);
+                    Utils.showSoftKeyboard(context, etInfo);
+                } else {
+                    editInfo = false;
+                    ivEditInfo.setImageResource(R.drawable.ic_mode_edit_primary_18dp);
+                    etInfo.setEnabled(false);
+                    Utils.hideSoftKeyboard(context);
+                }
+
+            }
+            break;
+
             case R.id.iv_profile: {
 
                 if (ImagesURLArray != null && ImagesURLArray.size() > 0)
@@ -316,10 +337,10 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
         }
     }
 
-    private void getAboutStatus(String fbId) {
+    private void getAboutStatus() {
         new GraphRequest(
                 AccessToken.getCurrentAccessToken(),
-                "/" + fbId + "?fields=about",
+                "/" + myProfile.getFbId() + "?fields=about",
                 null,
                 HttpMethod.GET,
                 new GraphRequest.Callback() {
@@ -338,10 +359,10 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
         ).executeAsync();
     }
 
-    private void getRelationshipStatus(String fbId) {
+    private void getRelationshipStatus() {
         new GraphRequest(
                 AccessToken.getCurrentAccessToken(),
-                "/" + fbId + "?fields=relationship_status",
+                "/" + myProfile.getFbId() + "?fields=relationship_status",
                 null,
                 HttpMethod.GET,
                 new GraphRequest.Callback() {
@@ -361,10 +382,10 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
         ).executeAsync();
     }
 
-    private void getWorkInfo(String fbId) {
+    private void getWorkInfo() {
         new GraphRequest(
                 AccessToken.getCurrentAccessToken(),
-                "/" + fbId + "?fields=work",
+                "/" + myProfile.getFbId() + "?fields=work",
                 null,
                 HttpMethod.GET,
                 new GraphRequest.Callback() {

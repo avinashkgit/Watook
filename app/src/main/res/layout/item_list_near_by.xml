@@ -38,7 +38,9 @@
             android:layout_gravity="bottom"
             android:gravity="bottom"
             android:orientation="vertical"
-            android:padding="@dimen/margin_10dp">
+            android:paddingBottom="@dimen/margin_10dp"
+            android:paddingLeft="@dimen/margin_10dp"
+            android:paddingRight="@dimen/margin_10dp">
 
             <TextView
                 android:id="@+id/txt_name"
@@ -47,7 +49,8 @@
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:textColor="@color/colorTextPrimary"
-                android:textSize="@dimen/font_large"
+                android:textSize="@dimen/font_medium"
+                android:textStyle="bold"
                 tool:text="Avinah Kumar" />
 
             <TextView
@@ -56,7 +59,7 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:textSize="@dimen/font_medium"
+                android:textSize="@dimen/font_small"
                 tool:text="2 Km" />
 
         </LinearLayout>

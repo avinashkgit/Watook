@@ -52,8 +52,8 @@
                         android:id="@+id/distance_bar"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:min_value="1"
-                        android:layout_margin="10dp" />
+                        android:layout_margin="10dp"
+                        app:min_value="1" />
 
                 </LinearLayout>
 
@@ -96,43 +96,32 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-                        <LinearLayout
-                            android:id="@+id/lay_km"
-                            android:layout_width="wrap_content"
+
+                        <Button
+                            android:id="@+id/btn_km"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_margin="@dimen/margin_min"
+                            android:layout_margin="@dimen/margin_5dp"
                             android:layout_weight="1"
-                            android:background="@drawable/rounded_rect_bg_accent_empty">
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:background="@drawable/rounded_rect_bg_accent_empty"
+                            android:text="KM"
+                            android:textColor="@color/colorTextPrimary" />
 
-                            <Button
-                                android:id="@+id/btn_km"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:background="?attr/selectableItemBackground"
-                                android:padding="@dimen/margin_5dp"
-                                android:text="KM"
-                                android:textColor="@color/colorTextPrimary" />
 
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/lay_miles"
-                            android:layout_width="wrap_content"
+                        <Button
+                            android:id="@+id/btn_miles"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_margin="@dimen/margin_min"
+                            android:layout_margin="@dimen/margin_5dp"
                             android:layout_weight="1"
-                            android:background="@drawable/rounded_rect_bg_accent">
-
-                            <Button
-                                android:id="@+id/btn_miles"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:background="?attr/selectableItemBackground"
-                                android:clickable="true"
-                                android:padding="@dimen/margin_5dp"
-                                android:text="Miles"
-                                android:textColor="@color/colorTextWhite" />
-                        </LinearLayout>
+                            android:background="@drawable/rounded_rect_bg_accent"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:padding="@dimen/margin_5dp"
+                            android:text="Miles"
+                            android:textColor="@color/colorTextWhite" />
 
                     </LinearLayout>
 
@@ -257,9 +246,6 @@
                 </LinearLayout>
 
             </android.support.v7.widget.CardView>
-
-
-
 
 
         </LinearLayout>
