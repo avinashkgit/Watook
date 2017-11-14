@@ -44,5 +44,12 @@ public class Constant {
 
     public static final String OTHERS_ID = "others_id";
     public static final String IS_PREFERENCES_CHANGED = "is_preferences_changed";
+    public static final String PROFILE_IMAGE = "profile_image";
+
+    public static final String BROADCAST_RESULT = "broadcast_message";
+    public static final String GPS = "gps";
+    public static final String GPS_ENABLED = "gps_enabled";
+    public static final String GPS_DISABLED = "gps_disabled";
+
 
 }

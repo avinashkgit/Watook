@@ -1,6 +1,7 @@
 package com.watook.fragment;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -18,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -30,6 +32,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.watook.R;
 import com.watook.activity.ChatActivity;
+import com.watook.activity.UserProfileActivity;
 import com.watook.adapter.ChatRecyclerAdapter;
 import com.watook.application.MyApplication;
 import com.watook.core.chat.ChatContract;
@@ -61,13 +64,15 @@ public class ChatFragment extends Fragment implements ChatContract.View, TextVie
     private RelativeLayout layStart;
     ChatActivity activity;
 
+
     public static ChatFragment newInstance(String receiver,
                                            String receiverUid,
-                                           String firebaseToken) {
+                                           String firebaseToken, String profileImage) {
         Bundle args = new Bundle();
         args.putString(Constant.ARG_RECEIVER, receiver);
         args.putString(Constant.ARG_RECEIVER_UID, receiverUid);
         args.putString(Constant.ARG_FIREBASE_TOKEN, firebaseToken);
+        args.putString(Constant.PROFILE_IMAGE, profileImage);
         ChatFragment fragment = new ChatFragment();
         fragment.setArguments(args);
         return fragment;
@@ -142,6 +147,7 @@ public class ChatFragment extends Fragment implements ChatContract.View, TextVie
 
             }
         });
+
     }
 
     @Override
@@ -155,6 +161,9 @@ public class ChatFragment extends Fragment implements ChatContract.View, TextVie
         mChatPresenter = new ChatPresenter(this);
         mChatPresenter.getMessage(MyApplication.getInstance().getUserId(),
                 getArguments().getString(Constant.ARG_RECEIVER_UID));
+
+
+
 
 
     }
@@ -267,6 +276,7 @@ public class ChatFragment extends Fragment implements ChatContract.View, TextVie
         userChat.setUserId(Long.parseLong(getArguments().getString(Constant.ARG_RECEIVER_UID)));
         userChat.setName(getArguments().getString(Constant.ARG_RECEIVER));
         userChat.setLastMessage(chat.message);
+        userChat.setProfileImage(getArguments().getString(Constant.PROFILE_IMAGE));
         userChat.setFireBaseToken(getArguments().getString(Constant.ARG_FIREBASE_TOKEN));
         map.put(Long.parseLong(getArguments().getString(Constant.ARG_RECEIVER_UID)), userChat);
         DatabaseManager.getInstance(activity).insertUserChat(map);

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.TextView;
 
 import com.watook.R;
@@ -11,7 +12,7 @@ import com.watook.adapter.FriendsListAdapter;
 import com.watook.application.MyApplication;
 import com.watook.manager.ApiManager;
 import com.watook.manager.DatabaseManager;
-import com.watook.model.response.NearByListResponse;
+import com.watook.model.response.ConnectionsResponse;
 import com.watook.util.Constant;
 import com.watook.util.DividerItemDecorator;
 
@@ -50,41 +51,47 @@ public class FriendsListActivity extends BaseActivity {
     }
 
     private void bindUi() {
-        List<NearByListResponse.User> usrList = DatabaseManager.getInstance(activity).getUsersList();
+        List<ConnectionsResponse.User> usrList = DatabaseManager.getInstance(activity).getConncetions();
         if (usrList != null) {
             setData(usrList);
-            apiCallGetUserList();
+            apiCallGetFriendsList();
         } else {
-            apiCallGetUserList();
+            apiCallGetFriendsList();
         }
     }
 
-    private void apiCallGetUserList() {
-        Call<NearByListResponse> codeValue = ApiManager.getApiInstance().getNearByList(Constant.CONTENT_TYPE,
+    private void apiCallGetFriendsList() {
+        Call<ConnectionsResponse> codeValue = ApiManager.getApiInstance().getFriendsList(Constant.CONTENT_TYPE,
                 DatabaseManager.getInstance(activity).getRegistrationData().getData(), MyApplication.getInstance().getUserId());
-        codeValue.enqueue(new Callback<NearByListResponse>() {
+        codeValue.enqueue(new Callback<ConnectionsResponse>() {
             @Override
-            public void onResponse(@NonNull Call<NearByListResponse> call, @NonNull Response<NearByListResponse> response) {
+            public void onResponse(@NonNull Call<ConnectionsResponse> call, @NonNull Response<ConnectionsResponse> response) {
                 int statusCode = response.code();
-                NearByListResponse codeValueResponse = response.body();
-                if (statusCode == 200 && codeValueResponse != null && codeValueResponse.getStatus() != null && codeValueResponse.getStatus().equalsIgnoreCase("success")) {
-                    DatabaseManager.getInstance(activity).insertNearByUsersList(codeValueResponse.getData());
-                    setData(codeValueResponse.getData());
+                ConnectionsResponse connectionsResponse = response.body();
+                if (statusCode == 200 && connectionsResponse != null && connectionsResponse.getStatus() != null && connectionsResponse.getStatus().equalsIgnoreCase("success")) {
+                    DatabaseManager.getInstance(activity).insertConnections(connectionsResponse.getData());
+                    setData(connectionsResponse.getData());
+                }  else {
+                    activity.showAToast(getResources().getString(R.string.oops_something_went_wrong));
                 }
             }
 
             @Override
-            public void onFailure(@NonNull Call<NearByListResponse> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<ConnectionsResponse> call, @NonNull Throwable t) {
                 activity.showAToast(getResources().getString(R.string.oops_something_went_wrong));
             }
         });
     }
 
-    private void setData(List<NearByListResponse.User> data) {
-        recyclerView.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false));
-        recyclerView.addItemDecoration(new DividerItemDecorator(getResources().getDrawable(R.drawable.divider)));
-        friendsListAdapter = new FriendsListAdapter(activity, data);
-        recyclerView.setAdapter(friendsListAdapter);
+    private void setData(List<ConnectionsResponse.User> data) {
+        if(data.size() > 0) {
+            recyclerView.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false));
+            recyclerView.addItemDecoration(new DividerItemDecorator(getResources().getDrawable(R.drawable.divider)));
+            friendsListAdapter = new FriendsListAdapter(activity, data);
+            recyclerView.setAdapter(friendsListAdapter);
+        } else{
+            txtNoData.setVisibility(View.VISIBLE);
+        }
     }
 
 }

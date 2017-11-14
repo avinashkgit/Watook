@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.watook.R;
@@ -38,6 +39,7 @@ public class NearByFragment extends Fragment {
     NearByAdapter nearByAdapter;
     MainActivity activity;
     ProgressBar progressBar;
+    RelativeLayout layStart;
 
 
     public static NearByFragment newInstance() {
@@ -70,6 +72,7 @@ public class NearByFragment extends Fragment {
         recyclerView = (RecyclerView) view.findViewById(R.id.rv_near_by);
         txtNoData = (TextView) view.findViewById(R.id.txt_no_data_found);
         progressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
+        layStart = (RelativeLayout) view.findViewById(R.id.lay_start);
     }
 
     @Override
@@ -80,7 +83,8 @@ public class NearByFragment extends Fragment {
             prefChanged = (boolean) MySharedPreferences.getObject(Constant.IS_PREFERENCES_CHANGED);
         } catch (Exception e) {
             e.printStackTrace();
-        } if(prefChanged) {
+        }
+        if (prefChanged) {
             apiCallGetUserList();
             try {
                 MySharedPreferences.putObject(Constant.IS_PREFERENCES_CHANGED, false);
@@ -129,10 +133,19 @@ public class NearByFragment extends Fragment {
     }
 
     private void setData(List<NearByListResponse.User> data) {
+        if (data.size() <= 0) {
+            layStart.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+            return;
+        }
+        recyclerView.setVisibility(View.VISIBLE);
+        layStart.setVisibility(View.GONE);
         recyclerView.setLayoutManager(new GridLayoutManager(activity, 2));
 //        recyclerView.addItemDecoration(new DividerItemDecorator(getResources().getDrawable(R.drawable.divider)));
         nearByAdapter = new NearByAdapter(activity, data);
         recyclerView.setAdapter(nearByAdapter);
         progressBar.setVisibility(View.GONE);
+
+
     }
 }

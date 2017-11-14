@@ -85,6 +85,7 @@
                 android:padding="@dimen/margin_avg"
                 android:textColor="@color/colorPrimary"
                 android:textSize="@dimen/font_large"
+                android:textStyle="bold"
                 tool:text="Avinash kumar, 26" />
 
 

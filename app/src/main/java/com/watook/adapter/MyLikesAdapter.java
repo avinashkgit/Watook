@@ -1,6 +1,7 @@
 package com.watook.adapter;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
@@ -16,23 +17,25 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.watook.R;
 import com.watook.activity.ChatActivity;
-import com.watook.model.response.ConnectionsResponse;
+import com.watook.activity.UserProfileActivity;
+import com.watook.model.response.MyLikesResponse;
+import com.watook.util.Constant;
 import com.watook.util.Utils;
 
 import java.util.List;
 
 /**
- * Created by Avinash.Kumar on 06-Nov-17.
+ * Created by Avinash.Kumar on 13-Nov-17.
  */
 
-public class FriendsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class MyLikesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Activity activity;
-    private List<ConnectionsResponse.User> user;
+    private List<MyLikesResponse.User> user;
 
     private static final int FOOTER_VIEW = 1;
 
-    public FriendsListAdapter(Activity activity, List<ConnectionsResponse.User> user) {
+    public MyLikesAdapter(Activity activity, List<MyLikesResponse.User> user) {
         this.activity = activity;
         this.user = user;
     }
@@ -43,21 +46,21 @@ public class FriendsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         View view;
         if (viewType == FOOTER_VIEW) {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_footer, parent, false);
-            return new FooterViewHolder(view);
+            return new MyLikesAdapter.FooterViewHolder(view);
         }
         view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_default, parent, false);
-        return new RecyclerViewHolder(view);
+        return new MyLikesAdapter.RecyclerViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
         try {
-            if (holder instanceof RecyclerViewHolder) {
-                RecyclerViewHolder vh = (RecyclerViewHolder) holder;
+            if (holder instanceof MyLikesAdapter.RecyclerViewHolder) {
+                MyLikesAdapter.RecyclerViewHolder vh = (MyLikesAdapter.RecyclerViewHolder) holder;
                 vh.bindView(position);
 
-            } else if (holder instanceof FooterViewHolder) {
-                FooterViewHolder vh = (FooterViewHolder) holder;
+            } else if (holder instanceof MyLikesAdapter.FooterViewHolder) {
+                MyLikesAdapter.FooterViewHolder vh = (MyLikesAdapter.FooterViewHolder) holder;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -90,14 +93,14 @@ public class FriendsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
 
-    public class FooterViewHolder extends FriendsListAdapter.ViewHolder {
+    public class FooterViewHolder extends MyLikesAdapter.ViewHolder {
         FooterViewHolder(View itemView) {
             super(itemView);
         }
     }
 
 
-    class RecyclerViewHolder extends FriendsListAdapter.ViewHolder {
+    class RecyclerViewHolder extends MyLikesAdapter.ViewHolder {
         RecyclerViewHolder(View itemView) {
             super(itemView);
 
@@ -120,7 +123,7 @@ public class FriendsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
 
         public void bindView(int position) {
-            final ConnectionsResponse.User user = FriendsListAdapter.this.user.get(position);
+            final MyLikesResponse.User user = MyLikesAdapter.this.user.get(position);
             tvName.setText(Utils.emptyIfNull(user.getFirstName()) + " " + Utils.emptyIfNull(user.getLastName()));
             if (!Utils.isEmpty(String.valueOf(user.getLocation().getLatitude()))
                     && !Utils.isEmpty(String.valueOf(user.getLocation().getLongitude()))) {
@@ -130,10 +133,9 @@ public class FriendsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ChatActivity.startActivity(activity,
-                            user.getFirstName() + " " + user.getLastName(),
-                            String.valueOf(user.getUserId()),
-                            user.getFireBaseToken(), user.getProfileImage());
+                    Intent i = new Intent(activity, UserProfileActivity.class);
+                    i.putExtra(Constant.OTHERS_ID, user.getUserId());
+                    activity.startActivity(i);
 
                 }
             });

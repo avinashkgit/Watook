@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -34,6 +35,7 @@ public class ChatsListFragment extends Fragment {
     MainActivity activity;
     RecyclerView recyclerView;
     RelativeLayout layNoData;
+    ProgressBar progressBar;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -54,6 +56,8 @@ public class ChatsListFragment extends Fragment {
         activity = (MainActivity) getActivity();
         layNoData = (RelativeLayout) v.findViewById(R.id.lay_start);
         recyclerView = (RecyclerView) v.findViewById(R.id.recycler_view_chat_list);
+        progressBar = (ProgressBar) v.findViewById(R.id.progress_bar);
+        progressBar.setVisibility(View.GONE);
     }
 
     @Override

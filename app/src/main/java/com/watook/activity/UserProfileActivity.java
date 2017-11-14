@@ -44,7 +44,7 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
     ViewPager mPager;
     CirclePageIndicator indicator;
     Long othersID;
-    boolean isliked = false;
+    boolean isLiked = false;
 
 
     @Override
@@ -85,7 +85,7 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
                 btnLike.setVisibility(View.GONE);
                 layRequest.setVisibility(View.GONE);
                 actionButton.setVisibility(View.VISIBLE);
-                setFriends();
+//                setFriends();
 
             } else if (user.getRequest().getReqstatus().equals(MyApplication.getRequestStatusCode().get(Constant.REJECTED))) {
                 btnLike.setVisibility(View.VISIBLE);
@@ -94,7 +94,7 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
 
             } else if (user.getRequest().getReqstatus().equals(MyApplication.getRequestStatusCode().get(Constant.LIKED))) {
                 if (user.getRequest().getRequestBy() == Long.parseLong(MyApplication.getInstance().getUserId())) {
-                    isliked = true;
+                    isLiked = true;
                     setLiked();
                     btnLike.setVisibility(View.VISIBLE);
                     layRequest.setVisibility(View.GONE);
@@ -110,6 +110,7 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
                 layRequest.setVisibility(View.GONE);
                 actionButton.setVisibility(View.GONE);
             } else {
+                setUnLiked();
                 btnLike.setVisibility(View.VISIBLE);
                 layRequest.setVisibility(View.GONE);
                 actionButton.setVisibility(View.GONE);
@@ -118,7 +119,10 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
 
             String nameAge = Utils.emptyIfNull(user.getFirstName()) + " " + Utils.emptyIfNull(user.getLastName());
             txtNameAge.setText(nameAge);
-            txtBio.setText(user.getAboutYou());
+            if (!Utils.isEmpty(user.getAboutYou()))
+                txtBio.setText(user.getAboutYou());
+            else
+                txtBio.setVisibility(View.GONE);
             String workInfo = "";
             if (!Utils.isEmpty(user.getWorkPosition()))
                 workInfo = user.getWorkPosition() + ",";
@@ -165,10 +169,10 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
                 ChatActivity.startActivity(this,
                         user.getFirstName() + " " + user.getLastName(),
                         String.valueOf(user.getUserId()),
-                        user.getFireBaseToken());
+                        user.getFireBaseToken(), user.getProfileImage());
                 break;
             case R.id.btn_like:
-                if (!isliked)
+                if (!isLiked)
                     apiCallSetRequest(LIKE);
                 else
                     apiCallSetRequest(UNLIKE);
@@ -189,6 +193,12 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
         btnLike.setBackground(getResources().getDrawable(R.drawable.btn_round_accent));
     }
 
+    private void setUnLiked() {
+        isLiked = false;
+        btnLike.setText("Like");
+        btnLike.setTextColor(getResources().getColor(R.color.colorTextPrimary));
+        btnLike.setBackground(getResources().getDrawable(R.drawable.btn_round_outline_primary));
+    }
     private void setFriends() {
         btnLike.setEnabled(false);
         btnLike.setText("You both like each other!");
@@ -219,22 +229,14 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
         if (code == UNLIKE)
             map.put("reqstatus", 0 + "");
 
-        Call<RequestSaveResponse> codeValue = ApiManager.getApiInstance().saveRequest(Constant.CONTENT_TYPE,
+        Call<RequestSaveResponse> request = ApiManager.getApiInstance().saveRequest(Constant.CONTENT_TYPE,
                 MyApplication.getInstance().getToken(), map);
-        codeValue.enqueue(new Callback<RequestSaveResponse>() {
+        request.enqueue(new Callback<RequestSaveResponse>() {
             @Override
             public void onResponse(@NonNull Call<RequestSaveResponse> call, @NonNull Response<RequestSaveResponse> response) {
                 int statusCode = response.code();
                 RequestSaveResponse saveResponse = response.body();
                 if (statusCode == 200 && saveResponse != null && saveResponse.getStatus() != null && saveResponse.getStatus().equalsIgnoreCase("success")) {
-//                    if (code == LIKE)
-//                        setLiked();
-//                    if (code == ACCEPT)
-//                        setFriends();
-//                    if (code == REJECT)
-//                        setRejected();
-//                    if (code == BLOCK)
-//                        setBlocked();
                     apiCallGetUser();
                 } else
                     showAToast(getResources().getString(R.string.oops_something_went_wrong));

@@ -11,6 +11,7 @@ import com.watook.model.MyProfile;
 import com.watook.model.Preferences;
 import com.watook.model.UserChat;
 import com.watook.model.response.CodeValueResponse;
+import com.watook.model.response.ConnectionsResponse;
 import com.watook.model.response.NearByListResponse;
 import com.watook.model.response.RegistrationResponse;
 
@@ -63,6 +64,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
         db.execSQL(DatabaseConstants.CREATE_TABLE_USERS);
         db.execSQL(DatabaseConstants.CREATE_TABLE_PREFERENCES);
         db.execSQL(DatabaseConstants.CREATE_TABLE_USER_CHAT);
+        db.execSQL(DatabaseConstants.CREATE_TABLE_CONNECTIONS);
 
     }
 
@@ -74,6 +76,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
         database.execSQL("delete from " + DatabaseConstants.TABLE_NEARBY_USERS);
         database.execSQL("delete from " + DatabaseConstants.TABLE_PREFERENCES);
         database.execSQL("delete from " + DatabaseConstants.TABLE_USER_CHAT);
+        database.execSQL("delete from " + DatabaseConstants.TABLE_CONNECTIONS);
     }
 
     @Override
@@ -422,8 +425,44 @@ public class DatabaseManager extends SQLiteOpenHelper {
         return obj;
     }
 
-//    public String getProfilePic(Context context, Long id){
-//
-//    }
+
+    public List<ConnectionsResponse.User> getConncetions() {
+        Cursor cursor = null;
+        byte[] blob;
+        List<ConnectionsResponse.User> obj = null;
+        try {
+            cursor = database.query(DatabaseConstants.TABLE_CONNECTIONS, new String[]{"*"}, null, null, null, null, null);
+            if (cursor != null && cursor.getCount() > 0) {
+                cursor.moveToLast();
+                blob = cursor.getBlob(cursor.getColumnIndex(DatabaseConstants.CONNECTIONS_RESPONSE));
+                if (blob != null)
+                    obj = (List<ConnectionsResponse.User>) byteToObj(blob);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return obj;
+    }
+
+
+
+    public void insertConnections(List<ConnectionsResponse.User> connection) {
+        try {
+            database = this.getWritableDatabase();
+            database.execSQL("delete from " + DatabaseConstants.TABLE_CONNECTIONS);
+            final ContentValues values = new ContentValues();
+            values.put(DatabaseConstants.CONNECTIONS_RESPONSE, objToByte(connection));
+            database.insert(DatabaseConstants.TABLE_CONNECTIONS, null, values);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
 
 }

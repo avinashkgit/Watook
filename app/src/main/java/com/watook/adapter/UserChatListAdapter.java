@@ -144,7 +144,7 @@ public class UserChatListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     ChatActivity.startActivity(activity,
                             user.getName(),
                             String.valueOf(user.getUserId()),
-                            user.getFireBaseToken());
+                            user.getFireBaseToken(), user.getProfileImage());
 
                 }
             });

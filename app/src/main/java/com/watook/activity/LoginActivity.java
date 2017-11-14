@@ -439,7 +439,7 @@ public class LoginActivity extends BaseActivity {
                 if (statusCode == 200 && codeValueResponse != null && codeValueResponse.getStatus() != null && codeValueResponse.getStatus().equalsIgnoreCase("success")) {
                     DatabaseManager.getInstance(LoginActivity.this).insertCodeValue(codeValueResponse.getData());
                     codeValues = codeValueResponse.getData();
-                    apiCallSaveProfile();
+                    getAboutStatus();
                 } else {
                     dismissProgressDialog();
                     showAToast(getResources().getString(R.string.oops_something_went_wrong));
@@ -453,6 +453,58 @@ public class LoginActivity extends BaseActivity {
             }
         });
     }
+
+    private void getAboutStatus() {
+        new GraphRequest(
+                AccessToken.getCurrentAccessToken(),
+                "/" + myProfile.getFbId() + "?fields=about",
+                null,
+                HttpMethod.GET,
+                new GraphRequest.Callback() {
+                    public void onCompleted(GraphResponse response) {
+                        JSONObject object = response.getJSONObject();
+                        try {
+                            String bio = object.getString("about");
+                            myProfile.setBio(bio);
+                            getWorkInfo();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            getWorkInfo();
+                        }
+                    }
+                }
+        ).executeAsync();
+    }
+
+    private void getWorkInfo() {
+        new GraphRequest(
+                AccessToken.getCurrentAccessToken(),
+                "/" + myProfile.getFbId() + "?fields=work",
+                null,
+                HttpMethod.GET,
+                new GraphRequest.Callback() {
+                    public void onCompleted(GraphResponse response) {
+                        JSONObject object = response.getJSONObject();
+                        try {
+                            JSONArray work = object.getJSONArray("work");
+                            JSONObject employer = work.getJSONObject(0).getJSONObject("employer");
+                            JSONObject location = work.getJSONObject(0).getJSONObject("location");
+                            JSONObject position = work.getJSONObject(0).getJSONObject("position");
+
+                            myProfile.setWorkEmployer(employer.getString("name"));
+                            myProfile.setWorkLocation(location.getString("name"));
+                            myProfile.setWorkPosition(position.getString("name"));
+
+                           apiCallSaveProfile();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            apiCallSaveProfile();
+                        }
+                    }
+                }
+        ).executeAsync();
+    }
+
 
     private void apiCallSaveProfile() {
         long genderId = 0;
@@ -518,18 +570,10 @@ public class LoginActivity extends BaseActivity {
 
     private void saveLocation() {
         GPSTracker gpsTracker = new GPSTracker(this);
+        Intent i = new Intent(this, GPSTracker.class);
+        startService(i);
         if (gpsTracker.getIsGPSTrackingEnabled()) {
             apiCallSaveLocation(gpsTracker.getLatitude(), gpsTracker.getLongitude());
-            Intent i = new Intent(this, GPSTracker.class);
-            startService(i);
-
-//            setPreferences();
-//            try {
-//                MySharedPreferences.putObject(Constant.IS_LOGGED_IN, true);
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//            navigateView();
 
         } else {
             gpsTracker.showSettingsAlert();
@@ -538,7 +582,7 @@ public class LoginActivity extends BaseActivity {
 
     private void apiCallSaveLocation(Double latitude, Double longitude) {
         HashMap<String, String> map = new HashMap<>();
-        map.put("userId", DatabaseManager.getInstance(this).getMyProfile().getUserId());
+        map.put("userId", MyApplication.getInstance().getUserId());
         map.put("latitude", latitude + "");
         map.put("longitude", longitude + "");
 
@@ -627,6 +671,7 @@ public class LoginActivity extends BaseActivity {
         });
 
     }
+
 
     public void getAlbum() {
         String token = AccessToken.getCurrentAccessToken().getToken();
@@ -773,6 +818,8 @@ public class LoginActivity extends BaseActivity {
             }
         });
     }
+
+
 
 
     private void handleFacebookAccessToken(AccessToken token) {

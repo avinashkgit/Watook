@@ -6,7 +6,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.watook.fragment.ChatsListFragment;
 import com.watook.fragment.NearByFragment;
-import com.watook.fragment.RequestsFragment;
+import com.watook.fragment.LikesFragment;
 
 
 public class MainActivityTabAdapter extends FragmentStatePagerAdapter {
@@ -25,7 +25,7 @@ public class MainActivityTabAdapter extends FragmentStatePagerAdapter {
             case 1:
                 return NearByFragment.newInstance();
             case 2:
-                return RequestsFragment.newInstance();
+                return LikesFragment.newInstance();
         }
         return null;
     }

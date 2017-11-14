@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -17,12 +18,19 @@ import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.viewpagerindicator.CirclePageIndicator;
 import com.watook.R;
 import com.watook.adapter.UserProfileImageAdapter;
+import com.watook.application.MyApplication;
+import com.watook.application.MySharedPreferences;
+import com.watook.manager.ApiManager;
 import com.watook.manager.DatabaseManager;
 import com.watook.model.MyProfile;
+import com.watook.model.response.CodeValueResponse;
+import com.watook.model.response.ProfileSaveResponse;
 import com.watook.service.ApiService;
+import com.watook.util.Constant;
 import com.watook.util.Utils;
 
 import org.json.JSONArray;
@@ -30,6 +38,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MyProfileActivity extends BaseActivity implements View.OnClickListener {
 
@@ -299,7 +313,9 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
                     editStatus = false;
                     ivEditStatus.setImageResource(R.drawable.ic_mode_edit_primary_18dp);
                     etStatus.setEnabled(false);
+                    myProfile.setBio(etStatus.getText().toString());
                     Utils.hideSoftKeyboard(context);
+                    apiCallSaveProfile();
 
                 }
 
@@ -316,7 +332,9 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
                     editInfo = false;
                     ivEditInfo.setImageResource(R.drawable.ic_mode_edit_primary_18dp);
                     etInfo.setEnabled(false);
+                    myProfile.setWorkPosition(etInfo.getText().toString());
                     Utils.hideSoftKeyboard(context);
+                    apiCallSaveProfile();
                 }
 
             }
@@ -411,6 +429,53 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
                     }
                 }
         ).executeAsync();
+    }
+
+    private void apiCallSaveProfile() {
+        List<CodeValueResponse.CodeValue> codeValues = DatabaseManager.getInstance(this).getCodeValue();
+        long genderId = 0;
+        long statusCode = 0;
+        for (CodeValueResponse.CodeValue cv : codeValues) {
+            if (cv.getCodeValue().equalsIgnoreCase(myProfile.getGender()))
+                genderId = cv.getCodeValueID();
+        }
+
+        for (CodeValueResponse.CodeValue cv : codeValues) {
+            if (cv.getCodeValue().equalsIgnoreCase("online"))
+                statusCode = cv.getCodeValueID();
+        }
+
+        HashMap<String, String> map = new HashMap<>();
+        map.put("fbId", myProfile.getFbId());
+        map.put("isActive", 1 + "");
+        map.put("statusInfo", statusCode + "");
+        map.put("genderId", genderId + "");
+        map.put("aboutYou", myProfile.getBio());
+        map.put("workEmployer", myProfile.getWorkEmployer());
+        map.put("workPosition", myProfile.getWorkPosition());
+        map.put("workLocation", myProfile.getWorkLocation());
+        System.out.println(TAG + map.toString());
+        Call<ProfileSaveResponse> saveProfile = ApiManager.getApiInstance().saveProfile(Constant.CONTENT_TYPE,
+                MyApplication.getInstance().getToken(), map);
+        saveProfile.enqueue(new Callback<ProfileSaveResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<ProfileSaveResponse> call, @NonNull Response<ProfileSaveResponse> response) {
+                int statusCode = response.code();
+                ProfileSaveResponse saveResponse = response.body();
+                if (statusCode == 200 && saveResponse != null && saveResponse.getStatus() != null && saveResponse.getStatus().equalsIgnoreCase("success")) {
+
+                } else {
+                    dismissProgressDialog();
+                    showAToast(getResources().getString(R.string.oops_something_went_wrong));
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<ProfileSaveResponse> call, @NonNull Throwable t) {
+                dismissProgressDialog();
+                showAToast(getResources().getString(R.string.oops_server_response_failure));
+            }
+        });
     }
 
 

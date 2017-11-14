@@ -182,26 +182,29 @@ public class PreferencesFragment extends Fragment implements View.OnClickListene
 
     private void setGenderInterestMale(boolean male) {
         pref.setMaleInterest(male);
-        apiCallSavePreferences();
+        if (!pref.toString().equals(DatabaseManager.getInstance(activity).getPreferences().toString()))
+            apiCallSavePreferences();
 
     }
 
     private void setGenderInterestFemale(boolean female) {
         pref.setFemaleInterest(female);
-        apiCallSavePreferences();
-        apiCallSavePreferences();
+        if (!pref.toString().equals(DatabaseManager.getInstance(activity).getPreferences().toString()))
+            apiCallSavePreferences();
     }
 
 
     private void setDistance(int dist) {
         pref.setDistanceRange(dist);
-        apiCallSavePreferences();
+        if (!pref.toString().equals(DatabaseManager.getInstance(activity).getPreferences().toString()))
+            apiCallSavePreferences();
     }
 
     private void setAge(int min, int max) {
         pref.setAgeMin(min);
         pref.setAgeMax(max);
-        apiCallSavePreferences();
+        if (!pref.toString().equals(DatabaseManager.getInstance(activity).getPreferences().toString()))
+            apiCallSavePreferences();
     }
 
 
