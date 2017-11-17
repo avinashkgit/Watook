@@ -9,24 +9,15 @@ import java.io.Serializable;
 public class UserChat implements Serializable {
     private Long userId;
     private String name;
-    private Long genderId;
     private Long statusInfo;
     private String profileImage;
-    private Double distance;
-    private Double latitude;
-    private Double longitude;
     private String fireBaseToken;
-    private Long requestStatus;
-    private String dob;
-    private Integer age;
-    private String aboutYou;
-    private String workEmployer;
-    private String workLocation;
-    private String workPosition;
+    private Integer messageCount;
     private String fbImages;
     private String lastMessage;
     private Long lastModified;
     private Long sentById;
+    private boolean hasNewMessage;
 
     public Long getUserId() {
         return userId;
@@ -36,21 +27,12 @@ public class UserChat implements Serializable {
         this.userId = userId;
     }
 
-
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Long getGenderId() {
-        return genderId;
-    }
-
-    public void setGenderId(Long genderId) {
-        this.genderId = genderId;
     }
 
     public Long getStatusInfo() {
@@ -69,30 +51,6 @@ public class UserChat implements Serializable {
         this.profileImage = profileImage;
     }
 
-    public Double getDistance() {
-        return distance;
-    }
-
-    public void setDistance(Double distance) {
-        this.distance = distance;
-    }
-
-    public Double getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(Double latitude) {
-        this.latitude = latitude;
-    }
-
-    public Double getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(Double longitude) {
-        this.longitude = longitude;
-    }
-
     public String getFireBaseToken() {
         return fireBaseToken;
     }
@@ -101,60 +59,12 @@ public class UserChat implements Serializable {
         this.fireBaseToken = fireBaseToken;
     }
 
-    public Long getRequestStatus() {
-        return requestStatus;
+    public Integer getMessageCount() {
+        return messageCount;
     }
 
-    public void setRequestStatus(Long requestStatus) {
-        this.requestStatus = requestStatus;
-    }
-
-    public String getDob() {
-        return dob;
-    }
-
-    public void setDob(String dob) {
-        this.dob = dob;
-    }
-
-    public Integer getAge() {
-        return age;
-    }
-
-    public void setAge(Integer age) {
-        this.age = age;
-    }
-
-    public String getAboutYou() {
-        return aboutYou;
-    }
-
-    public void setAboutYou(String aboutYou) {
-        this.aboutYou = aboutYou;
-    }
-
-    public String getWorkEmployer() {
-        return workEmployer;
-    }
-
-    public void setWorkEmployer(String workEmployer) {
-        this.workEmployer = workEmployer;
-    }
-
-    public String getWorkLocation() {
-        return workLocation;
-    }
-
-    public void setWorkLocation(String workLocation) {
-        this.workLocation = workLocation;
-    }
-
-    public String getWorkPosition() {
-        return workPosition;
-    }
-
-    public void setWorkPosition(String workPosition) {
-        this.workPosition = workPosition;
+    public void setMessageCount(Integer messageCount) {
+        this.messageCount = messageCount;
     }
 
     public String getFbImages() {
@@ -187,5 +97,13 @@ public class UserChat implements Serializable {
 
     public void setSentById(Long sentById) {
         this.sentById = sentById;
+    }
+
+    public boolean isHasNewMessage() {
+        return hasNewMessage;
+    }
+
+    public void setHasNewMessage(boolean hasNewMessage) {
+        this.hasNewMessage = hasNewMessage;
     }
 }

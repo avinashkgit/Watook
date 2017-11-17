@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.watook.application.MyApplication;
 import com.watook.model.MyProfile;
 import com.watook.model.Preferences;
 import com.watook.model.UserChat;
@@ -33,7 +34,6 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
 
-
 @SuppressWarnings("ALL")
 public class DatabaseManager extends SQLiteOpenHelper {
 
@@ -54,7 +54,6 @@ public class DatabaseManager extends SQLiteOpenHelper {
         //DATABASE_PATH = mContext.getFilesDir().getPath() + context.getPackageName() + "/databases/";
         DATABASE_PATH = "/data/data/" + context.getPackageName() + "/databases/";
     }
-
 
 
     private void createTable(SQLiteDatabase db) {
@@ -350,7 +349,6 @@ public class DatabaseManager extends SQLiteOpenHelper {
     }
 
 
-
     public void insertPreferences(Preferences myObject) {
         try {
             database = this.getWritableDatabase();
@@ -386,7 +384,6 @@ public class DatabaseManager extends SQLiteOpenHelper {
         }
         return obj;
     }
-
 
 
     public void insertUserChat(HashMap<Long, UserChat> map) {
@@ -449,7 +446,6 @@ public class DatabaseManager extends SQLiteOpenHelper {
     }
 
 
-
     public void insertConnections(List<ConnectionsResponse.User> connection) {
         try {
             database = this.getWritableDatabase();
@@ -463,6 +459,31 @@ public class DatabaseManager extends SQLiteOpenHelper {
 
     }
 
+    public String getProfilePic(Long userId) {
+        List<ConnectionsResponse.User> userList = getConncetions();
+        String s = null;
+        if (userList != null) {
+            for (ConnectionsResponse.User user : userList) {
+                if (user.getUserId().equals(userId)) {
+                    s = user.getProfileImage();
+                    return s;
+                }
+                else
+                    s = null;
+            }
+            return s;
+        } else {
+            return s;
+        }
+
+    }
+
+    public void removeUserFromChatList(Long id){
+        HashMap<Long, UserChat> map = getUserChats();
+        if(map.containsKey(id))
+            map.remove(id);
+        insertUserChat(map);
+    }
 
 
 }

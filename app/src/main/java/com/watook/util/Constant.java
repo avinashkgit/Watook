@@ -51,5 +51,7 @@ public class Constant {
     public static final String GPS_ENABLED = "gps_enabled";
     public static final String GPS_DISABLED = "gps_disabled";
 
+    public static final String NEW_MESSAGE = "new_message";
+
 
 }

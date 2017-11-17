@@ -2,8 +2,11 @@ package com.watook.activity;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
@@ -11,12 +14,14 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -98,7 +103,6 @@ public class LoginActivity extends BaseActivity {
         Glide.with(this).load(R.drawable.logo).asBitmap().into((ImageView) findViewById(R.id.img_txt_logo));
 //        getHashCode();
         inItUi();
-
     }
 
     private void getHashCode() {
@@ -197,6 +201,15 @@ public class LoginActivity extends BaseActivity {
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getStringExtra(Constant.GPS).equals(Constant.GPS_ENABLED))
+                if (myProfile != null && myProfile.getUserId() != null)
+                    saveLocation();
+        }
+    };
+
 
     @Override
     protected void onResume() {
@@ -204,9 +217,18 @@ public class LoginActivity extends BaseActivity {
         if (checkAndRequestPermissions()) {
             // carry on the normal flow, as the case of  permissions  granted.
         }
+        LocalBroadcastManager.getInstance(this).registerReceiver(receiver,
+                new IntentFilter(Constant.BROADCAST_RESULT));
+        if (myProfile != null && myProfile.getUserId() != null)
+            saveLocation();
 
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(receiver);
+    }
 
     private boolean checkAndRequestPermissions() {
 //        int permissionSendMessage = ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS);
@@ -495,7 +517,7 @@ public class LoginActivity extends BaseActivity {
                             myProfile.setWorkLocation(location.getString("name"));
                             myProfile.setWorkPosition(position.getString("name"));
 
-                           apiCallSaveProfile();
+                            apiCallSaveProfile();
                         } catch (JSONException e) {
                             e.printStackTrace();
                             apiCallSaveProfile();
@@ -526,7 +548,7 @@ public class LoginActivity extends BaseActivity {
         map.put("isActive", 1 + "");
         map.put("statusInfo", statusCode + "");
         map.put("genderId", genderId + "");
-        map.put("birthday", "15/02/1991");
+        map.put("dob", "15/02/1991");
         map.put("emailId", myProfile.getEmail());
         map.put("advertiseId", myProfile.getFbId());
         map.put("aboutYou", myProfile.getBio());
@@ -818,8 +840,6 @@ public class LoginActivity extends BaseActivity {
             }
         });
     }
-
-
 
 
     private void handleFacebookAccessToken(AccessToken token) {

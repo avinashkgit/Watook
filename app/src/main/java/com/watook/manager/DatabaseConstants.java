@@ -1,5 +1,7 @@
 package com.watook.manager;
 
+import com.watook.util.Constant;
+
 /**
  * Created by Avinash kumar on 10/01/2017.
  */
@@ -49,8 +51,10 @@ public class DatabaseConstants {
     static final String CREATE_TABLE_PREFERENCES = "CREATE TABLE IF NOT EXISTS " + TABLE_PREFERENCES
             + " (" + PREFERENCES_RESPONSE + " BLOB" + " )";
 
+
     static final String CREATE_TABLE_USER_CHAT = "CREATE TABLE IF NOT EXISTS " + TABLE_USER_CHAT
             + " (" + USER_CHAT_RESPONSE + " BLOB" + " )";
+
 
     static final String CREATE_TABLE_CONNECTIONS = "CREATE TABLE IF NOT EXISTS " + TABLE_CONNECTIONS
             + " (" + CONNECTIONS_RESPONSE + " BLOB" + " )";

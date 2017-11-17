@@ -1,5 +1,5 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <!--<item android:right="200dp">-->
+    <!--<item>-->
         <!--<rotate-->
             <!--android:fromDegrees="-45"-->
             <!--android:pivotX="0%"-->
@@ -14,9 +14,9 @@
     <!--</item>-->
     <item >
         <shape android:shape="rectangle">
-            <gradient
-                android:startColor="@color/colorChatBubbleIncoming"
-                android:endColor="@color/colorChatBubbleIncomingDark" />
+            <gradient android:type="linear"
+                android:startColor="@color/colorChatBubbleIncomingDark"
+                android:endColor="@color/colorChatBubbleIncoming" />
             <corners android:radius="25dp" />
         </shape>
     </item>

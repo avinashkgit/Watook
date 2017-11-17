@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.watook.R;
 import com.watook.fragment.ChatFragment;
+import com.watook.manager.DatabaseManager;
 import com.watook.util.Constant;
 import com.watook.util.FirebaseChatMainApp;
 import com.watook.util.Utils;
@@ -67,7 +68,11 @@ public class ChatActivity extends BaseActivity {
                 startActivity(i);
             }
         });
-        Glide.with(this).load(Utils.emptyIfNull(getIntent().getExtras().getString(Constant.PROFILE_IMAGE))).asBitmap().centerCrop().into(new BitmapImageViewTarget(imgProfile) {
+        Glide.with(this)
+                .load(Utils.emptyIfNull(DatabaseManager.getInstance(this).getProfilePic(Long.parseLong(getIntent().getExtras().getString(Constant.ARG_RECEIVER_UID)))))
+                .asBitmap()
+                .centerCrop()
+                .into(new BitmapImageViewTarget(imgProfile) {
             @Override
             protected void setResource(Bitmap resource) {
                 RoundedBitmapDrawable circularBitmapDrawable =
@@ -83,11 +88,15 @@ public class ChatActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         FirebaseChatMainApp.setChatActivityOpen(true);
+        FirebaseChatMainApp.setReceiverId(getIntent().getExtras().getString(Constant.ARG_RECEIVER_UID));
+
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         FirebaseChatMainApp.setChatActivityOpen(false);
+        FirebaseChatMainApp.setReceiverId(null);
+
     }
 }

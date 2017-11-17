@@ -272,7 +272,7 @@ public class ChatFragment extends Fragment implements ChatContract.View, TextVie
         }
         UserChat userChat = new UserChat();
         userChat.setLastModified(chat.timestamp);
-        userChat.setSentById(Long.parseLong(chat.receiverUid));
+        userChat.setSentById(Long.parseLong(chat.senderUid));
         userChat.setUserId(Long.parseLong(getArguments().getString(Constant.ARG_RECEIVER_UID)));
         userChat.setName(getArguments().getString(Constant.ARG_RECEIVER));
         userChat.setLastMessage(chat.message);

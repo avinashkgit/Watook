@@ -6,22 +6,39 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.watook.R;
 import com.watook.activity.ChatActivity;
+import com.watook.application.MyApplication;
 import com.watook.events.PushNotificationEvent;
+import com.watook.manager.ApiManager;
+import com.watook.manager.DatabaseManager;
+import com.watook.model.UserChat;
+import com.watook.model.response.ConnectionsResponse;
 import com.watook.util.Constant;
 import com.watook.util.FirebaseChatMainApp;
+import com.watook.util.Utils;
 
 import org.greenrobot.eventbus.EventBus;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private static final String TAG = "MyFirebaseMsgService";
+    RemoteMessage remoteMessage;
 
     /**
      * Called when message is received.
@@ -30,34 +47,69 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
      */
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
+        this.remoteMessage = remoteMessage;
 
-        // TODO(developer): Handle FCM messages here.
-        // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
-        Log.d(TAG, "From: " + remoteMessage.getFrom());
-
-        // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {
-            Log.d(TAG, "Message data payload: " + remoteMessage.getData());
+            if (DatabaseManager.getInstance(MyApplication.getContext()).getProfilePic(Long.parseLong(remoteMessage.getData().get("uid"))) != null) {
+                Log.d(TAG, "Message data payload: " + remoteMessage.getData());
 
-            String title = remoteMessage.getData().get("title");
-            String message = remoteMessage.getData().get("text");
-            String username = remoteMessage.getData().get("username");
-            String uid = remoteMessage.getData().get("uid");
-            String fcmToken = remoteMessage.getData().get("fcm_token");
+                String title = remoteMessage.getData().get("title");
+                String message = remoteMessage.getData().get("text");
+                String username = remoteMessage.getData().get("username");
+                String uid = remoteMessage.getData().get("uid");
+                String fcmToken = remoteMessage.getData().get("fcm_token");
+                Long time = Long.parseLong(remoteMessage.getData().get("time"));
 
-            // Don't show notification if chat activity is open.
-            if (!FirebaseChatMainApp.isChatActivityOpen()) {
-                sendNotification(title,
-                        message,
-                        username,
-                        uid,
-                        fcmToken);
+
+
+
+                // Don't show notification if chat activity is open.
+                if (!Utils.emptyIfNull(FirebaseChatMainApp.getReceiverId()).equals(uid)) {
+
+                    UserChat userChat;
+                    HashMap<Long, UserChat> map = DatabaseManager.getInstance(MyApplication.getContext()).getUserChats();
+                    if (map != null && map.containsKey(Long.parseLong(uid))) {
+                        userChat = map.get(Long.parseLong(uid));
+                        userChat.setHasNewMessage(true);
+                        userChat.setSentById(Long.parseLong(uid));
+                        userChat.setLastMessage(message);
+                        userChat.setLastModified(time);
+                        if (userChat.getMessageCount() == null)
+                            userChat.setMessageCount(1);
+                        else
+                            userChat.setMessageCount(userChat.getMessageCount() + 1);
+                        map.put(Long.parseLong(uid), userChat);
+                        DatabaseManager.getInstance(MyApplication.getContext()).insertUserChat(map);
+                    } else {
+                        if (map == null)
+                            map = new HashMap<>();
+                        userChat = new UserChat();
+                        userChat.setLastModified(time);
+                        userChat.setSentById(Long.parseLong(uid));
+                        userChat.setUserId(Long.parseLong(uid));
+                        userChat.setName(username);
+                        userChat.setLastMessage(message);
+                        userChat.setProfileImage(DatabaseManager.getInstance(MyApplication.getContext()).getProfilePic(Long.parseLong(uid)));
+                        userChat.setFireBaseToken(fcmToken);
+                        userChat.setHasNewMessage(true);
+                        map.put(Long.parseLong(uid), userChat);
+                        DatabaseManager.getInstance(MyApplication.getContext()).insertUserChat(map);
+                    }
+                    broadcastEvent();
+
+
+
+
+                    sendNotification(title, message, username, uid, fcmToken);
+                } else {
+                    EventBus.getDefault().post(new PushNotificationEvent(title,
+                            message,
+                            username,
+                            uid,
+                            fcmToken));
+                }
             } else {
-                EventBus.getDefault().post(new PushNotificationEvent(title,
-                        message,
-                        username,
-                        uid,
-                        fcmToken));
+                apiCallGetFriendsList();
             }
         }
     }
@@ -90,6 +142,34 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        notificationManager.notify(0, notificationBuilder.build());
+        int m = (int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE);
+        notificationManager.notify(m, notificationBuilder.build());
+    }
+
+
+    private void apiCallGetFriendsList() {
+        Call<ConnectionsResponse> codeValue = ApiManager.getApiInstance().getFriendsList(Constant.CONTENT_TYPE,
+                DatabaseManager.getInstance(MyApplication.getContext()).getRegistrationData().getData(), MyApplication.getInstance().getUserId());
+        codeValue.enqueue(new Callback<ConnectionsResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<ConnectionsResponse> call, @NonNull Response<ConnectionsResponse> response) {
+                int statusCode = response.code();
+                ConnectionsResponse connectionsResponse = response.body();
+                if (statusCode == 200 && connectionsResponse != null && connectionsResponse.getStatus() != null && connectionsResponse.getStatus().equalsIgnoreCase("success")) {
+                    DatabaseManager.getInstance(MyApplication.getContext()).insertConnections(connectionsResponse.getData());
+                    onMessageReceived(remoteMessage);
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<ConnectionsResponse> call, @NonNull Throwable t) {
+            }
+        });
+    }
+
+    private void broadcastEvent() {
+        Intent intent = new Intent(Constant.BROADCAST_RESULT);
+        intent.putExtra(Constant.NEW_MESSAGE, Constant.NEW_MESSAGE);
+        LocalBroadcastManager.getInstance(MyApplication.getContext()).sendBroadcast(intent);
     }
 }

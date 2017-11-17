@@ -73,13 +73,13 @@ public class ChatInteractor implements ChatContract.Interactor {
                     }
 
                 }
-                //send push notification to the receiver
+                //end push notification to the receiver
                 try {
                     sendPushNotificationToReceiver(chat.sender,
                             chat.message,
                             chat.senderUid,
                             (String) MySharedPreferences.getObject(Constant.ARG_FIREBASE_TOKEN),
-                            receiverFirebaseToken);
+                            receiverFirebaseToken, String.valueOf(chat.timestamp));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -97,7 +97,7 @@ public class ChatInteractor implements ChatContract.Interactor {
                                                 String message,
                                                 String uid,
                                                 String firebaseToken,
-                                                String receiverFirebaseToken) {
+                                                String receiverFirebaseToken, String timeStamp) {
         FcmNotificationBuilder.initialize()
                 .title(username)
                 .message(message)
@@ -105,6 +105,7 @@ public class ChatInteractor implements ChatContract.Interactor {
                 .uid(uid)
                 .firebaseToken(firebaseToken)
                 .receiverFirebaseToken(receiverFirebaseToken)
+                .time(timeStamp)
                 .send();
     }
 

@@ -34,6 +34,7 @@ public class FcmNotificationBuilder {
     private static final String KEY_USERNAME = "username";
     private static final String KEY_UID = "uid";
     private static final String KEY_FCM_TOKEN = "fcm_token";
+    private static final String KEY_TIME = "time";
 
     private String mTitle;
     private String mMessage;
@@ -41,6 +42,7 @@ public class FcmNotificationBuilder {
     private String mUid;
     private String mFirebaseToken;
     private String mReceiverFirebaseToken;
+    private String mTime;
 
     private FcmNotificationBuilder() {
 
@@ -79,6 +81,12 @@ public class FcmNotificationBuilder {
         mReceiverFirebaseToken = receiverFirebaseToken;
         return this;
     }
+
+    public FcmNotificationBuilder time(String time) {
+        mTime = time;
+        return this;
+    }
+
 
     public void send() {
         RequestBody requestBody = null;
@@ -119,6 +127,7 @@ public class FcmNotificationBuilder {
         jsonObjectData.put(KEY_USERNAME, mUsername);
         jsonObjectData.put(KEY_UID, mUid);
         jsonObjectData.put(KEY_FCM_TOKEN, mFirebaseToken);
+        jsonObjectData.put(KEY_TIME, mTime);
         jsonObjectBody.put(KEY_DATA, jsonObjectData);
 
         return jsonObjectBody;

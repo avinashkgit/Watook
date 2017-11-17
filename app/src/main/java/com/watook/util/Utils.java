@@ -39,7 +39,7 @@ public class Utils {
     }
 
     public static boolean isEmpty(String s) {
-        return s == null || s.equals("") ||s.equals("null");
+        return s == null || s.equals("") || s.equals("null");
     }
 
     public static boolean isEmpty(Integer s) {
@@ -238,6 +238,24 @@ public class Utils {
             return "Yesterday";
         } else {
             return new SimpleDateFormat("d MMMM yyyy", Locale.getDefault()).format(d1);
+        }
+    }
+
+    public static String getUserFriendlyDateForList(long time) {
+        Date d1 = new Date(time);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(d1);
+        Calendar today = Calendar.getInstance();
+        Calendar yesterday = Calendar.getInstance();
+        yesterday.add(Calendar.DATE, -1);
+
+//        if (calendar.get(Calendar.YEAR) == today.get(Calendar.YEAR) && calendar.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR)) {
+//            return "Today";
+//        } else
+        if (calendar.get(Calendar.YEAR) == yesterday.get(Calendar.YEAR) && calendar.get(Calendar.DAY_OF_YEAR) == yesterday.get(Calendar.DAY_OF_YEAR)) {
+            return "Yesterday";
+        } else {
+            return new SimpleDateFormat("hh:mm a", Locale.getDefault()).format(d1);
         }
     }
 

@@ -244,7 +244,7 @@ public class ConnectionsResponse implements Serializable{
             }
         }
 
-        public static class RequestBean {
+        public static class RequestBean implements Serializable{
             /**
              * requestId : 4
              * requestBy : 30

@@ -1,7 +1,12 @@
 package com.watook.fragment;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,6 +22,7 @@ import com.watook.adapter.UserChatListAdapter;
 import com.watook.manager.DatabaseManager;
 import com.watook.model.User;
 import com.watook.model.UserChat;
+import com.watook.util.Constant;
 import com.watook.util.DividerItemDecorator;
 
 import java.util.ArrayList;
@@ -36,6 +42,14 @@ public class ChatsListFragment extends Fragment {
     RecyclerView recyclerView;
     RelativeLayout layNoData;
     ProgressBar progressBar;
+
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getStringExtra(Constant.NEW_MESSAGE).equals(Constant.NEW_MESSAGE))
+                bindView();
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,6 +78,14 @@ public class ChatsListFragment extends Fragment {
     public void onResume() {
         super.onResume();
         bindView();
+        LocalBroadcastManager.getInstance(activity).registerReceiver(receiver,
+                new IntentFilter(Constant.BROADCAST_RESULT));
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(activity).unregisterReceiver(receiver);
     }
 
     private void bindView() {
@@ -75,12 +97,12 @@ public class ChatsListFragment extends Fragment {
                 lstChat.add(userChat);
             }
         }
+        recyclerView.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false));
+        recyclerView.addItemDecoration(new DividerItemDecorator(getResources().getDrawable(R.drawable.divider)));
+        UserChatListAdapter userChatListAdapter = new UserChatListAdapter(activity, lstChat);
+        recyclerView.setAdapter(userChatListAdapter);
         if (lstChat.size() > 0) {
             layNoData.setVisibility(View.GONE);
-            recyclerView.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false));
-            recyclerView.addItemDecoration(new DividerItemDecorator(getResources().getDrawable(R.drawable.divider)));
-            UserChatListAdapter userChatListAdapter = new UserChatListAdapter(activity, lstChat);
-            recyclerView.setAdapter(userChatListAdapter);
         } else {
             layNoData.setVisibility(View.VISIBLE);
         }

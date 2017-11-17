@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.os.Bundle;
 import android.widget.ImageView;
 
+import com.google.firebase.database.FirebaseDatabase;
 import com.watook.R;
 import com.watook.application.MySharedPreferences;
 import com.watook.manager.DatabaseManager;
@@ -19,6 +20,7 @@ public class SplashActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        FirebaseDatabase.getInstance().getReference().keepSynced(true);
         try {
             isLoggedIn = (boolean) MySharedPreferences.getObject(Constant.IS_LOGGED_IN);
         } catch (Exception e) {

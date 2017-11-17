@@ -56,7 +56,7 @@ public class UserChatListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_footer, parent, false);
             return new UserChatListAdapter.FooterViewHolder(view);
         }
-        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_default, parent, false);
+        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_user_chat, parent, false);
         return new UserChatListAdapter.RecyclerViewHolder(view);
     }
 
@@ -117,7 +117,7 @@ public class UserChatListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         // Define elements of a row here
-        TextView tvName, tvDist;
+        TextView tvName, tvDist, txtCount, txtTime;
         RelativeLayout rlBack;
         ImageView ivProfile;
 
@@ -126,6 +126,8 @@ public class UserChatListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             // Find view by ID and initialize here
             tvName = (TextView) itemView.findViewById(R.id.txt_name);
             tvDist = (TextView) itemView.findViewById(R.id.txt_dist);
+            txtCount = (TextView) itemView.findViewById(R.id.txt_count);
+            txtTime = (TextView) itemView.findViewById(R.id.txt_time);
             rlBack = (RelativeLayout) itemView.findViewById(R.id.rl_profile_back);
             ivProfile = (ImageView) itemView.findViewById(R.id.profile_pic);
         }
@@ -134,10 +136,19 @@ public class UserChatListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             final UserChat user = UserChatListAdapter.this.users.get(position);
             tvName.setText(Utils.emptyIfNull(user.getName()));
             tvDist.setText(Utils.emptyIfNull(user.getLastMessage()));
-            if (user.getSentById() != Long.parseLong(MyApplication.getInstance().getUserId()))
+            if (user.getSentById() == Long.parseLong(MyApplication.getInstance().getUserId()))
                 tvDist.setCompoundDrawablesWithIntrinsicBounds(activity.getResources().getDrawable(R.drawable.ic_reply_outgoing_18dp), null, null, null);
             else
                 tvDist.setCompoundDrawablesWithIntrinsicBounds(activity.getResources().getDrawable(R.drawable.ic_reply_incoming_18dp), null, null, null);
+            if (user.getLastModified() != null) {
+                txtTime.setText(Utils.getUserFriendlyDateForList(user.getLastModified()));
+            }
+            if (user.getMessageCount() != null) {
+                txtCount.setVisibility(View.VISIBLE);
+                txtCount.setText(user.getMessageCount().toString());
+            } else
+                txtCount.setVisibility(View.GONE);
+
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

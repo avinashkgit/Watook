@@ -5,9 +5,12 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.ViewPager;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.viewpagerindicator.CirclePageIndicator;
@@ -40,11 +43,12 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
     LinearLayout layRequest;
     Button btnLike, btnAccept, btnReject;
     UserResponse.User user;
-    TextView txtNameAge, txtBio, txtInfo;
+    TextView txtNameAge, txtBio, txtInfo, txtDist;
     ViewPager mPager;
     CirclePageIndicator indicator;
     Long othersID;
     boolean isLiked = false;
+    ImageView ivMenu;
 
 
     @Override
@@ -66,6 +70,9 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
         txtNameAge = (TextView) findViewById(R.id.tv_name_age);
         txtBio = (TextView) findViewById(R.id.txt_bio);
         txtInfo = (TextView) findViewById(R.id.txt_work);
+        txtDist = (TextView) findViewById(R.id.txt_dist);
+        ivMenu = (ImageView) findViewById(R.id.iv_menu);
+        ivMenu.setOnClickListener(this);
         layRequest = (LinearLayout) findViewById(R.id.lay_has_request);
         btnLike = (Button) findViewById(R.id.btn_like);
         btnLike.setOnClickListener(this);
@@ -85,6 +92,7 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
                 btnLike.setVisibility(View.GONE);
                 layRequest.setVisibility(View.GONE);
                 actionButton.setVisibility(View.VISIBLE);
+                ivMenu.setVisibility(View.VISIBLE);
 //                setFriends();
 
             } else if (user.getRequest().getReqstatus().equals(MyApplication.getRequestStatusCode().get(Constant.REJECTED))) {
@@ -114,6 +122,13 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
                 btnLike.setVisibility(View.VISIBLE);
                 layRequest.setVisibility(View.GONE);
                 actionButton.setVisibility(View.GONE);
+            }
+
+            if (!Utils.isEmpty(String.valueOf(user.getLocation().getLatitude()))
+                    && !Utils.isEmpty(String.valueOf(user.getLocation().getLongitude()))) {
+                txtDist.setText(Utils.getDistance(this, user.getLocation().getLatitude(), user.getLocation().getLongitude()));
+            } else{
+                txtDist.setVisibility(View.GONE);
             }
 
 
@@ -183,9 +198,32 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
             case R.id.btn_reject:
                 rejectClicked();
                 break;
+            case R.id.iv_menu:
+                showPopUpMenu();
+                break;
         }
 
     }
+
+    private void showPopUpMenu(){
+        PopupMenu popupMenu = new PopupMenu(this, ivMenu);
+        popupMenu.inflate(R.menu.menu_user_profile);
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.action_unmatch:
+                        apiCallSetRequest(UNLIKE);
+                        DatabaseManager.getInstance(UserProfileActivity.this).removeUserFromChatList(othersID);
+                        break;
+                }
+                return false;
+            }
+        });
+        popupMenu.show();
+    }
+
+
 
     private void setLiked() {
         btnLike.setText("Unlike");

@@ -48,7 +48,7 @@ public class MyLikesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_footer, parent, false);
             return new MyLikesAdapter.FooterViewHolder(view);
         }
-        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_default, parent, false);
+        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_mylikes, parent, false);
         return new MyLikesAdapter.RecyclerViewHolder(view);
     }
 
