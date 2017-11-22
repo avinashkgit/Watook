@@ -99,11 +99,13 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
                 btnLike.setVisibility(View.VISIBLE);
                 layRequest.setVisibility(View.GONE);
                 actionButton.setVisibility(View.GONE);
+                ivMenu.setVisibility(View.GONE);
 
             } else if (user.getRequest().getReqstatus().equals(MyApplication.getRequestStatusCode().get(Constant.LIKED))) {
+                ivMenu.setVisibility(View.GONE);
                 if (user.getRequest().getRequestBy() == Long.parseLong(MyApplication.getInstance().getUserId())) {
                     isLiked = true;
-                    setLiked();
+//                    setLiked();
                     btnLike.setVisibility(View.VISIBLE);
                     layRequest.setVisibility(View.GONE);
                     actionButton.setVisibility(View.GONE);
@@ -114,10 +116,12 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
                 }
 
             } else if (user.getRequest().getReqstatus().equals(MyApplication.getRequestStatusCode().get(Constant.BLOCKED))) {
+                ivMenu.setVisibility(View.GONE);
                 btnLike.setVisibility(View.GONE);
                 layRequest.setVisibility(View.GONE);
                 actionButton.setVisibility(View.GONE);
             } else {
+                ivMenu.setVisibility(View.GONE);
                 setUnLiked();
                 btnLike.setVisibility(View.VISIBLE);
                 layRequest.setVisibility(View.GONE);

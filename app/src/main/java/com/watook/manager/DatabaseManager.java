@@ -24,6 +24,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -386,31 +387,85 @@ public class DatabaseManager extends SQLiteOpenHelper {
     }
 
 
-    public void insertUserChat(HashMap<Long, UserChat> map) {
+    public void insertUserChat(UserChat userChat) {
+//        try {
+//            database = this.getWritableDatabase();
+//            database.execSQL("delete from " + DatabaseConstants.TABLE_USER_CHAT);
+//            final ContentValues values = new ContentValues();
+//            values.put(DatabaseConstants.USER_CHAT_RESPONSE, objToByte(map));
+//            database.insert(DatabaseConstants.TABLE_USER_CHAT, null, values);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+
+//        int id = 0;
+//        try {
+//            database = this.getWritableDatabase();
+//            final ContentValues values = new ContentValues();
+//            values.put(DatabaseConstants.USER_CHAT_USER_ID, userChat.getUserId());
+//            values.put(DatabaseConstants.USER_CHAT_STATUS_INFO, userChat.getStatusInfo());
+//            values.put(DatabaseConstants.USER_CHAT_PROFILE_IMAGE, userChat.getProfileImage());
+//            values.put(DatabaseConstants.USER_CHAT_FIREBASE_TOKEN, userChat.getFireBaseToken());
+//            values.put(DatabaseConstants.USER_CHAT_LAST_MESSAGE, userChat.getLastMessage());
+//            values.put(DatabaseConstants.USER_CHAT_LAST_MODIFIED, userChat.getLastModified());
+//            values.put(DatabaseConstants.USER_CHAT_SENT_BY_ID, userChat.getSentById());
+//            if (userChat.isHasNewMessage())
+//                values.put(DatabaseConstants.USER_CHAT_HAS_NEW_MESSAGE, "1");
+//            else
+//                values.put(DatabaseConstants.USER_CHAT_HAS_NEW_MESSAGE, "0");
+//            id = (int) database.insert(DatabaseConstants.TABLE_USER_CHAT, null, values);
+//            if (id != 1) {
+//                database.update(DatabaseConstants.TABLE_USER_CHAT, values, userChat.getUserId().toString(), null);
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+
         try {
             database = this.getWritableDatabase();
-            database.execSQL("delete from " + DatabaseConstants.TABLE_USER_CHAT);
-            final ContentValues values = new ContentValues();
-            values.put(DatabaseConstants.USER_CHAT_RESPONSE, objToByte(map));
-            database.insert(DatabaseConstants.TABLE_USER_CHAT, null, values);
+                final ContentValues values = new ContentValues();
+                values.put(DatabaseConstants.USER_CHAT_USER_ID, userChat.getUserId());
+                values.put(DatabaseConstants.USER_CHAT_RESPONSE, objToByte(userChat));
+                if (!CheckIsDataAlreadyInUserChat(userChat.getUserId())) {
+                    database.insert(DatabaseConstants.TABLE_USER_CHAT, null, values);
+                } else {
+                    database.update(DatabaseConstants.TABLE_USER_CHAT, values,
+                            DatabaseConstants.USER_CHAT_USER_ID + " = ? ", new String[]{String.valueOf(userChat.getUserId())});
+                }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
 
+    private boolean CheckIsDataAlreadyInUserChat(Long userId) {
+        String selectQuery = "select * from " + DatabaseConstants.TABLE_USER_CHAT + " where " +
+                DatabaseConstants.USER_CHAT_USER_ID + "='" + userId + "'";
+        Cursor cursor = database.rawQuery(selectQuery, null, null);
+        if (cursor.getCount() <= 0) {
+            cursor.close();
+            return false;
+        }
+        cursor.close();
+        return true;
+    }
 
-    public HashMap<Long, UserChat> getUserChats() {
+
+    public List<UserChat> getUserChats() {
         Cursor cursor = null;
-        byte[] blob;
-        HashMap<Long, UserChat> obj = null;
+        List<UserChat> arrayList = null;
         try {
-            cursor = database.query(DatabaseConstants.TABLE_USER_CHAT, new String[]{"*"}, null, null, null, null, null);
-            if (cursor != null && cursor.getCount() > 0) {
-                cursor.moveToLast();
-                blob = cursor.getBlob(cursor.getColumnIndex(DatabaseConstants.USER_CHAT_RESPONSE));
-                if (blob != null)
-                    obj = (HashMap<Long, UserChat>) byteToObj(blob);
+            String query = "select * from " + DatabaseConstants.TABLE_USER_CHAT;
+            cursor = database.rawQuery(query, null, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                arrayList = new ArrayList<>();
+                do {
+                    byte[] blob = cursor.getBlob(cursor.getColumnIndex(DatabaseConstants.USER_CHAT_RESPONSE));
+                    UserChat obj =(UserChat) byteToObj(blob);
+                    if (obj != null) {
+                        arrayList.add(obj);
+                    }
+                } while (cursor.moveToNext());
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -419,8 +474,34 @@ public class DatabaseManager extends SQLiteOpenHelper {
                 cursor.close();
             }
         }
-        return obj;
+        return arrayList;
     }
+
+    public UserChat getUserChat(Long userId){
+        Cursor cursor = null;
+        byte[] blob;
+        UserChat userChat = new UserChat();
+
+        try {
+            String[] columns = new String[] { DatabaseConstants.USER_CHAT_RESPONSE };
+            String selection = DatabaseConstants.USER_CHAT_USER_ID + " = ?";
+            String[] selectionArgs = new String[] { userId.toString() };
+
+            cursor = database.query(DatabaseConstants.TABLE_USER_CHAT, columns, selection,
+                    selectionArgs, null, null, null, null);
+            if (cursor != null && cursor.getCount() > 0) {
+                cursor.moveToFirst();
+                blob = cursor.getBlob(cursor.getColumnIndex(DatabaseConstants.USER_CHAT_RESPONSE));
+                userChat = (UserChat) byteToObj(blob);
+            } else{
+                userChat = null;
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return userChat;
+    }
+
 
 
     public List<ConnectionsResponse.User> getConncetions() {
@@ -467,8 +548,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
                 if (user.getUserId().equals(userId)) {
                     s = user.getProfileImage();
                     return s;
-                }
-                else
+                } else
                     s = null;
             }
             return s;
@@ -478,11 +558,9 @@ public class DatabaseManager extends SQLiteOpenHelper {
 
     }
 
-    public void removeUserFromChatList(Long id){
-        HashMap<Long, UserChat> map = getUserChats();
-        if(map.containsKey(id))
-            map.remove(id);
-        insertUserChat(map);
+    public void removeUserFromChatList(Long id) {
+        database = this.getWritableDatabase();
+        database.execSQL("delete from " + DatabaseConstants.TABLE_USER_CHAT + " where " + DatabaseConstants.USER_CHAT_USER_ID + "=" + id);
     }
 
 

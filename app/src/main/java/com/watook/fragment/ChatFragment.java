@@ -1,9 +1,12 @@
 package com.watook.fragment;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -156,15 +159,31 @@ public class ChatFragment extends Fragment implements ChatContract.View, TextVie
         init();
     }
 
+
+    @SuppressLint("StaticFieldLeak")
     private void init() {
         mETxtMessage.setOnEditorActionListener(this);
         mChatPresenter = new ChatPresenter(this);
-        mChatPresenter.getMessage(MyApplication.getInstance().getUserId(),
-                getArguments().getString(Constant.ARG_RECEIVER_UID));
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                progressBar.setVisibility(View.VISIBLE);
+            }
 
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
+                progressBar.setVisibility(View.VISIBLE);
+            }
 
-
-
+            @Override
+            protected Void doInBackground(Void... voids) {
+                mChatPresenter.getMessage(MyApplication.getInstance().getUserId(),
+                        getArguments().getString(Constant.ARG_RECEIVER_UID));
+                return null;
+            }
+        }.execute();
 
     }
 
@@ -261,15 +280,17 @@ public class ChatFragment extends Fragment implements ChatContract.View, TextVie
         mChatRecyclerAdapter.add(chat);
         mRecyclerViewChat.scrollToPosition(mChatRecyclerAdapter.getItemCount() - 1);
 //        mRecyclerViewChat.smoothScrollToPosition(mChatRecyclerAdapter.getItemCount() - 1);
-        updateChatList(chat);
+//        updateChatList(chat);
 
     }
 
+    @Override
+    public void onPause() {
+        updateChatList(mChatRecyclerAdapter.getLastChatElement());
+        super.onPause();
+    }
+
     private void updateChatList(final Chat chat) {
-        HashMap<Long, UserChat> map = DatabaseManager.getInstance(activity).getUserChats();
-        if (map == null) {
-            map = new HashMap<>();
-        }
         UserChat userChat = new UserChat();
         userChat.setLastModified(chat.timestamp);
         userChat.setSentById(Long.parseLong(chat.senderUid));
@@ -278,8 +299,8 @@ public class ChatFragment extends Fragment implements ChatContract.View, TextVie
         userChat.setLastMessage(chat.message);
         userChat.setProfileImage(getArguments().getString(Constant.PROFILE_IMAGE));
         userChat.setFireBaseToken(getArguments().getString(Constant.ARG_FIREBASE_TOKEN));
-        map.put(Long.parseLong(getArguments().getString(Constant.ARG_RECEIVER_UID)), userChat);
-        DatabaseManager.getInstance(activity).insertUserChat(map);
+
+        DatabaseManager.getInstance(activity).insertUserChat(userChat);
 
     }
 
@@ -293,7 +314,7 @@ public class ChatFragment extends Fragment implements ChatContract.View, TextVie
 
     @Override
     public void onGetMessagesFailure(String message) {
-       activity.showAToast(message);
+        activity.showAToast(message);
     }
 
     @Subscribe

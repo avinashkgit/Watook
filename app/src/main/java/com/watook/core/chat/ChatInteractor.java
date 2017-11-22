@@ -124,10 +124,10 @@ public class ChatInteractor implements ChatContract.Interactor {
 
         final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
 
-        databaseReference.child(Constant.ARG_CHAT_ROOMS).getRef().addListenerForSingleValueEvent(new ValueEventListener() {
+        databaseReference.child(Constant.ARG_CHAT_ROOMS).child(finalRoom).getRef().addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.hasChild(finalRoom)) {
+                if (dataSnapshot.exists()) {
                     Log.e(TAG, "getMessageFromFirebaseUser: " + finalRoom + " exists");
                     FirebaseDatabase.getInstance()
                             .getReference()
@@ -198,6 +198,7 @@ public class ChatInteractor implements ChatContract.Interactor {
                     mOnNoRoomFoundListener.onNoRoomFound(Constant.NO_ROOM_FOUND);
                 }
             }
+
 
             @Override
             public void onCancelled(DatabaseError databaseError) {

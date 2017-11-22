@@ -657,12 +657,13 @@ public class LoginActivity extends BaseActivity {
     private void apiCallSavePreferences(Preferences pref) {
         HashMap<String, String> map = new HashMap<>();
         map.put("userId", MyApplication.getInstance().getUserId());
-        map.put("distanceRange", pref.getDistanceRange() + "");
+        map.put("distanceRange", Utils.milesToKm(pref.getDistanceRange()) * 1000 + "");
         map.put("distanceIn", MyApplication.getDistanceCode().get(Constant.METER) + "");
         map.put("ageMin", pref.getAgeMin() + "");
         map.put("ageMax", pref.getAgeMax() + "");
         map.put("femaleInterest", MyApplication.getGenderCode().get(Constant.FEMALE) + "");
         map.put("maleInterest", MyApplication.getGenderCode().get(Constant.MALE) + "");
+        map.put("discoverable", 1 + "");
 
 
         Call<PreferencesSaveResponse> saveProfile = ApiManager.getApiInstance().setPreferences(Constant.CONTENT_TYPE,

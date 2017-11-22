@@ -84,7 +84,7 @@ public class LikesFragment extends Fragment {
 
     private void apiCallGetFriendsList() {
         Call<MyLikesResponse> codeValue = ApiManager.getApiInstance().getRequests(Constant.CONTENT_TYPE,
-                DatabaseManager.getInstance(activity).getRegistrationData().getData(), MyApplication.getInstance().getUserId());
+                DatabaseManager.getInstance(activity).getRegistrationData().getData(), MyApplication.getInstance().getUserId(), MyApplication.getRequestStatusCode().get(Constant.LIKED).toString());
         codeValue.enqueue(new Callback<MyLikesResponse>() {
             @Override
             public void onResponse(@NonNull Call<MyLikesResponse> call, @NonNull Response<MyLikesResponse> response) {

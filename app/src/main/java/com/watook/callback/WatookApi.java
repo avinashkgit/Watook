@@ -65,7 +65,7 @@ public interface WatookApi {
     Call<ConnectionsResponse> getFriendsList(@Header("Content-Type") String content_type, @Header("token") String token, @Query("userId") String s);
 
     @GET("request/list")
-    Call<MyLikesResponse> getRequests(@Header("Content-Type") String content_type, @Header("token") String token, @Query("userId") String s);
+    Call<MyLikesResponse> getRequests(@Header("Content-Type") String content_type, @Header("token") String token, @Query("userId") String s, @Query("requestStatus") String g);
 
 
 }

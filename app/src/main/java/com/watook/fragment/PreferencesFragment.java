@@ -104,10 +104,6 @@ public class PreferencesFragment extends Fragment implements View.OnClickListene
         }
         ageSeekBar.setMinStartValue(pref.getAgeMin()).setMaxStartValue(pref.getAgeMax()).apply();
 
-    }
-
-    private void inItViews(final View view) {
-        switchMen = (Switch) view.findViewById(R.id.switch_men);
         switchMen.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -121,7 +117,7 @@ public class PreferencesFragment extends Fragment implements View.OnClickListene
                 }
             }
         });
-        switchWomen = (Switch) view.findViewById(R.id.switch_women);
+
         switchWomen.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -136,17 +132,20 @@ public class PreferencesFragment extends Fragment implements View.OnClickListene
             }
         });
 
-        activity = (PreferencesActivity) getActivity();
-        txtAgeRange = (TextView) view.findViewById(R.id.txt_age_range);
-        txtDistance = (TextView) view.findViewById(R.id.txt_dist);
+        switchDiscoverable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (switchDiscoverable.isChecked()) {
+                    pref.setDiscoverable(true);
+                    apiCallSavePreferences();
+                } else {
+                    pref.setDiscoverable(false);
+                    apiCallSavePreferences();
+                }
+            }
+        });
 
-        btnKm = (Button) view.findViewById(R.id.btn_km);
-        btnKm.setOnClickListener(this);
 
-        btnMiles = (Button) view.findViewById(R.id.btn_miles);
-        btnMiles.setOnClickListener(this);
-
-        distanceBar = (CrystalSeekbar) view.findViewById(R.id.distance_bar);
         distanceBar.setOnSeekbarChangeListener(new OnSeekbarChangeListener() {
             @Override
             public void valueChanged(Number value) {
@@ -159,6 +158,26 @@ public class PreferencesFragment extends Fragment implements View.OnClickListene
                 setDistance(value.intValue());
             }
         });
+
+    }
+
+    private void inItViews(final View view) {
+        switchMen = (Switch) view.findViewById(R.id.switch_men);
+
+        switchWomen = (Switch) view.findViewById(R.id.switch_women);
+
+        activity = (PreferencesActivity) getActivity();
+        txtAgeRange = (TextView) view.findViewById(R.id.txt_age_range);
+        txtDistance = (TextView) view.findViewById(R.id.txt_dist);
+
+        btnKm = (Button) view.findViewById(R.id.btn_km);
+        btnKm.setOnClickListener(this);
+
+        btnMiles = (Button) view.findViewById(R.id.btn_miles);
+        btnMiles.setOnClickListener(this);
+
+        distanceBar = (CrystalSeekbar) view.findViewById(R.id.distance_bar);
+
 
 
         ageSeekBar = (CrystalRangeSeekbar) view.findViewById(R.id.age_bar);
@@ -176,7 +195,7 @@ public class PreferencesFragment extends Fragment implements View.OnClickListene
         });
 
         switchDiscoverable = (Switch) view.findViewById(R.id.switch_discoverable);
-        switchDiscoverable.setChecked(true);
+
 
     }
 
@@ -270,7 +289,7 @@ public class PreferencesFragment extends Fragment implements View.OnClickListene
     private void apiCallSavePreferences() {
         HashMap<String, String> map = new HashMap<>();
         map.put("userId", MyApplication.getInstance().getUserId());
-        map.put("distanceRange", pref.getDistanceRange() * 1000 + "");
+        map.put("distanceRange", Utils.milesToKm(pref.getDistanceRange()) * 1000 + "");
         map.put("distanceIn", MyApplication.getDistanceCode().get(Constant.METER) + "");
         map.put("ageMin", pref.getAgeMin() + "");
         map.put("ageMax", pref.getAgeMax() + "");
@@ -282,6 +301,10 @@ public class PreferencesFragment extends Fragment implements View.OnClickListene
             map.put("maleInterest", MyApplication.getGenderCode().get(Constant.MALE) + "");
         else
             map.put("maleInterest", 0 + "");
+        if (pref.isDiscoverable())
+            map.put("discoverable", 1 + "");
+        else
+            map.put("discoverable", 0 + "");
 
         Log.d(TAG, map.toString());
 

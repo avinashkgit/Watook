@@ -432,6 +432,7 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
     }
 
     private void apiCallSaveProfile() {
+        showProgressDialog("Saving...", null);
         List<CodeValueResponse.CodeValue> codeValues = DatabaseManager.getInstance(this).getCodeValue();
         long genderId = 0;
         long statusCode = 0;
@@ -463,7 +464,8 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
                 int statusCode = response.code();
                 ProfileSaveResponse saveResponse = response.body();
                 if (statusCode == 200 && saveResponse != null && saveResponse.getStatus() != null && saveResponse.getStatus().equalsIgnoreCase("success")) {
-
+                    DatabaseManager.getInstance(MyProfileActivity.this).insertMyProfile(myProfile);
+                    dismissProgressDialog();
                 } else {
                     dismissProgressDialog();
                     showAToast(getResources().getString(R.string.oops_something_went_wrong));

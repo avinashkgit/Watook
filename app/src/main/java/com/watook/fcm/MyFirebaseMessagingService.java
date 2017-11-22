@@ -13,6 +13,7 @@ import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.google.gson.internal.bind.DateTypeAdapter;
 import com.watook.R;
 import com.watook.activity.ChatActivity;
 import com.watook.application.MyApplication;
@@ -50,7 +51,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         this.remoteMessage = remoteMessage;
 
         if (remoteMessage.getData().size() > 0) {
-            if (DatabaseManager.getInstance(MyApplication.getContext()).getProfilePic(Long.parseLong(remoteMessage.getData().get("uid"))) != null) {
+            String profilePic = DatabaseManager.getInstance(MyApplication.getContext()).getProfilePic(Long.parseLong(remoteMessage.getData().get("uid")));
+            if (profilePic != null) {
                 Log.d(TAG, "Message data payload: " + remoteMessage.getData());
 
                 String title = remoteMessage.getData().get("title");
@@ -67,33 +69,31 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 if (!Utils.emptyIfNull(FirebaseChatMainApp.getReceiverId()).equals(uid)) {
 
                     UserChat userChat;
-                    HashMap<Long, UserChat> map = DatabaseManager.getInstance(MyApplication.getContext()).getUserChats();
-                    if (map != null && map.containsKey(Long.parseLong(uid))) {
-                        userChat = map.get(Long.parseLong(uid));
+                    userChat = DatabaseManager.getInstance(MyApplication.getContext()).getUserChat(Long.parseLong(uid));
+                    if (userChat != null) {
                         userChat.setHasNewMessage(true);
                         userChat.setSentById(Long.parseLong(uid));
                         userChat.setLastMessage(message);
                         userChat.setLastModified(time);
+                        userChat.setProfileImage(profilePic);
+                        userChat.setHasNewMessage(false);
                         if (userChat.getMessageCount() == null)
                             userChat.setMessageCount(1);
                         else
                             userChat.setMessageCount(userChat.getMessageCount() + 1);
-                        map.put(Long.parseLong(uid), userChat);
-                        DatabaseManager.getInstance(MyApplication.getContext()).insertUserChat(map);
+                        DatabaseManager.getInstance(MyApplication.getContext()).insertUserChat(userChat);
                     } else {
-                        if (map == null)
-                            map = new HashMap<>();
                         userChat = new UserChat();
                         userChat.setLastModified(time);
                         userChat.setSentById(Long.parseLong(uid));
                         userChat.setUserId(Long.parseLong(uid));
                         userChat.setName(username);
                         userChat.setLastMessage(message);
-                        userChat.setProfileImage(DatabaseManager.getInstance(MyApplication.getContext()).getProfilePic(Long.parseLong(uid)));
+                        userChat.setMessageCount(1);
+                        userChat.setProfileImage(profilePic);
                         userChat.setFireBaseToken(fcmToken);
                         userChat.setHasNewMessage(true);
-                        map.put(Long.parseLong(uid), userChat);
-                        DatabaseManager.getInstance(MyApplication.getContext()).insertUserChat(map);
+                        DatabaseManager.getInstance(MyApplication.getContext()).insertUserChat(userChat);
                     }
                     broadcastEvent();
 

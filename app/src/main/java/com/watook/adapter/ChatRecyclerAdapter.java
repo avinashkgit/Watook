@@ -32,6 +32,10 @@ public class ChatRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         notifyItemInserted(mChats.size() - 1);
     }
 
+    public Chat getLastChatElement() {
+        return mChats.get(mChats.size()-1);
+    }
+
     public void deleteAll() {
         mChats.clear();
         notifyDataSetChanged();

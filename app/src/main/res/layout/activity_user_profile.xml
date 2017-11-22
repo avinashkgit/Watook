@@ -131,6 +131,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
+                    android:layout_weight="1"
                     android:paddingBottom="@dimen/margin_10dp"
                     android:paddingLeft="@dimen/margin_avg"
                     android:paddingRight="@dimen/margin_avg"
@@ -273,7 +274,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@drawable/ic_chat_white_24dp" />
+        app:srcCompat="@drawable/ic_chat_white_24dp"
+        android:visibility="gone"/>
 
 
 </android.support.design.widget.CoordinatorLayout>

@@ -89,18 +89,15 @@ public class ChatsListFragment extends Fragment {
     }
 
     private void bindView() {
-        HashMap<Long, UserChat> map = DatabaseManager.getInstance(activity).getUserChats();
-        List<UserChat> lstChat = new ArrayList<>();
-        if (map != null && map.size() > 0) {
-            for (Map.Entry<Long, UserChat> entry : map.entrySet()) {
-                UserChat userChat = entry.getValue();
-                lstChat.add(userChat);
-            }
-        }
+        List<UserChat> lstChat = DatabaseManager.getInstance(activity).getUserChats();
+        if (lstChat == null)
+            lstChat = new ArrayList<>();
+
         recyclerView.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false));
         recyclerView.addItemDecoration(new DividerItemDecorator(getResources().getDrawable(R.drawable.divider)));
         UserChatListAdapter userChatListAdapter = new UserChatListAdapter(activity, lstChat);
         recyclerView.setAdapter(userChatListAdapter);
+
         if (lstChat.size() > 0) {
             layNoData.setVisibility(View.GONE);
         } else {
