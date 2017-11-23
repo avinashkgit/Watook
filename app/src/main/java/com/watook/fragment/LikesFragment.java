@@ -1,6 +1,5 @@
 package com.watook.fragment;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -16,12 +15,10 @@ import android.widget.TextView;
 import com.watook.R;
 import com.watook.activity.MainActivity;
 import com.watook.adapter.MyLikesAdapter;
-import com.watook.adapter.NearByAdapter;
 import com.watook.application.MyApplication;
 import com.watook.manager.ApiManager;
 import com.watook.manager.DatabaseManager;
-import com.watook.model.response.ConnectionsResponse;
-import com.watook.model.response.MyLikesResponse;
+import com.watook.model.response.ConnectionTypeResponse;
 import com.watook.util.Constant;
 import com.watook.util.DividerItemDecorator;
 
@@ -83,15 +80,15 @@ public class LikesFragment extends Fragment {
 
 
     private void apiCallGetFriendsList() {
-        Call<MyLikesResponse> codeValue = ApiManager.getApiInstance().getRequests(Constant.CONTENT_TYPE,
+        Call<ConnectionTypeResponse> codeValue = ApiManager.getApiInstance().getRequests(Constant.CONTENT_TYPE,
                 DatabaseManager.getInstance(activity).getRegistrationData().getData(), MyApplication.getInstance().getUserId(), MyApplication.getRequestStatusCode().get(Constant.LIKED).toString());
-        codeValue.enqueue(new Callback<MyLikesResponse>() {
+        codeValue.enqueue(new Callback<ConnectionTypeResponse>() {
             @Override
-            public void onResponse(@NonNull Call<MyLikesResponse> call, @NonNull Response<MyLikesResponse> response) {
+            public void onResponse(@NonNull Call<ConnectionTypeResponse> call, @NonNull Response<ConnectionTypeResponse> response) {
                 int statusCode = response.code();
-                MyLikesResponse myLikesResponse = response.body();
-                if (statusCode == 200 && myLikesResponse != null && myLikesResponse.getStatus() != null && myLikesResponse.getStatus().equalsIgnoreCase("success")) {
-                    setData(myLikesResponse.getData());
+                ConnectionTypeResponse connectionTypeResponse = response.body();
+                if (statusCode == 200 && connectionTypeResponse != null && connectionTypeResponse.getStatus() != null && connectionTypeResponse.getStatus().equalsIgnoreCase("success")) {
+                    setData(connectionTypeResponse.getData());
                 } else {
                     activity.showAToast(getResources().getString(R.string.oops_something_went_wrong));
                     progressBar.setVisibility(View.GONE);
@@ -100,14 +97,14 @@ public class LikesFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(@NonNull Call<MyLikesResponse> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<ConnectionTypeResponse> call, @NonNull Throwable t) {
                 progressBar.setVisibility(View.GONE);
                 activity.showAToast(getResources().getString(R.string.oops_something_went_wrong));
             }
         });
     }
 
-    private void setData(List<MyLikesResponse.User> data) {
+    private void setData(List<ConnectionTypeResponse.User> data) {
         progressBar.setVisibility(View.GONE);
         if (data.size() > 0) {
             recyclerView.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false));

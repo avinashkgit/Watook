@@ -24,17 +24,17 @@ import com.watook.util.Utils;
 import java.util.List;
 
 /**
- * Created by Avinash.Kumar on 13-Nov-17.
+ * Created by Avinash.Kumar on 23-Nov-17.
  */
 
-public class MyLikesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class BlockedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Activity activity;
     private List<ConnectionTypeResponse.User> user;
 
     private static final int FOOTER_VIEW = 1;
 
-    public MyLikesAdapter(Activity activity, List<ConnectionTypeResponse.User> user) {
+    public BlockedAdapter(Activity activity, List<ConnectionTypeResponse.User> user) {
         this.activity = activity;
         this.user = user;
     }
@@ -45,21 +45,21 @@ public class MyLikesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         View view;
         if (viewType == FOOTER_VIEW) {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_footer, parent, false);
-            return new MyLikesAdapter.FooterViewHolder(view);
+            return new BlockedAdapter.FooterViewHolder(view);
         }
-        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_mylikes, parent, false);
-        return new MyLikesAdapter.RecyclerViewHolder(view);
+        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_default, parent, false);
+        return new BlockedAdapter.RecyclerViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
         try {
-            if (holder instanceof MyLikesAdapter.RecyclerViewHolder) {
-                MyLikesAdapter.RecyclerViewHolder vh = (MyLikesAdapter.RecyclerViewHolder) holder;
+            if (holder instanceof BlockedAdapter.RecyclerViewHolder) {
+                BlockedAdapter.RecyclerViewHolder vh = (BlockedAdapter.RecyclerViewHolder) holder;
                 vh.bindView(position);
 
-            } else if (holder instanceof MyLikesAdapter.FooterViewHolder) {
-                MyLikesAdapter.FooterViewHolder vh = (MyLikesAdapter.FooterViewHolder) holder;
+            } else if (holder instanceof BlockedAdapter.FooterViewHolder) {
+                BlockedAdapter.FooterViewHolder vh = (BlockedAdapter.FooterViewHolder) holder;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -92,14 +92,14 @@ public class MyLikesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
 
-    public class FooterViewHolder extends MyLikesAdapter.ViewHolder {
+    public class FooterViewHolder extends BlockedAdapter.ViewHolder {
         FooterViewHolder(View itemView) {
             super(itemView);
         }
     }
 
 
-    class RecyclerViewHolder extends MyLikesAdapter.ViewHolder {
+    class RecyclerViewHolder extends BlockedAdapter.ViewHolder {
         RecyclerViewHolder(View itemView) {
             super(itemView);
 
@@ -122,7 +122,7 @@ public class MyLikesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
 
         public void bindView(int position) {
-            final ConnectionTypeResponse.User user = MyLikesAdapter.this.user.get(position);
+            final ConnectionTypeResponse.User user = BlockedAdapter.this.user.get(position);
             tvName.setText(Utils.emptyIfNull(user.getFirstName()) + " " + Utils.emptyIfNull(user.getLastName()));
             if (!Utils.isEmpty(String.valueOf(user.getLocation().getLatitude()))
                     && !Utils.isEmpty(String.valueOf(user.getLocation().getLongitude()))) {

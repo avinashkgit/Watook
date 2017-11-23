@@ -7,7 +7,7 @@ import java.util.List;
  * Created by Avinash.Kumar on 13-Nov-17.
  */
 
-public class MyLikesResponse implements Serializable {
+public class ConnectionTypeResponse implements Serializable {
 
 
     /**

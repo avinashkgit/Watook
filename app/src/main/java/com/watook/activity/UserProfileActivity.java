@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.viewpagerindicator.CirclePageIndicator;
@@ -37,19 +38,19 @@ import retrofit2.Response;
 
 public class UserProfileActivity extends BaseActivity implements View.OnClickListener {
 
-    static final int LIKE = 1, ACCEPT = 2, REJECT = 3, BLOCK = 4, UNLIKE = 5;
+    static final int LIKE = 1, ACCEPT = 2, REJECT = 3, BLOCK = 4, UNLIKE = 5, UNBLOCK = 6;
     Context context;
     FloatingActionButton actionButton;
     LinearLayout layRequest;
     Button btnLike, btnAccept, btnReject;
     UserResponse.User user;
-    TextView txtNameAge, txtBio, txtInfo, txtDist;
+    TextView txtNameAge, txtBio, txtInfo, txtDist, txtBlock;
     ViewPager mPager;
     CirclePageIndicator indicator;
     Long othersID;
-    boolean isLiked = false;
+    boolean isLiked = false, isBlocked = false;
     ImageView ivMenu;
-
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +72,8 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
         txtBio = (TextView) findViewById(R.id.txt_bio);
         txtInfo = (TextView) findViewById(R.id.txt_work);
         txtDist = (TextView) findViewById(R.id.txt_dist);
+        txtBlock = (TextView) findViewById(R.id.txt_block);
+        txtBlock.setOnClickListener(this);
         ivMenu = (ImageView) findViewById(R.id.iv_menu);
         ivMenu.setOnClickListener(this);
         layRequest = (LinearLayout) findViewById(R.id.lay_has_request);
@@ -80,7 +83,7 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
         btnAccept.setOnClickListener(this);
         btnReject = (Button) findViewById(R.id.btn_reject);
         btnReject.setOnClickListener(this);
-
+        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
         othersID = getIntent().getLongExtra(Constant.OTHERS_ID, -1);
         apiCallGetUser();
     }
@@ -116,10 +119,12 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
                 }
 
             } else if (user.getRequest().getReqstatus().equals(MyApplication.getRequestStatusCode().get(Constant.BLOCKED))) {
+                isBlocked = true;
                 ivMenu.setVisibility(View.GONE);
                 btnLike.setVisibility(View.GONE);
                 layRequest.setVisibility(View.GONE);
                 actionButton.setVisibility(View.GONE);
+                txtBlock.setText("Unblock");
             } else {
                 ivMenu.setVisibility(View.GONE);
                 setUnLiked();
@@ -131,7 +136,7 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
             if (!Utils.isEmpty(String.valueOf(user.getLocation().getLatitude()))
                     && !Utils.isEmpty(String.valueOf(user.getLocation().getLongitude()))) {
                 txtDist.setText(Utils.getDistance(this, user.getLocation().getLatitude(), user.getLocation().getLongitude()));
-            } else{
+            } else {
                 txtDist.setVisibility(View.GONE);
             }
 
@@ -205,17 +210,23 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
             case R.id.iv_menu:
                 showPopUpMenu();
                 break;
+            case R.id.txt_block:
+                if (!isBlocked)
+                    apiCallSetRequest(BLOCK);
+                else
+                    apiCallSetRequest(UNBLOCK);
+                break;
         }
 
     }
 
-    private void showPopUpMenu(){
+    private void showPopUpMenu() {
         PopupMenu popupMenu = new PopupMenu(this, ivMenu);
         popupMenu.inflate(R.menu.menu_user_profile);
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()){
+                switch (item.getItemId()) {
                     case R.id.action_unmatch:
                         apiCallSetRequest(UNLIKE);
                         DatabaseManager.getInstance(UserProfileActivity.this).removeUserFromChatList(othersID);
@@ -226,7 +237,6 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
         });
         popupMenu.show();
     }
-
 
 
     private void setLiked() {
@@ -241,6 +251,7 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
         btnLike.setTextColor(getResources().getColor(R.color.colorTextPrimary));
         btnLike.setBackground(getResources().getDrawable(R.drawable.btn_round_outline_primary));
     }
+
     private void setFriends() {
         btnLike.setEnabled(false);
         btnLike.setText("You both like each other!");
@@ -257,6 +268,7 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void apiCallSetRequest(final int code) {
+
         HashMap<String, String> map = new HashMap<>();
         map.put("requestBy", MyApplication.getInstance().getUserId());
         map.put("requestTo", othersID.toString());
@@ -270,6 +282,8 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
             map.put("reqstatus", MyApplication.getRequestStatusCode().get(Constant.BLOCKED) + "");
         if (code == UNLIKE)
             map.put("reqstatus", 0 + "");
+        if(code == UNBLOCK)
+            map.put("reqstatus", 0 + "");
 
         Call<RequestSaveResponse> request = ApiManager.getApiInstance().saveRequest(Constant.CONTENT_TYPE,
                 MyApplication.getInstance().getToken(), map);
@@ -279,13 +293,16 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
                 int statusCode = response.code();
                 RequestSaveResponse saveResponse = response.body();
                 if (statusCode == 200 && saveResponse != null && saveResponse.getStatus() != null && saveResponse.getStatus().equalsIgnoreCase("success")) {
+                    progressBar.setVisibility(View.GONE);
                     apiCallGetUser();
                 } else
+                    progressBar.setVisibility(View.GONE);
                     showAToast(getResources().getString(R.string.oops_something_went_wrong));
             }
 
             @Override
             public void onFailure(@NonNull Call<RequestSaveResponse> call, @NonNull Throwable t) {
+                progressBar.setVisibility(View.GONE);
                 showAToast(getResources().getString(R.string.oops_server_response_failure));
             }
         });
@@ -293,6 +310,7 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void apiCallGetUser() {
+        progressBar.setVisibility(View.VISIBLE);
         Call<UserResponse> codeValue = ApiManager.getApiInstance().getUser(Constant.CONTENT_TYPE,
                 DatabaseManager.getInstance(UserProfileActivity.this).getRegistrationData().getData(), MyApplication.getInstance().getUserId(), othersID.toString());
         codeValue.enqueue(new Callback<UserResponse>() {
@@ -303,12 +321,15 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
                 if (statusCode == 200 && userResponse != null && userResponse.getStatus() != null && userResponse.getStatus().equalsIgnoreCase("success")) {
                     user = userResponse.getData();
                     bindView();
+                    progressBar.setVisibility(View.GONE);
                 } else
+                    progressBar.setVisibility(View.GONE);
                     showAToast(getResources().getString(R.string.oops_something_went_wrong));
             }
 
             @Override
             public void onFailure(@NonNull Call<UserResponse> call, @NonNull Throwable t) {
+                progressBar.setVisibility(View.GONE);
                 showAToast(getResources().getString(R.string.oops_server_response_failure));
             }
         });

@@ -12,6 +12,7 @@ import com.watook.model.MyProfile;
 import com.watook.model.Preferences;
 import com.watook.model.UserChat;
 import com.watook.model.response.CodeValueResponse;
+import com.watook.model.response.ConnectionTypeResponse;
 import com.watook.model.response.ConnectionsResponse;
 import com.watook.model.response.NearByListResponse;
 import com.watook.model.response.RegistrationResponse;
@@ -65,6 +66,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
         db.execSQL(DatabaseConstants.CREATE_TABLE_PREFERENCES);
         db.execSQL(DatabaseConstants.CREATE_TABLE_USER_CHAT);
         db.execSQL(DatabaseConstants.CREATE_TABLE_CONNECTIONS);
+        db.execSQL(DatabaseConstants.CREATE_BLOCKED_USER);
 
     }
 
@@ -77,6 +79,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
         database.execSQL("delete from " + DatabaseConstants.TABLE_PREFERENCES);
         database.execSQL("delete from " + DatabaseConstants.TABLE_USER_CHAT);
         database.execSQL("delete from " + DatabaseConstants.TABLE_CONNECTIONS);
+        database.execSQL("delete from " + DatabaseConstants.TABLE_BLOCKED);
     }
 
     @Override
@@ -388,50 +391,17 @@ public class DatabaseManager extends SQLiteOpenHelper {
 
 
     public void insertUserChat(UserChat userChat) {
-//        try {
-//            database = this.getWritableDatabase();
-//            database.execSQL("delete from " + DatabaseConstants.TABLE_USER_CHAT);
-//            final ContentValues values = new ContentValues();
-//            values.put(DatabaseConstants.USER_CHAT_RESPONSE, objToByte(map));
-//            database.insert(DatabaseConstants.TABLE_USER_CHAT, null, values);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-
-//        int id = 0;
-//        try {
-//            database = this.getWritableDatabase();
-//            final ContentValues values = new ContentValues();
-//            values.put(DatabaseConstants.USER_CHAT_USER_ID, userChat.getUserId());
-//            values.put(DatabaseConstants.USER_CHAT_STATUS_INFO, userChat.getStatusInfo());
-//            values.put(DatabaseConstants.USER_CHAT_PROFILE_IMAGE, userChat.getProfileImage());
-//            values.put(DatabaseConstants.USER_CHAT_FIREBASE_TOKEN, userChat.getFireBaseToken());
-//            values.put(DatabaseConstants.USER_CHAT_LAST_MESSAGE, userChat.getLastMessage());
-//            values.put(DatabaseConstants.USER_CHAT_LAST_MODIFIED, userChat.getLastModified());
-//            values.put(DatabaseConstants.USER_CHAT_SENT_BY_ID, userChat.getSentById());
-//            if (userChat.isHasNewMessage())
-//                values.put(DatabaseConstants.USER_CHAT_HAS_NEW_MESSAGE, "1");
-//            else
-//                values.put(DatabaseConstants.USER_CHAT_HAS_NEW_MESSAGE, "0");
-//            id = (int) database.insert(DatabaseConstants.TABLE_USER_CHAT, null, values);
-//            if (id != 1) {
-//                database.update(DatabaseConstants.TABLE_USER_CHAT, values, userChat.getUserId().toString(), null);
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-
         try {
             database = this.getWritableDatabase();
-                final ContentValues values = new ContentValues();
-                values.put(DatabaseConstants.USER_CHAT_USER_ID, userChat.getUserId());
-                values.put(DatabaseConstants.USER_CHAT_RESPONSE, objToByte(userChat));
-                if (!CheckIsDataAlreadyInUserChat(userChat.getUserId())) {
-                    database.insert(DatabaseConstants.TABLE_USER_CHAT, null, values);
-                } else {
-                    database.update(DatabaseConstants.TABLE_USER_CHAT, values,
-                            DatabaseConstants.USER_CHAT_USER_ID + " = ? ", new String[]{String.valueOf(userChat.getUserId())});
-                }
+            final ContentValues values = new ContentValues();
+            values.put(DatabaseConstants.USER_CHAT_USER_ID, userChat.getUserId());
+            values.put(DatabaseConstants.USER_CHAT_RESPONSE, objToByte(userChat));
+            if (!CheckIsDataAlreadyInUserChat(userChat.getUserId())) {
+                database.insert(DatabaseConstants.TABLE_USER_CHAT, null, values);
+            } else {
+                database.update(DatabaseConstants.TABLE_USER_CHAT, values,
+                        DatabaseConstants.USER_CHAT_USER_ID + " = ? ", new String[]{String.valueOf(userChat.getUserId())});
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -461,7 +431,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
                 arrayList = new ArrayList<>();
                 do {
                     byte[] blob = cursor.getBlob(cursor.getColumnIndex(DatabaseConstants.USER_CHAT_RESPONSE));
-                    UserChat obj =(UserChat) byteToObj(blob);
+                    UserChat obj = (UserChat) byteToObj(blob);
                     if (obj != null) {
                         arrayList.add(obj);
                     }
@@ -477,15 +447,15 @@ public class DatabaseManager extends SQLiteOpenHelper {
         return arrayList;
     }
 
-    public UserChat getUserChat(Long userId){
+    public UserChat getUserChat(Long userId) {
         Cursor cursor = null;
         byte[] blob;
         UserChat userChat = new UserChat();
 
         try {
-            String[] columns = new String[] { DatabaseConstants.USER_CHAT_RESPONSE };
+            String[] columns = new String[]{DatabaseConstants.USER_CHAT_RESPONSE};
             String selection = DatabaseConstants.USER_CHAT_USER_ID + " = ?";
-            String[] selectionArgs = new String[] { userId.toString() };
+            String[] selectionArgs = new String[]{userId.toString()};
 
             cursor = database.query(DatabaseConstants.TABLE_USER_CHAT, columns, selection,
                     selectionArgs, null, null, null, null);
@@ -493,15 +463,14 @@ public class DatabaseManager extends SQLiteOpenHelper {
                 cursor.moveToFirst();
                 blob = cursor.getBlob(cursor.getColumnIndex(DatabaseConstants.USER_CHAT_RESPONSE));
                 userChat = (UserChat) byteToObj(blob);
-            } else{
+            } else {
                 userChat = null;
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return userChat;
     }
-
 
 
     public List<ConnectionsResponse.User> getConncetions() {
@@ -563,5 +532,67 @@ public class DatabaseManager extends SQLiteOpenHelper {
         database.execSQL("delete from " + DatabaseConstants.TABLE_USER_CHAT + " where " + DatabaseConstants.USER_CHAT_USER_ID + "=" + id);
     }
 
+
+    public void insertBlocked(ConnectionTypeResponse.User user) {
+        try {
+            database = this.getWritableDatabase();
+            final ContentValues values = new ContentValues();
+            values.put(DatabaseConstants.BLOCKED_USER_ID, user.getUserId());
+            values.put(DatabaseConstants.BLOCKED_RESPONSE, objToByte(user));
+            if (!CheckIsUserBlocked(user.getUserId())) {
+                database.insert(DatabaseConstants.TABLE_BLOCKED, null, values);
+            } else {
+                database.update(DatabaseConstants.TABLE_BLOCKED, values,
+                        DatabaseConstants.BLOCKED_USER_ID + " = ? ", new String[]{String.valueOf(user.getUserId())});
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private boolean CheckIsUserBlocked(Long userId) {
+        String selectQuery = "select * from " + DatabaseConstants.TABLE_BLOCKED + " where " +
+                DatabaseConstants.BLOCKED_USER_ID + "='" + userId + "'";
+        Cursor cursor = database.rawQuery(selectQuery, null, null);
+        if (cursor.getCount() <= 0) {
+            cursor.close();
+            return false;
+        }
+        cursor.close();
+        return true;
+    }
+
+
+    public List<ConnectionTypeResponse.User> getBlockedUserList() {
+        Cursor cursor = null;
+        List<ConnectionTypeResponse.User> arrayList = null;
+        try {
+            String query = "select * from " + DatabaseConstants.TABLE_BLOCKED;
+            cursor = database.rawQuery(query, null, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                arrayList = new ArrayList<>();
+                do {
+                    byte[] blob = cursor.getBlob(cursor.getColumnIndex(DatabaseConstants.BLOCKED_RESPONSE));
+                    ConnectionTypeResponse.User obj =(ConnectionTypeResponse.User) byteToObj(blob);
+                    if (obj != null) {
+                        arrayList.add(obj);
+                    }
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return arrayList;
+    }
+
+    public void removeUserFromBlocked(Long id) {
+        database = this.getWritableDatabase();
+        database.execSQL("delete from " + DatabaseConstants.TABLE_BLOCKED + " where " + DatabaseConstants.BLOCKED_USER_ID + "=" + id);
+    }
 
 }

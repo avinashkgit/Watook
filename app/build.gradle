@@ -28,24 +28,24 @@ android {
 
         SIT {
             //SIT Version
-            buildConfigField 'String', 'BASE_URL', '"http://myapp.watook.com/Watook/api/v1/"'
+            buildConfigField 'String', 'BASE_URL', '"http://13.126.133.29:8080/Watook/api/v1/"'
         }
         //noinspection GroovyMissingReturnStatement,GroovyMissingReturnStatement
         PREPROD {
             //Pre-Prod
-            buildConfigField 'String', 'BASE_URL', '"http://myapp.watook.com/Watook/api/v1/"'
+            buildConfigField 'String', 'BASE_URL', '"http://13.126.133.29:8080/Watook/api/v1/"'
 
         }
         //noinspection GroovyMissingReturnStatement,GroovyMissingReturnStatement
         UAT {
             // UAT Version
-            buildConfigField 'String', 'BASE_URL', '"http://myapp.watook.com/Watook/api/v1/"'
+            buildConfigField 'String', 'BASE_URL', '"http://13.126.133.29:8080/Watook/api/v1/"'
 
         }
         //noinspection GroovyMissingReturnStatement,GroovyMissingReturnStatement
         PROD {
             // Prod
-            buildConfigField 'String', 'BASE_URL', '"http://myapp.watook.com/Watook/api/v1/"'
+            buildConfigField 'String', 'BASE_URL', '"http://13.126.133.29:8080/Watook/api/v1/"'
 //            buildConfigField 'String', 'BASE_URL', '"https://ofa.fiinfra.in/FIINFRAService/"'
 
         }

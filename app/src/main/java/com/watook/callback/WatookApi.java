@@ -3,7 +3,7 @@ package com.watook.callback;
 import com.watook.model.response.ApplicationIdResponse;
 import com.watook.model.response.CodeValueResponse;
 import com.watook.model.response.ConnectionsResponse;
-import com.watook.model.response.MyLikesResponse;
+import com.watook.model.response.ConnectionTypeResponse;
 import com.watook.model.response.NearByListResponse;
 import com.watook.model.response.PreferencesSaveResponse;
 import com.watook.model.response.ProfileSaveResponse;
@@ -65,7 +65,7 @@ public interface WatookApi {
     Call<ConnectionsResponse> getFriendsList(@Header("Content-Type") String content_type, @Header("token") String token, @Query("userId") String s);
 
     @GET("request/list")
-    Call<MyLikesResponse> getRequests(@Header("Content-Type") String content_type, @Header("token") String token, @Query("userId") String s, @Query("requestStatus") String g);
+    Call<ConnectionTypeResponse> getRequests(@Header("Content-Type") String content_type, @Header("token") String token, @Query("userId") String s, @Query("requestStatus") String g);
 
 
 }
